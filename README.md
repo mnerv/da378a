@@ -1,0 +1,18 @@
+# Computer Science: C++ and Program Construction
+
+This repository holds all the course labs. It includes 6 programming assignments (Labs). Each labs has its own tasks to implement.
+
+## Development
+
+### nvim
+
+Some tasks requires you to compile the file with command line tools and when using neovim with ccls language server it can't know what C++ standard we should be using or what warning flags should be use.
+
+Create `.ccls` file in the project directory and populate it 
+
+```
+%c++ -std=c++20 -Wall -Wextra -Wconversion -Wpedantic -Wshadow -Werror
+```
+
+`%c++`: This depends entirely on what compiler we're using, this can be `g++` or `clang++`
+
