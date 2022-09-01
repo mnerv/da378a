@@ -20,7 +20,10 @@
  *             Usage: ./sum > sum.txt
  *                    ctrl+d to exit
  *
->>>>>>> 1728669 (Lab01: Task05. Summation program and output redirect)
+ *         06. Input-redirect from file
+ *             Usage: ./sum < terms.txt
+ *
+ *             terms.txt: 1 2 3 4
  * @date   2022-09-01
  */
 #include <cstdint>
