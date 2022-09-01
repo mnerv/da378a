@@ -24,6 +24,10 @@
  *             Usage: ./sum < terms.txt
  *
  *             terms.txt: 1 2 3 4
+ *
+ *          07. Input/Ouput redirect
+ *              Usage: (./sum < numbers.txt) > sum.txt
+ *
  * @date   2022-09-01
  */
 #include <cstdint>
