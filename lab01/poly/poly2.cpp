@@ -25,6 +25,7 @@ void Poly2::findRoots(std::int32_t& root_count, float& root_a, float& root_b)
         root_a = (-b + std::sqrt(d)) / (2.0f * a);
     } else {
         auto const sq = std::sqrt(d);
+        root_count = 2;
         root_a = (-b - sq) / (2.0f * a);
         root_b = (-b + sq) / (2.0f * a);
     }

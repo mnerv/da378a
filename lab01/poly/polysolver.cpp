@@ -17,6 +17,9 @@
  *
  *         10. Read coefficients by std::cin
  *
+ *         11. Read coefficients by redirect
+ *             Usage: (./polysolver < coeffs.txt) > roots.txt
+ *
  * @date   2022-09-02
  */
 #include <cstdint>
