@@ -8,6 +8,15 @@
  *
  *             Windows
  *             cl /std:c++20 /W4 /WX /EHsc hello.cpp
+ *
+ *         02. Compile to object and link to executable.
+ *             Linux/macOS (clang)
+ *             clang++ -std=c++20 -Wall -Wextra -Wconversion -Wpedantic -Wshadow -Werror -c hello.cpp
+ *             clang++ hello.o -o hello
+ *
+ *             Windows
+ *             cl /std:c++20 /W4 /WX /EHsc /c hello.cpp
+ *             link /out:hello.exe hello.obj
  * @date   2022-08-31
  */
 #include <cstdint>
