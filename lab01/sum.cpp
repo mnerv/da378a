@@ -15,6 +15,12 @@
  *             Use ctrl+d to exit on Unix-based machines or ctrl+x on Windows.
  *
  *             The program will output the sum result on the last line.
+ *
+ *         05. Output-redirect to file
+ *             Usage: ./sum > sum.txt
+ *                    ctrl+d to exit
+ *
+>>>>>>> 1728669 (Lab01: Task05. Summation program and output redirect)
  * @date   2022-09-01
  */
 #include <cstdint>
