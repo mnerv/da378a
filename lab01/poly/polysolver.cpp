@@ -15,6 +15,8 @@
  *
  *         09. findRoots return value by parameter
  *
+ *         10. Read coefficients by std::cin
+ *
  * @date   2022-09-02
  */
 #include <cstdint>
@@ -24,24 +26,23 @@
 int main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[])
 {
     std::cout << "Root-finding started...\n";
-    std::int32_t root_count;
-    float root_a, root_b;
+    constexpr std::size_t MAX_COEFFS = 3;
+    float coeffs[MAX_COEFFS];
+    float input = 0.0f;
+    std::size_t input_count = 0;
+    while (std::cin >> input) {
+        coeffs[input_count++] = input;
+        if (input_count > MAX_COEFFS - 1) {
+            input_count = 0;
 
-    Poly2 poly1(1.0f, 2.0f, 1.0f);
-    std::cout << "x = -1.0: f(x) = " << poly1.eval(-1.0f) << "\n";
-    poly1.findRoots(root_count, root_a, root_b);
-    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
-
-    Poly2 poly2(2.0f, -1.0f, -1.0f);
-    std::cout << "x = -0.5: f(x) = " << poly2.eval(-0.5f) << ", ";
-    std::cout << "x = -1.0: f(x) = " << poly2.eval(1.0f)  << "\n";
-    poly2.findRoots(root_count, root_a, root_b);
-    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
-
-    Poly2 poly3(1.0f, 1.0f, 1.0f);
-    std::cout << "x = 0.0:  f(x) = " << poly3.eval(0.0f) << "\n";
-    poly3.findRoots(root_count, root_a, root_b);
-    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
+            std::int32_t root_count;
+            float x1, x2;
+            Poly2 poly(coeffs[0], coeffs[1], coeffs[2]);
+            poly.findRoots(root_count, x1, x2);
+            std::cout << "roots: " << root_count << "\n";
+            std::cout << "   x1: " << x1 << ", x2: " << x2 << "\n";
+        }
+    }
     return 0;
 }
 
