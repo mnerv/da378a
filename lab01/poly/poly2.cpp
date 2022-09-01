@@ -1,6 +1,5 @@
 #include "poly2.h"
 #include <cmath>
-#include <iostream>
 
 Poly2::Poly2(float a, float b, float c)
 {
@@ -14,19 +13,20 @@ float Poly2::eval(float x)
     return a * x * x + b * x + c;
 }
 
-void Poly2::findRoots()
+void Poly2::findRoots(std::int32_t& root_count, float& root_a, float& root_b)
 {
     auto const d = b * b - 4.0f * a * c;
     if (d < 0.0f) {
-        std::cout << "Imaginary roots\n";
+        root_count = 0;
+        root_a = NAN;
+        root_b = NAN;
     } else if (d == 0.0f) {
-        auto const x = (-b + std::sqrt(d)) / (2.0f * a);
-        std::cout << x << "\n";
+        root_count = 1;
+        root_a = (-b + std::sqrt(d)) / (2.0f * a);
     } else {
         auto const sq = std::sqrt(d);
-        auto const x1 = (-b + sq) / (2.0f * a);
-        auto const x2 = (-b - sq) / (2.0f * a);
-        std::cout << x1 << ", " << x2 << "\n";
+        root_a = (-b - sq) / (2.0f * a);
+        root_b = (-b + sq) / (2.0f * a);
     }
 }
 

@@ -1,5 +1,6 @@
 #ifndef LAB01_POLY2_H
 #define LAB01_POLY2_H
+#include <cstdint>
 
 class Poly2
 {
@@ -18,7 +19,7 @@ public:
     /*
      * Find roots, i.e. x when y(x) = 0
      */
-    void findRoots();
+    void findRoots(std::int32_t& root_count, float& root_a, float& root_b);
 
     /*
      * Destructor:

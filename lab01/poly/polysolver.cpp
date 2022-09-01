@@ -13,6 +13,8 @@
  *
  *         08. Implement poly2 eval and findRoots
  *
+ *         09. findRoots return value by parameter
+ *
  * @date   2022-09-02
  */
 #include <cstdint>
@@ -22,18 +24,24 @@
 int main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[])
 {
     std::cout << "Root-finding started...\n";
+    std::int32_t root_count;
+    float root_a, root_b;
+
     Poly2 poly1(1.0f, 2.0f, 1.0f);
     std::cout << "x = -1.0: f(x) = " << poly1.eval(-1.0f) << "\n";
-    poly1.findRoots();
+    poly1.findRoots(root_count, root_a, root_b);
+    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
 
     Poly2 poly2(2.0f, -1.0f, -1.0f);
     std::cout << "x = -0.5: f(x) = " << poly2.eval(-0.5f) << ", ";
     std::cout << "x = -1.0: f(x) = " << poly2.eval(1.0f)  << "\n";
-    poly2.findRoots();
+    poly2.findRoots(root_count, root_a, root_b);
+    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
 
     Poly2 poly3(1.0f, 1.0f, 1.0f);
     std::cout << "x = 0.0:  f(x) = " << poly3.eval(0.0f) << "\n";
-    poly3.findRoots();
+    poly3.findRoots(root_count, root_a, root_b);
+    std::cout << "roots: " << root_count << ", x1: " << root_a << ", x2: " << root_b << "\n";
     return 0;
 }
 
