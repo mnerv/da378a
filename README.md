@@ -2,6 +2,11 @@
 
 This repository holds all the course labs. It includes 6 programming assignments (Labs). Each labs has its own tasks to implement.
 
+## Resources
+
+  - [cppreference](https://en.cppreference.com/w/)
+  - [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
+
 ## Development
 
 ### CMake
