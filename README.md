@@ -6,6 +6,7 @@ This repository holds all the course labs. It includes 6 programming assignments
 
   - [cppreference](https://en.cppreference.com/w/)
   - [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
+  - [Compiler Explorer](https://godbolt.org)
 
 ## Development
 
