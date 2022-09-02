@@ -16,3 +16,17 @@ Create `.ccls` file in the project directory and populate it
 
 `%c++`: This depends entirely on what compiler we're using, this can be `g++` or `clang++`
 
+## git
+
+Use `git archive` to create a zip file.
+
+```
+git archive --format=zip HEAD:{directory} -o {output}.zip
+```
+
+`HEAD:{directory}`: This can be short to just `HEAD` to create a zip from the whole repo.
+
+`{directory}`: Is the directory you want to create a zip file from, example: `lab01`.
+
+`{output}.zip`: Output file path, example: `~/Downloads/lab01.zip`
+
