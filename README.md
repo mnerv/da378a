@@ -8,6 +8,8 @@ This repository holds all the course labs. It includes 6 programming assignments
   - [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
   - [Compiler Explorer](https://godbolt.org)
 
+**Fundamental types**: LP-prefix stands for Long Pointer, example: LP64 is long-pointer 64.
+
 ## Development
 
 ### CMake
