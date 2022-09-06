@@ -25,7 +25,7 @@ auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
         if (primes[i] == 0) continue;
         else p = primes[i];
 
-        std::replace_if(primes, primes + N, [&p](auto const& n) {
+        std::replace_if(primes + i, primes + N, [&p](auto const& n) {
             return n > p && n % p == 0;
         }, 0);
     }
