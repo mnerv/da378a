@@ -6,6 +6,8 @@ This repository holds all the course labs. It includes 6 programming assignments
 
   - [cppreference](https://en.cppreference.com/w/)
   - [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
+  - [Integer literal](https://en.cppreference.com/w/cpp/language/integer_literal)
+  - [Character literal](https://en.cppreference.com/w/cpp/language/character_literal)
   - [Compiler Explorer](https://godbolt.org)
 
 **Fundamental types**: LP-prefix stands for Long Pointer, example: LP64 is long-pointer 64.
