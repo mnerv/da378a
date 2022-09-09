@@ -75,15 +75,26 @@ auto substitute_cstr(char const* input, char const* before, char const* after) -
     return str;
 }
 
-
 auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
-    auto str = substitute_cstr("Hello, World!", "World", "Charlie");
-    std::cout << str << "\n";
-    delete[] str;
+    using namespace std::string_literals;
+    auto str1    = "Hello, World and World!"s;
+    auto before1 = "World"s;
+    auto after1  = "Charlie"s;
+    std::cout << "Task 02.\n";
+    std::cout << "Text: \"" << str1 << "\"\n";
+    std::cout << "Before: \"" << before1 << "\", After: \"" << after1 << "\"\n";
+    substitute_str(str1, before1, after1);
+    std::cout << "Out: \"" << str1 << "\"\n\n";
 
-    str = substitute_cstr("Hello, World!", ", World!", ".");
-    std::cout << str << "\n";
-    delete[] str;
+    auto str2 = "Hello, World, World, World!";
+    auto before2 = "World";
+    auto after2  = "KOMIGEN!";
+    std::cout << "Task 03.\n";
+    std::cout << "Text: \"" << str2 << "\"\n";
+    std::cout << "Before: \"" << before2 << "\", After: \"" << after2 << "\"\n";
+    auto task2_out = substitute_cstr(str2, before2, after2);
+    std::cout << "Out: \"" << task2_out << "\"\n";
+    delete[] task2_out;
     return 0;
 }
 
