@@ -44,8 +44,8 @@ auto substitude_cstr(char const* input, char const* before, char const* after) -
     };
     // Find the first
     auto str_len = std::strlen(input);
-    auto str     = new char[str_len];
-    std::memcpy(str, input, str_len);
+    auto str     = new char[str_len + 1];
+    std::memcpy(str, input, str_len + 1);
     auto match   = find_str(str, before);
 
     auto const before_len = std::strlen(before);
@@ -58,7 +58,7 @@ auto substitude_cstr(char const* input, char const* before, char const* after) -
 
         // Allocate new memory for string output
         str_len = tmp_len - before_len + after_len;
-        str     = new char[str_len];
+        str     = new char[str_len + 1];
 
         // Memory copy to the new destination
         //   1. Copy first part before match
@@ -66,7 +66,7 @@ auto substitude_cstr(char const* input, char const* before, char const* after) -
         //   3. Copy rest of the previous string data.
         std::memcpy(str, tmp_str, match);
         std::memcpy(str + match, after, after_len);
-        std::memcpy(str + match + after_len, tmp_str + match + before_len, tmp_len - match - before_len);
+        std::memcpy(str + match + after_len, tmp_str + match + before_len, tmp_len - match - before_len + 1);
 
         match = find_str(str, before);
         delete[] tmp_str;
