@@ -18,6 +18,13 @@
 
 #include <cstring>
 
+/**
+ * Simple find and replace all using std::string find and replace api.
+ *
+ * @iostr  The input string and also the output.
+ * @before Match string to find.
+ * @after  Replacement string.
+ */
 auto substitute_str(std::string& iostr, std::string const& before, std::string const& after) -> void {
     auto match = iostr.find(before);
     while (match != std::string::npos) {
@@ -26,6 +33,21 @@ auto substitute_str(std::string& iostr, std::string const& before, std::string c
     }
 }
 
+/**
+ * A naive find and replace all using C style string with null termination.
+ * This solution behaves like the substitute_str std::string version but
+ * manually mangaging the menory. The return string of this needs to be later
+ * free with delete[]. The replacing parts will delete the old string and
+ * allocate new memory space everytime there's a match. This might be a problem
+ * if it is a requirement that there should be as little memory allocation as
+ * possible.
+ *
+ * @input  String we should search in.
+ * @before Matching string.
+ * @after  Replacement string.
+ *
+ * @return C style string with null termination, NEEDS TO BE FREE!
+ */
 auto substitute_cstr(char const* input, char const* before, char const* after) -> char* {
     static constexpr auto NPOS = std::numeric_limits<std::size_t>::max();
     auto find_str = [](char const* str, char const* match) {
