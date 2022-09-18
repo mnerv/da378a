@@ -14,7 +14,10 @@ struct Person {
     std::string namn;
     std::string adress;
 
-    auto Print() const -> void;
+    Person(std::string const& namn = "", std::string const& adress = "");
+    virtual ~Person();
+
+    virtual auto Print() const -> void;
 };
 
 #endif

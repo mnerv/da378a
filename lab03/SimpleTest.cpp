@@ -13,6 +13,21 @@
 
 #include "PersonReg.hpp"
 
+class PersonMedTel : public Person {
+  public:
+    PersonMedTel(std::string const& namn, std::string const& adress, std::string const& tel)
+        : Person(namn, adress), tel(tel) {}
+
+    auto Print() const -> void override {
+        std::cout << "PersonMedTel { ";
+        std::cout << "namn: " << namn << ", ";
+        std::cout << "adress: " << adress << ", ";
+        std::cout << "tel: " << tel << " }";
+    }
+
+    std::string tel;
+};
+
 auto read_register(PersonReg& reg, std::string filename) -> bool {
     std::string line;
     std::ifstream file{filename};
@@ -38,10 +53,17 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     PersonReg reg{10};
     read_register(reg, "/Users/k/Downloads/personer.txt");
     reg.Print();
-
     std::cout << "\n";
+
     auto a = reg.SokNamn("Eric Ejfrid Lundin");
+    auto b = reg.SokNamn("Daniel Freer Popowicz");
     reg.TaBortEntry(a);
+    reg.TaBortEntry(b);
+    reg.Print();
+    std::cout << "\n";
+
+    PersonMedTel te("Hello", "World", "02");
+    reg.LaggTill(&te);
     reg.Print();
     return 0;
 }
