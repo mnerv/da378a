@@ -30,7 +30,7 @@ auto PersonReg::LaggTillTest(std::string const& namn, std::string const& adress)
 }
 
 auto PersonReg::TaBortEntry(Person* ptr) -> void {
-    if (m_storlek == 0) return;
+    if (m_storlek == 0 || ptr == nullptr) return;
     Person* found = nullptr;
     for (auto it = m_personer; it != m_personer + m_max_storlek; ++it) {
         if (it->namn == ptr->namn && it->adress == ptr->adress) {
@@ -38,6 +38,7 @@ auto PersonReg::TaBortEntry(Person* ptr) -> void {
             break;
         }
     }
+    if (found == nullptr) return;
     for (auto it = found; it != m_personer + m_max_storlek; ++it) {
         if (it + 1 != m_personer + m_max_storlek)
             *it = *(it + 1);
@@ -46,7 +47,7 @@ auto PersonReg::TaBortEntry(Person* ptr) -> void {
     m_personer[m_storlek] = {};
 }
 
-auto PersonReg::SokNamn([[maybe_unused]]std::string const& namn) const -> Person* {
+auto PersonReg::SokNamn(std::string const& namn) const -> Person* {
     for (auto ptr = m_personer; ptr != m_personer + m_max_storlek; ++ptr) {
         if (ptr->namn == namn) return ptr;
     }
