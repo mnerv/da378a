@@ -32,15 +32,18 @@ auto PersonReg::LaggTillTest(std::string const& namn, std::string const& adress)
 auto PersonReg::TaBortEntry(Person* ptr) -> void {
     if (m_storlek == 0) return;
     Person* found = nullptr;
-    for (auto prn = m_personer; prn != m_personer + m_max_storlek; ++prn) {
-        if (prn->namn == ptr->namn && prn->adress == ptr->adress) {
-            found = prn;
+    for (auto it = m_personer; it != m_personer + m_max_storlek; ++it) {
+        if (it->namn == ptr->namn && it->adress == ptr->adress) {
+            found = it;
             break;
         }
     }
-    // TODO: Shift data to the correct place
-    if (found != nullptr) *found = {};
+    for (auto it = found; it != m_personer + m_max_storlek; ++it) {
+        if (it + 1 != m_personer + m_max_storlek)
+            *it = *(it + 1);
+    }
     m_storlek--;
+    m_personer[m_storlek] = {};
 }
 
 auto PersonReg::SokNamn([[maybe_unused]]std::string const& namn) const -> Person* {
@@ -53,8 +56,8 @@ auto PersonReg::SokNamn([[maybe_unused]]std::string const& namn) const -> Person
 auto PersonReg::SokFritt(std::string const& namn, Person* start_search) const -> Person* {
     if (start_search > m_personer + m_max_storlek) return nullptr;
     auto start_ptr = start_search == nullptr ? m_personer : start_search;
-    for (auto ptr = start_ptr; ptr != m_personer + m_max_storlek; ++ptr) {
-        if (ptr->namn == namn) return ptr;
+    for (auto it = start_ptr; it != m_personer + m_max_storlek; ++it) {
+        if (it->namn == namn) return it;
     }
     return nullptr;
 }

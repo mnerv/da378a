@@ -38,6 +38,11 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     PersonReg reg{10};
     read_register(reg, "/Users/k/Downloads/personer.txt");
     reg.Print();
+
+    std::cout << "\n";
+    auto a = reg.SokNamn("Eric Ejfrid Lundin");
+    reg.TaBortEntry(a);
+    reg.Print();
     return 0;
 }
 
