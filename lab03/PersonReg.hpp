@@ -14,10 +14,10 @@
 
 class PersonReg {
   public:
-    PersonReg(int max_storlek);
+    PersonReg(int const& max_storlek);
     ~PersonReg();
 
-    auto LaggTill(Person const* const Person) -> bool;
+    auto LaggTill(Person const* const person) -> bool;
     auto LaggTillTest(std::string const& namn, std::string const& adress) -> bool;
     auto TaBortEntry(Person* ptr) -> void;
     auto SokNamn(std::string const& namn) const -> Person*;
@@ -26,7 +26,9 @@ class PersonReg {
     auto Tom() -> void;
 
   private:
-    Person* m_Personer;
+    std::size_t m_max_storlek;
+    std::size_t m_storlek;
+    Person*     m_personer;
 };
 
 #endif

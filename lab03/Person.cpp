@@ -7,4 +7,10 @@
  * @copyright Copyright (c) 2022
  */
 #include "Person.hpp"
+#include <iostream>
 
+auto Person::Print() const -> void {
+    std::cout << "Person { ";
+    std::cout << "namn: "   << namn   << ", ";
+    std::cout << "adress: " << adress << " }\n";
+}

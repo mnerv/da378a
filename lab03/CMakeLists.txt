@@ -7,6 +7,7 @@ set(TARGET_SOURCE_FILES
     "${PROJECT_SOURCE_DIR}/Person.hpp"
     "${PROJECT_SOURCE_DIR}/PersonReg.hpp"
 
+    "${PROJECT_SOURCE_DIR}/Person.cpp"
     "${PROJECT_SOURCE_DIR}/PersonReg.cpp"
     "${PROJECT_SOURCE_DIR}/SimpleTest.cpp"
 )
