@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(lab03 VERSION 0.0.0)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)  # Group CMake targets inside a folder
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json for language servers
 
 if (NOT MSVC)
     add_compile_options(
@@ -15,6 +16,7 @@ else()
     add_compile_options(
         "/W4"
         "/WX"
+        "/fsanitize=address"
     )
 endif()
 
