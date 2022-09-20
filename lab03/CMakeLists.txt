@@ -9,7 +9,7 @@ if (NOT MSVC)
         "-Wextra"
         "-Wconversion"
         "-Wpedantic"
-        "-Wshadow"
+        "-Wno-shadow"
         "-Werror"
     )
 else()
