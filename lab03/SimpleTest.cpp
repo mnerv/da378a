@@ -51,12 +51,12 @@ auto read_register(PersonReg& reg, std::string filename) -> bool {
 
 auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[]) -> std::int32_t {
     PersonReg reg{10};
-    read_register(reg, "/Users/k/Downloads/personer.txt");
+    read_register(reg, "personer.txt");
     reg.Print();
     std::cout << "\n";
 
-    auto a = reg.SokNamn("Eric Ejfrid Lundin");
-    auto b = reg.SokNamn("Daniel Freer Popowicz");
+    auto a = reg.SokNamn("Eric");
+    auto b = reg.SokNamn("Daniel");
     reg.TaBortEntry(a);
     reg.TaBortEntry(b);
     reg.Print();
