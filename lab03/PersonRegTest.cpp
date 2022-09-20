@@ -45,8 +45,7 @@ bool ReadReg(PersonReg& reg, string fileName) {
     {
         while (getline(myfile, line))
         {
-            while (line.length() == 0 && getline(myfile, line))
-                ;
+            while (line.length() == 0 && getline(myfile, line));
             string name(line);
             string adress;
             getline(myfile, adress);
@@ -160,8 +159,8 @@ int main() {
     //locale::global(locale("swedish"));
     PersonReg pr(5);
     Init(pr);
-    //Test1();
-    //Test2();
-    //Test3();
-    //cin.get();
+    Test1();
+    Test2();
+    Test3();
+    cin.get();
 }

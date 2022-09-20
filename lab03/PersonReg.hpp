@@ -21,7 +21,7 @@ class PersonReg {
     auto LaggTillTest(std::string const& namn, std::string const& adress) -> bool;
     auto TaBortEntry(Person* ptr) -> void;
     auto SokNamn(std::string const& namn) const -> Person*;
-    auto SokFritt(std::string const& namn, Person* start) const -> Person*;
+    auto SokFritt(std::string const& search_value, Person* start_search) const -> Person*;
     auto Print() const -> void;
     auto Tom() -> void;
 

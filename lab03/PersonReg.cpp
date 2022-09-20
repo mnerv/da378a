@@ -46,11 +46,10 @@ auto PersonReg::SokNamn(std::string const& namn) const -> Person* {
     return nullptr;
 }
 
-auto PersonReg::SokFritt(std::string const& namn, Person* start_search) const -> Person* {
-    if (start_search > m_personer + m_max_storlek) return nullptr;
-    auto start_ptr = start_search == nullptr ? m_personer : start_search;
+auto PersonReg::SokFritt(std::string const& search_value, Person* start_search) const -> Person* {
+    auto start_ptr = start_search == nullptr ? m_personer : ++start_search;
     for (auto it = start_ptr; it != m_personer + m_max_storlek; ++it) {
-        if (it->namn == namn) return it;
+        if (it->namn == search_value || it->adress == search_value) return it;
     }
     return nullptr;
 }
