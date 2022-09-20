@@ -14,8 +14,7 @@ Person::Person(std::string const& namn, std::string const& adress) : namn(namn),
 Person::~Person() = default;
 
 auto Person::Print() const -> void {
-    std::cout << "Person { ";
     std::cout << "namn: "   << namn   << ", ";
-    std::cout << "adress: " << adress << " }\n";
+    std::cout << "adress: " << adress << " \n";
 }
 
