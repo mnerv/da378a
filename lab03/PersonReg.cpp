@@ -1,7 +1,7 @@
 /**
  * @file   PersonReg.cpp
  * @author Pratchaya Khansomboon (me@mononerv.dev)
- * @brief  Person register implementations
+ * @brief  Person register implementations.
  * @date   2022-09-14
  *
  * @copyright Copyright (c) 2022
@@ -29,6 +29,14 @@ auto PersonReg::LaggTillTest(std::string const& namn, std::string const& adress)
     return true;
 }
 
+/**
+ * Removes a person in the register and pack the array data linearly. This
+ * solution keeps the order of the list, another way is to swap the last place
+ * and the removing place and set the last place to an empty object. The result
+ * of it will be faster, because it is O(1).
+ *
+ * @param ptr The pointer needs to point into the PersonReg memory space that's allocated.
+ */
 auto PersonReg::TaBortEntry(Person* ptr) -> void {
     if (m_storlek == 0 || ptr == nullptr) return;
     for (auto it = ptr; it != m_personer + m_max_storlek; ++it) {
@@ -40,14 +48,13 @@ auto PersonReg::TaBortEntry(Person* ptr) -> void {
 }
 
 auto PersonReg::SokNamn(std::string const& namn) const -> Person* {
-    for (auto ptr = m_personer; ptr != m_personer + m_max_storlek; ++ptr) {
-        if (ptr->namn == namn) return ptr;
-    }
+    for (auto it = m_personer; it != m_personer + m_max_storlek; ++it)
+        if (it->namn == namn) return it;
     return nullptr;
 }
 
 auto PersonReg::SokFritt(std::string const& search_value, Person* start_search) const -> Person* {
-    auto start_ptr = start_search == nullptr ? m_personer : ++start_search;
+    auto start_ptr = start_search == nullptr ? m_personer : ++start_search;  // Skip the current one if there's a starting point
     for (auto it = start_ptr; it != m_personer + m_max_storlek; ++it) {
         if (it->namn == search_value || it->adress == search_value) return it;
     }
@@ -59,6 +66,10 @@ auto PersonReg::Print() const -> void {
         it->Print();
 }
 
+/**
+ * Set the current size to zero and all the object in the list are set to empty,
+ * in this case the 'namn' and 'adress' is set to empty string.
+ */
 auto PersonReg::Tom() -> void {
     for (auto it = m_personer; it != m_personer + m_max_storlek; ++it)
         *it = {};
