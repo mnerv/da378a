@@ -36,7 +36,6 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     constexpr std::size_t MAX_NUM = 32;
 
     // Task 01.a - Sort integers with std::vector
-
     std::vector<std::int32_t> nums{};
     std::generate_n(std::back_inserter(nums), MAX_NUM, [&] { return dist(rng); });
 
@@ -47,8 +46,20 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::cout << "Sorted integer numbers (std::vector)\n";
     std::sort(std::begin(nums), std::end(nums));
     print_container(std::begin(nums), std::end(nums));
+    std::cout << "\n\n";
+
+    // Task 01.b - Sort integers with C style array
+    std::int32_t c_nums[MAX_NUM]{0};
+    std::generate_n(c_nums, MAX_NUM, [&] { return dist(rng); });
+
+    std::cout << "Random integer numbers (C style array)\n";
+    print_container(c_nums, c_nums + MAX_NUM);
     std::cout << "\n";
 
+    std::cout << "Sorted integer numbers (C style array)\n";
+    std::sort(c_nums, c_nums + MAX_NUM);
+    print_container(c_nums, c_nums + MAX_NUM);
+    std::cout << "\n\n";
     return 0;
 }
 
