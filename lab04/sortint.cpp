@@ -1,0 +1,54 @@
+/**
+ * @file   sortint.cpp
+ * @author Pratchaya Khansomboon <me@mononerv.dev>
+ * @brief  Task 1 - Sort integers with STL algorithm
+ *
+ *         a. Generate random numbers into std::vector and sort it with std::sort.
+ *            Print out the results between the steps.
+ * @date   2022-09-18
+ *
+ * @copyright Copyright (c) 2022
+ */
+#include <iostream>
+#include <cstdint>
+#include <random>
+#include <vector>
+#include <algorithm>
+
+/**
+ * Prints with space separated values.
+ *
+ * @param begin Where to start iterate from.
+ * @param end   Where to end, this will check it one iterator down to insert space.
+ */
+auto print_container(auto const& begin, auto const& end) -> void {
+    for (auto it = begin; it != end; ++it) {
+        std::cout << *it;
+        if (it != end - 1) std::cout << " ";
+        else std::cout << "\n";
+    }
+}
+
+auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[]) -> std::int32_t {
+    std::random_device rdev;  // Create random device for later usage
+    std::mt19937 rng{0};      // Pass in random device to generate the random number
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 255);
+    constexpr std::size_t MAX_NUM = 32;
+
+    // Task 01.a - Sort integers with std::vector
+
+    std::vector<std::int32_t> nums{};
+    std::generate_n(std::back_inserter(nums), MAX_NUM, [&] { return dist(rng); });
+
+    std::cout << "Random integer numbers (std::vector)\n";
+    print_container(std::begin(nums), std::end(nums));
+    std::cout << "\n";
+
+    std::cout << "Sorted integer numbers (std::vector)\n";
+    std::sort(std::begin(nums), std::end(nums));
+    print_container(std::begin(nums), std::end(nums));
+    std::cout << "\n";
+
+    return 0;
+}
+
