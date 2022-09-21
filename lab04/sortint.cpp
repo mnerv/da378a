@@ -60,6 +60,19 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::sort(c_nums, c_nums + MAX_NUM);
     print_container(c_nums, c_nums + MAX_NUM);
     std::cout << "\n\n";
+
+    // Task 01.c - Sort integers in reverse order (std::vector)
+    std::vector<std::int32_t> rnums{};
+    std::generate_n(std::back_inserter(rnums), MAX_NUM, [&] { return dist(rng); });
+    std::cout << "Random integer numbers (std::vector)\n";
+    print_container(std::begin(rnums), std::end(rnums));
+    std::cout << "\n";
+
+    std::cout << "Sorted integer numbers (std::vector)\n";
+    std::sort(std::rbegin(rnums), std::rend(rnums));
+    print_container(std::begin(rnums), std::end(rnums));
+    std::cout << "\n\n";
+
     return 0;
 }
 
