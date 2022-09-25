@@ -23,9 +23,10 @@
 [[maybe_unused]]constexpr auto test_source = R"(config dec
 print 1 + 1
 print 3 + 3 * 3
+print ( 3 + 3 ) * 3
 x = 2 - -2
 y = x
-z = y * (16 / (y - 2))
+z = y * ( 16 / ( y - 2 ) )
 print x
 print y
 print z
