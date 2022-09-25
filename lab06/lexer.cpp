@@ -24,6 +24,7 @@ auto lexer::tokenize() -> std::vector<token> {
 }
 
 auto lexer::consume() -> void { ++m_cursor; }
+auto lexer::peek() const -> char { return m_source[m_cursor]; }
 
 auto lexer::next_token() -> std::optional<token> {
     if (!has_next()) return {};
@@ -36,9 +37,9 @@ auto lexer::next_token() -> std::optional<token> {
     return token(res, token_type::invalid);
 }
 
-auto lexer::is_tab()     const -> bool { return m_source[m_cursor] == '\t'; }
-auto lexer::is_space()   const -> bool { return m_source[m_cursor] == ' ';  }
-auto lexer::is_newline() const -> bool { return m_source[m_cursor] == '\n'; }
+auto lexer::is_tab()     const -> bool { return peek() == '\t'; }
+auto lexer::is_space()   const -> bool { return peek() == ' ';  }
+auto lexer::is_newline() const -> bool { return peek() == '\n'; }
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }
-auto lexer::is_carriage_return() const -> bool { return m_source[m_cursor] == '\r'; }
+auto lexer::is_carriage_return() const -> bool { return peek() == '\r'; }
 }

@@ -29,6 +29,7 @@ class lexer {
 
   private:
     auto consume() -> void;
+    auto peek() const -> char;
 
     auto next_token() -> std::optional<token>;
 
