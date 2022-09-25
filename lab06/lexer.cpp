@@ -18,6 +18,8 @@ std::unordered_map<std::string, token_type> lexer::s_keywords{
 
 std::unordered_map<std::string, token_type> lexer::s_punctuations{
     {"\n",     token_type::newline},
+    {"(",      token_type::paren_open},
+    {")",      token_type::paren_close},
 };
 
 lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
@@ -45,14 +47,18 @@ auto lexer::next_token() -> std::optional<token> {
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
     if (is_newline() || is_carriage_return()) res += consume_next();
+
+    // TODO: Find a better way? It's kind of ugly
+    if (res.empty()) {
+        do {
+            res += consume_next();
+        } while (has_next() && !is_whitespace());
+        if (has_next() && !is_newline()) consume();
+    }
+
     auto const token_punctuation = s_punctuations.find(res);
     if (token_punctuation != std::end(s_punctuations))
         return token(res, token_punctuation->second);
-
-    do {
-        res += consume_next();
-    } while (has_next() && !is_whitespace());
-    if (has_next() && !is_newline()) consume();
 
     auto const token_keyword = s_keywords.find(res);
     if (token_keyword != std::end(s_keywords))

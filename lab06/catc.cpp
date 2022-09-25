@@ -47,7 +47,6 @@ print z
 )";
 
 auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
-    std::cout << "Hello, cat!\n";
     cat::lexer lexer{test_source};
     auto tokens = lexer.tokenize();
     for (auto const& token : tokens) {
