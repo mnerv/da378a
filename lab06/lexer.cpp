@@ -30,6 +30,7 @@ auto lexer::next_token() -> std::optional<token> {
     if (is_space()) consume();
     if (!has_next()) return {};
     std::string res{};  // Eaten results
+    (void)m_line;
 
     // TODO: Handle strings source code
     return token(res, token_type::invalid);

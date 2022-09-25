@@ -48,4 +48,4 @@ class lexer {
 };
 }
 
-#endif //CATC_LEXER_HPP
+#endif  // CATC_LEXER_HPP
