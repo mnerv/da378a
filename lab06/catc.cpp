@@ -7,7 +7,7 @@
  *         Functionality requirements:
  *           - Read code from a source file
  *           - Parse and execute according to the C@ grammar. Add your own code
- *             (or code sgguested by a teacher)
+ *             (or code suggested by a teacher)
  *           - Output sends to the std::ostream, such as std::cout (standard out)
  *           - Terminals defined by regular expressions (int and variable)
  *             should be matched properly to the provided pattern. int-tokens

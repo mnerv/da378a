@@ -21,16 +21,15 @@ auto token_type_str(token_type const& type) -> std::string {
 
 auto token_category_str(token_category const& type) -> std::string {
     switch (type) {
-        case token_category::number:    return "number";
-        case token_category::keyword:   return "keyword";
-        case token_category::operator_: return "operator";
-        default:
-        case token_category::invalid:   return "invalid";
+        case token_category::number:      return "number";
+        case token_category::keyword:     return "keyword";
+        case token_category::operator_:   return "operator";
+        case token_category::punctuation: return "punctuation";
+        case token_category::invalid:
+        case token_category::_count:      return "invalid";
     }
 }
-/**
- * Token container, describe what type of token it is and what value it has.
- */
+
 token::token(std::string const& value, token_type const& type) : m_value(value), m_type(type) {}
 
 auto token::str() const -> std::string {

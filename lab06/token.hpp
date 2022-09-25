@@ -15,16 +15,17 @@ namespace cat {
 // notes:
 //   - assign    = equals
 //   - operator_ = operator (reserved keyword in C++)
-#define ENUMERATOR_CATLANG_TOKENS                           \
-        ENUMERATOR_CATLANG_TOKEN(assign     , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(config     , keyword)      \
-        ENUMERATOR_CATLANG_TOKEN(invalid    , invalid)      \
-        ENUMERATOR_CATLANG_TOKEN(minus      , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(paren_open , punctuation)  \
-        ENUMERATOR_CATLANG_TOKEN(paren_close, punctuation)  \
-        ENUMERATOR_CATLANG_TOKEN(plus       , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(print      , keyword)      \
-        ENUMERATOR_CATLANG_TOKEN(slash      , operator_)
+#define ENUMERATOR_CATLANG_TOKENS                               \
+        ENUMERATOR_CATLANG_TOKEN(assign         , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(config         , keyword)      \
+        ENUMERATOR_CATLANG_TOKEN(invalid        , invalid)      \
+        ENUMERATOR_CATLANG_TOKEN(minus          , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(numeric_literal, number)       \
+        ENUMERATOR_CATLANG_TOKEN(paren_open     , punctuation)  \
+        ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
+        ENUMERATOR_CATLANG_TOKEN(plus           , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(print          , keyword)      \
+        ENUMERATOR_CATLANG_TOKEN(slash          , operator_)
 
 enum class token_type : std::uint32_t {
 #define ENUMERATOR_CATLANG_TOKEN(type, category) type,
