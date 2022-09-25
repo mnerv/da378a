@@ -3,7 +3,16 @@
  * @author Pratchaya Khansomboon <me@mononerv.dev>
  * @brief  catc is a mini project interpreter for the C@ (cat) language.
  *         This program compiles and interpret the C@ code.
- * @date   2022-09-14
+ *
+ *         Functionality requirements:
+ *           - Read code from a source file
+ *           - Parse and execute according to the C@ grammar. Add your own code
+ *             (or code sgguested by a teacher)
+ *           - Output sends to the std::ostream, such as std::cout (standard out)
+ *           - Terminals defined by regular expressions (int and variable)
+ *             should be matched properly to the provided pattern. int-tokens
+ *             should be matched before being ast to C++ integers.
+ * @date   2022-09-15
  *
  * @copyright Copyright (c) 2022
  */
