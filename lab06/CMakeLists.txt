@@ -4,19 +4,19 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)  # Group CMake targets inside a fol
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json for language servers
 
 set(SOURCE_FILES
-    "${PROJECT_SOURCE_DIR}/lexer.hpp"
-    "${PROJECT_SOURCE_DIR}/token.hpp"
+    "lexer.hpp"
+    "token.hpp"
 
-    "${PROJECT_SOURCE_DIR}/lexer.cpp"
-    "${PROJECT_SOURCE_DIR}/token.cpp"
-    "${PROJECT_SOURCE_DIR}/catc.cpp"
+    "lexer.cpp"
+    "token.cpp"
+    "catc.cpp"
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}"
 )
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-if (NOT MSVC)
+if (NOT MSVC AND NOT WIN32)
     target_compile_options(${PROJECT_NAME} PRIVATE
         "-Wall"
         "-Wextra"
