@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <unordered_map>
 
 #include "token.hpp"
 
@@ -29,6 +30,7 @@ class lexer {
 
   private:
     auto consume() -> void;
+    auto consume_next() -> char;
     auto peek() const -> char;
 
     auto next_token() -> std::optional<token>;
@@ -41,11 +43,15 @@ class lexer {
     auto is_newline() const -> bool;
     auto has_next()   const -> bool;
     auto is_carriage_return() const -> bool;
+    auto is_whitespace()      const -> bool;
 
   private:
     std::string m_source;
     std::size_t m_cursor;
     std::size_t m_line;
+
+  private:
+    static std::unordered_map<std::string, token_type> s_keywords;
 };
 }
 

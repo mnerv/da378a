@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2022
  */
 #include "token.hpp"
+#include <numeric>
 
 namespace cat {
 auto token_type_str(token_type const& type) -> std::string {
@@ -28,14 +29,24 @@ auto token_category_str(token_category const& type) -> std::string {
         case token_category::invalid:
         case token_category::_count:      return "invalid";
     }
+    return "invalid";
 }
 
 token::token(std::string const& value, token_type const& type) : m_value(value), m_type(type) {}
 
+
 auto token::str() const -> std::string {
     using namespace std::string_literals;
+    auto sanitize_str = [](std::string const& str) -> std::string {
+        return std::reduce(std::begin(str), std::end(str), std::string{}, [](auto a, auto b) {
+            std::string raw{};
+            if (b == '\n') raw = "\\n";
+            else raw = b;
+            return a + raw;
+        });
+    };
     std::string str{"token { "};
-    str += "value: " + m_value + ", ";
+    str += "value: \"" + sanitize_str(m_value) + "\", ";
     str += "type: "  + token_type_str(m_type);
     str += " }";
     return str;
