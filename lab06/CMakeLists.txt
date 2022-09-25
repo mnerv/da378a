@@ -24,7 +24,7 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         "/W4"
         "/WX"
-        "/fsanitize=address"
+        #"/fsanitize=address"  # Doesn't work without Visual Studio
     )
 endif()
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
