@@ -4,6 +4,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)  # Group CMake targets inside a fol
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json for language servers
 
 set(SOURCE_FILES
+    "${PROJECT_SOURCE_DIR}/lexer.hpp"
+    "${PROJECT_SOURCE_DIR}/token.hpp"
+
+    "${PROJECT_SOURCE_DIR}/lexer.cpp"
+    "${PROJECT_SOURCE_DIR}/token.cpp"
     "${PROJECT_SOURCE_DIR}/catc.cpp"
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
