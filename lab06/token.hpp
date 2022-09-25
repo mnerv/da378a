@@ -11,17 +11,25 @@
 #include <string>
 
 namespace cat {
-// Preprocessor magic for automatically setting up enumerations
-#define __ENUMERATOR_CATLANG_TOKENS                   \
-        __ENUMERATOR_CATLANG_TOKEN(config, keyword)   \
-        __ENUMERATOR_CATLANG_TOKEN(print, keyword)    \
-        __ENUMERATOR_CATLANG_TOKEN(assign, keyword)   \
-        __ENUMERATOR_CATLANG_TOKEN(invalid, invalid)
+// Preprocessor magic for automatically setting up enumerations.
+// notes:
+//   - assign    = equals
+//   - operator_ = operator (reserved keyword in C++)
+#define ENUMERATOR_CATLANG_TOKENS                           \
+        ENUMERATOR_CATLANG_TOKEN(assign     , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(config     , keyword)      \
+        ENUMERATOR_CATLANG_TOKEN(invalid    , invalid)      \
+        ENUMERATOR_CATLANG_TOKEN(minus      , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(paren_open , punctuation)  \
+        ENUMERATOR_CATLANG_TOKEN(paren_close, punctuation)  \
+        ENUMERATOR_CATLANG_TOKEN(plus       , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(print      , keyword)      \
+        ENUMERATOR_CATLANG_TOKEN(slash      , operator_)
 
 enum class token_type : std::uint32_t {
-#define __ENUMERATOR_CATLANG_TOKEN(type, category) type,
-    __ENUMERATOR_CATLANG_TOKENS
-#undef  __ENUMERATOR_CATLANG_TOKEN
+#define ENUMERATOR_CATLANG_TOKEN(type, category) type,
+    ENUMERATOR_CATLANG_TOKENS
+#undef  ENUMERATOR_CATLANG_TOKEN
     _count
 };
 
@@ -31,7 +39,8 @@ enum class token_category : std::uint32_t {
     invalid,
     number,
     keyword,
-    driver,  // operator (+-/*, etc)
+    operator_,
+    punctuation,
     _count
 };
 

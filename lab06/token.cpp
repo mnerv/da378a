@@ -11,9 +11,9 @@
 namespace cat {
 auto token_type_str(token_type const& type) -> std::string {
     switch (type) {
-#define __ENUMERATOR_CATLANG_TOKEN(_type, category) case token_type::_type: return #_type;
-        __ENUMERATOR_CATLANG_TOKENS
-#undef  __ENUMERATOR_CATLANG_TOKEN
+#define ENUMERATOR_CATLANG_TOKEN(_type, category) case token_type::_type: return #_type;
+        ENUMERATOR_CATLANG_TOKENS
+#undef  ENUMERATOR_CATLANG_TOKEN
         default: break;
     }
     return "invalid";
@@ -21,11 +21,11 @@ auto token_type_str(token_type const& type) -> std::string {
 
 auto token_category_str(token_category const& type) -> std::string {
     switch (type) {
-        case token_category::number:  return "number";
-        case token_category::keyword: return "keyword";
-        case token_category::driver:  return "operator";
+        case token_category::number:    return "number";
+        case token_category::keyword:   return "keyword";
+        case token_category::operator_: return "operator";
         default:
-        case token_category::invalid: return "invalid";
+        case token_category::invalid:   return "invalid";
     }
 }
 /**
