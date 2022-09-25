@@ -53,6 +53,7 @@ class lexer {
   private:
     static std::unordered_map<std::string, token_type> s_keywords;
     static std::unordered_map<std::string, token_type> s_punctuations;
+    static std::unordered_map<std::string, token_type> s_operators;
 };
 }
 

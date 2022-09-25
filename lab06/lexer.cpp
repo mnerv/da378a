@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2022
  */
 #include "lexer.hpp"
-#include <iostream>
 
 namespace cat {
 
@@ -20,6 +19,14 @@ std::unordered_map<std::string, token_type> lexer::s_punctuations{
     {"\n",     token_type::newline},
     {"(",      token_type::paren_open},
     {")",      token_type::paren_close},
+};
+
+std::unordered_map<std::string, token_type> lexer::s_operators{
+    {"=",     token_type::equals},
+    {"+",     token_type::plus},
+    {"-",     token_type::minus},
+    {"*",     token_type::asterisk},
+    {"/",     token_type::slash},
 };
 
 lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
@@ -63,6 +70,10 @@ auto lexer::next_token() -> std::optional<token> {
     auto const token_keyword = s_keywords.find(res);
     if (token_keyword != std::end(s_keywords))
         return token(res, token_keyword->second);
+
+    auto const token_operators = s_operators.find(res);
+    if (token_operators != std::end(s_operators))
+        return token(res, token_operators->second);
 
     return token(res, token_type::invalid);
 }

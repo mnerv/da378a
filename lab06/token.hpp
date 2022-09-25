@@ -13,11 +13,13 @@
 namespace cat {
 // Preprocessor magic for automatically setting up enumerations.
 // notes:
-//   - assign    = equals
+//   - asterisk  = multiplication
+//   - equals    = assignment
 //   - operator_ = operator (reserved keyword in C++)
 #define ENUMERATOR_CATLANG_TOKENS                               \
-        ENUMERATOR_CATLANG_TOKEN(assign         , operator_)    \
+        ENUMERATOR_CATLANG_TOKEN(asterisk       , operator_)    \
         ENUMERATOR_CATLANG_TOKEN(config         , keyword)      \
+        ENUMERATOR_CATLANG_TOKEN(equals         , operator_)    \
         ENUMERATOR_CATLANG_TOKEN(invalid        , invalid)      \
         ENUMERATOR_CATLANG_TOKEN(minus          , operator_)    \
         ENUMERATOR_CATLANG_TOKEN(numeric_literal, number)       \
