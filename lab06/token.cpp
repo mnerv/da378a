@@ -40,7 +40,9 @@ auto token::str() const -> std::string {
     auto sanitize_str = [](std::string const& str) -> std::string {
         return std::reduce(std::begin(str), std::end(str), std::string{}, [](auto a, auto b) {
             std::string raw{};
-            if (b == '\n') raw = "\\n";
+            if (b == '\n')     raw = "\\n";
+            else if(b == '\r') raw = "\\r";
+            else if(b == '\t') raw = "\\t";
             else raw = b;
             return a + raw;
         });

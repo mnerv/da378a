@@ -7,12 +7,17 @@
  * @copyright Copyright (c) 2022
  */
 #include "lexer.hpp"
+#include <iostream>
 
 namespace cat {
 
 std::unordered_map<std::string, token_type> lexer::s_keywords{
     {"config", token_type::config},
-    {"print",  token_type::print}
+    {"print",  token_type::print},
+};
+
+std::unordered_map<std::string, token_type> lexer::s_punctuations{
+    {"\n",     token_type::newline},
 };
 
 lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
@@ -38,13 +43,16 @@ auto lexer::next_token() -> std::optional<token> {
     if (!has_next()) return {};
     std::string res{};  // Eaten results
 
-    // TODO: Handle strings source code
+    // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
+    if (is_newline() || is_carriage_return()) res += consume_next();
+    auto const token_punctuation = s_punctuations.find(res);
+    if (token_punctuation != std::end(s_punctuations))
+        return token(res, token_punctuation->second);
 
     do {
-        if (is_newline()) ++m_line;
         res += consume_next();
     } while (has_next() && !is_whitespace());
-    if (has_next()) consume();
+    if (has_next() && !is_newline()) consume();
 
     auto const token_keyword = s_keywords.find(res);
     if (token_keyword != std::end(s_keywords))

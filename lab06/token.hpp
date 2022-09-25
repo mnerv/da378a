@@ -21,6 +21,7 @@ namespace cat {
         ENUMERATOR_CATLANG_TOKEN(invalid        , invalid)      \
         ENUMERATOR_CATLANG_TOKEN(minus          , operator_)    \
         ENUMERATOR_CATLANG_TOKEN(numeric_literal, number)       \
+        ENUMERATOR_CATLANG_TOKEN(newline        , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(paren_open     , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(plus           , operator_)    \
