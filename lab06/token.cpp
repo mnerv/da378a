@@ -8,8 +8,28 @@
  */
 #include "token.hpp"
 #include <numeric>
+#include <algorithm>
+#include <cctype>
 
 namespace cat {
+std::unordered_map<std::string, token_type> token::s_token_strs{
+    // Keywords
+    {"config", token_type::config},
+    {"print",  token_type::print},
+
+    // Punctuations
+    {"\n",     token_type::newline},
+    {"(",      token_type::paren_open},
+    {")",      token_type::paren_close},
+
+    // Operators
+    {"=",      token_type::equals},
+    {"+",      token_type::plus},
+    {"-",      token_type::minus},
+    {"*",      token_type::asterisk},
+    {"/",      token_type::slash},
+};
+
 auto token_type_str(token_type const& type) -> std::string {
     switch (type) {
 #define ENUMERATOR_CATLANG_TOKEN(_type, category) case token_type::_type: return #_type;
@@ -32,6 +52,16 @@ auto token_category_str(token_category const& type) -> std::string {
     return "invalid";
 }
 
+auto token_type_category(token_type const& type) -> token_category {
+    switch (type) {
+#define ENUMERATOR_CATLANG_TOKEN(_type, category) case token_type::_type: return token_category::category;
+        ENUMERATOR_CATLANG_TOKENS
+#undef  ENUMERATOR_CATLANG_TOKEN
+        default: break;
+    }
+    return token_category::invalid;
+}
+
 token::token(std::string const& value, token_type const& type) : m_value(value), m_type(type) {}
 
 
@@ -52,5 +82,16 @@ auto token::str() const -> std::string {
     str += "type: "  + token_type_str(m_type);
     str += " }";
     return str;
+}
+
+auto token::str_token(std::string const& str) -> std::optional<token_type> {
+    auto it = s_token_strs.find(str);
+    if (it != std::end(s_token_strs)) return it->second;
+    else return {};
+}
+
+auto token::is_numeric(std::string const& str) -> bool {
+    return std::all_of(std::begin(str), std::end(str),
+            [](auto const& c) { return std::isdigit(c); });
 }
 }

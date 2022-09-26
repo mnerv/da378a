@@ -9,6 +9,7 @@
 #ifndef CATC_TOKEN_HPP
 #define CATC_TOKEN_HPP
 #include <string>
+#include <unordered_map>
 
 namespace cat {
 // Preprocessor magic for automatically setting up enumerations.
@@ -17,18 +18,18 @@ namespace cat {
 //   - equals    = assignment
 //   - operator_ = operator (reserved keyword in C++)
 #define ENUMERATOR_CATLANG_TOKENS                               \
-        ENUMERATOR_CATLANG_TOKEN(asterisk       , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(config         , keyword)      \
-        ENUMERATOR_CATLANG_TOKEN(equals         , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(invalid        , invalid)      \
-        ENUMERATOR_CATLANG_TOKEN(minus          , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(numeric_literal, number)       \
+        ENUMERATOR_CATLANG_TOKEN(asterisk       , operator_  )  \
+        ENUMERATOR_CATLANG_TOKEN(config         , keyword    )  \
+        ENUMERATOR_CATLANG_TOKEN(equals         , operator_  )  \
+        ENUMERATOR_CATLANG_TOKEN(invalid        , invalid    )  \
+        ENUMERATOR_CATLANG_TOKEN(minus          , operator_  )  \
+        ENUMERATOR_CATLANG_TOKEN(numeric_literal, number     )  \
         ENUMERATOR_CATLANG_TOKEN(newline        , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(paren_open     , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
-        ENUMERATOR_CATLANG_TOKEN(plus           , operator_)    \
-        ENUMERATOR_CATLANG_TOKEN(print          , keyword)      \
-        ENUMERATOR_CATLANG_TOKEN(slash          , operator_)
+        ENUMERATOR_CATLANG_TOKEN(plus           , operator_  )  \
+        ENUMERATOR_CATLANG_TOKEN(print          , keyword    )  \
+        ENUMERATOR_CATLANG_TOKEN(slash          , operator_  )
 
 enum class token_type : std::uint32_t {
 #define ENUMERATOR_CATLANG_TOKEN(type, category) type,
@@ -49,6 +50,7 @@ enum class token_category : std::uint32_t {
 };
 
 auto token_category_str(token_category const& type) -> std::string;
+auto token_type_category(token_type const& type) -> token_category;
 
 /**
  * Token container, describe what type of token it is and what value it has.
@@ -60,9 +62,16 @@ class token {
 
     auto str() const -> std::string;
 
+  public:
+    static auto str_token(std::string const& str) -> std::optional<token_type>;
+    static auto is_numeric(std::string const& str) -> bool;
+
   private:
     std::string m_value{};
     token_type  m_type{token_type::invalid};
+
+  private:
+    static std::unordered_map<std::string, token_type> s_token_strs;
 };
 }
 #endif  // CATC_TOKEN_HPP

@@ -48,12 +48,7 @@ class lexer {
   private:
     std::string m_source;
     std::size_t m_cursor;
-    std::size_t m_line;
-
-  private:
-    static std::unordered_map<std::string, token_type> s_keywords;
-    static std::unordered_map<std::string, token_type> s_punctuations;
-    static std::unordered_map<std::string, token_type> s_operators;
+    [[maybe_unused]]std::size_t m_line;
 };
 }
 

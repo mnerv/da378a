@@ -10,25 +10,6 @@
 
 namespace cat {
 
-std::unordered_map<std::string, token_type> lexer::s_keywords{
-    {"config", token_type::config},
-    {"print",  token_type::print},
-};
-
-std::unordered_map<std::string, token_type> lexer::s_punctuations{
-    {"\n",     token_type::newline},
-    {"(",      token_type::paren_open},
-    {")",      token_type::paren_close},
-};
-
-std::unordered_map<std::string, token_type> lexer::s_operators{
-    {"=",     token_type::equals},
-    {"+",     token_type::plus},
-    {"-",     token_type::minus},
-    {"*",     token_type::asterisk},
-    {"/",     token_type::slash},
-};
-
 lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
 lexer::~lexer() = default;
 
@@ -53,7 +34,7 @@ auto lexer::next_token() -> std::optional<token> {
     std::string res{};  // Eaten results
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
-    if (is_newline() || is_carriage_return()) res += consume_next();
+    if (is_newline() || is_carriage_return()) res = consume_next();
 
     // TODO: Find a better way? It's kind of ugly
     if (res.empty()) {
@@ -63,17 +44,12 @@ auto lexer::next_token() -> std::optional<token> {
         if (has_next() && !is_newline()) consume();
     }
 
-    auto const token_punctuation = s_punctuations.find(res);
-    if (token_punctuation != std::end(s_punctuations))
-        return token(res, token_punctuation->second);
+    if (token::is_numeric(res))
+        return token(res, token_type::numeric_literal);
 
-    auto const token_keyword = s_keywords.find(res);
-    if (token_keyword != std::end(s_keywords))
-        return token(res, token_keyword->second);
-
-    auto const token_operators = s_operators.find(res);
-    if (token_operators != std::end(s_operators))
-        return token(res, token_operators->second);
+    auto const token_valid = token::str_token(res);
+    if (token_valid.has_value())
+        return token(res, token_valid.value());
 
     return token(res, token_type::invalid);
 }
