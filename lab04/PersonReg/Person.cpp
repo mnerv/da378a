@@ -18,6 +18,6 @@ auto Person::Print() const -> void {
 }
 
 auto Person::operator<(Person const& other) const -> bool {
-    return m_namn < other.m_namn;
+    return m_adress > other.m_adress;
 }
 
