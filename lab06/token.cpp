@@ -46,6 +46,7 @@ auto token_category_str(token_category const& type) -> std::string {
         case token_category::keyword:     return "keyword";
         case token_category::operator_:   return "operator";
         case token_category::punctuation: return "punctuation";
+        case token_category::identifier:  return "identifier";
         case token_category::invalid:
         case token_category::_count:      return "invalid";
     }

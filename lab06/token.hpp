@@ -29,6 +29,7 @@ namespace cat {
         ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(plus           , operator_  )  \
         ENUMERATOR_CATLANG_TOKEN(print          , keyword    )  \
+        ENUMERATOR_CATLANG_TOKEN(identifier     , identifier )  \
         ENUMERATOR_CATLANG_TOKEN(slash          , operator_  )
 
 enum class token_type : std::uint32_t {
@@ -41,6 +42,7 @@ enum class token_type : std::uint32_t {
 auto token_type_str(token_type const& type) -> std::string;
 
 enum class token_category : std::uint32_t {
+    identifier,
     invalid,
     number,
     keyword,

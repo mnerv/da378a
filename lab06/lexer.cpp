@@ -51,7 +51,7 @@ auto lexer::next_token() -> std::optional<token> {
     if (token_valid.has_value())
         return token(res, token_valid.value());
 
-    return token(res, token_type::invalid);
+    return token(res, token_type::identifier);
 }
 
 auto lexer::is_tab()     const -> bool { return peek() == '\t'; }
