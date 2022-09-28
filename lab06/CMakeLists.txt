@@ -5,9 +5,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json f
 
 set(SOURCE_FILES
     "lexer.hpp"
+    "parser.hpp"
     "token.hpp"
 
     "lexer.cpp"
+    "parser.cpp"
     "token.cpp"
     "catc.cpp"
 )
