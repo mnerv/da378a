@@ -10,6 +10,7 @@
 #define CATC_TOKEN_HPP
 #include <string>
 #include <unordered_map>
+#include <optional>
 
 namespace cat {
 // Preprocessor magic for automatically setting up enumerations.
