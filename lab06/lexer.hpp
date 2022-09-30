@@ -48,7 +48,6 @@ class lexer {
   private:
     std::string m_source;
     std::size_t m_cursor;
-    [[maybe_unused]]std::size_t m_line;
 };
 }
 

@@ -10,7 +10,7 @@
 
 namespace cat {
 
-lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
+lexer::lexer(std::string const& source) : m_source(source), m_cursor(0) {}
 lexer::~lexer() = default;
 
 auto lexer::tokenize() -> std::vector<token> {
@@ -32,11 +32,12 @@ auto lexer::next_token() -> std::optional<token> {
     if (is_space()) consume();
     if (!has_next()) return {};
     std::string res{};  // Eaten results
+    // TODO: Add a way to see where a token is located in the source file.
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
     if (is_newline() || is_carriage_return()) res = consume_next();
 
-    // TODO: Find a better way? It's kind of ugly
+    // FIXME: Find a better way? It's kind of ugly
     if (res.empty()) {
         do {
             res += consume_next();
