@@ -6,16 +6,15 @@
  *
  * @copyright Copyright (c) 2022
  */
-#ifndef CAT_PARSER_HPP
-#define CAT_PARSER_HPP
+#ifndef CATC_PARSER_HPP
+#define CATC_PARSER_HPP
 
+#include <vector>
 #include "token.hpp"
 #include "lexer.hpp"
+#include "ast.hpp"
 
 namespace cat {
-
-class ast_node {
-};
 
 class parser {
   public:
@@ -24,4 +23,4 @@ class parser {
 
 }
 
-#endif  // CAT_PARSER_HPP
+#endif  // CATC_PARSER_HPP
