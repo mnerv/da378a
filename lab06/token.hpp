@@ -20,7 +20,6 @@ namespace cat {
 //   - operator_ = operator (reserved keyword in C++)
 #define ENUMERATOR_CATLANG_TOKENS                               \
         ENUMERATOR_CATLANG_TOKEN(asterisk       , operator_  )  \
-        ENUMERATOR_CATLANG_TOKEN(config         , keyword    )  \
         ENUMERATOR_CATLANG_TOKEN(equals         , operator_  )  \
         ENUMERATOR_CATLANG_TOKEN(invalid        , invalid    )  \
         ENUMERATOR_CATLANG_TOKEN(minus          , operator_  )  \
@@ -29,7 +28,6 @@ namespace cat {
         ENUMERATOR_CATLANG_TOKEN(paren_open     , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(plus           , operator_  )  \
-        ENUMERATOR_CATLANG_TOKEN(print          , keyword    )  \
         ENUMERATOR_CATLANG_TOKEN(identifier     , identifier )  \
         ENUMERATOR_CATLANG_TOKEN(slash          , operator_  )
 

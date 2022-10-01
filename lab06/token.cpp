@@ -14,8 +14,6 @@
 namespace cat {
 std::unordered_map<std::string, token_type> token::s_token_strs{
     // Keywords
-    {"config", token_type::config},
-    {"print",  token_type::print},
 
     // Punctuations
     {"\n",     token_type::newline},
