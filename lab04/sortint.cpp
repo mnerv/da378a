@@ -45,6 +45,7 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::vector<std::int32_t> nums{};
     std::generate_n(std::back_inserter(nums), MAX_NUM, [&] { return dist(rng); });
 
+    std::cout << "Task 01.a\n";
     std::cout << "Random integer numbers (std::vector)\n";
     print_container(std::begin(nums), std::end(nums));
     std::cout << "\n";
@@ -58,6 +59,7 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::int32_t c_nums[MAX_NUM]{0};
     std::generate_n(c_nums, MAX_NUM, [&] { return dist(rng); });
 
+    std::cout << "Task 01.b\n";
     std::cout << "Random integer numbers (C style array)\n";
     print_container(c_nums, c_nums + MAX_NUM);
     std::cout << "\n";
@@ -71,6 +73,7 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::vector<std::int32_t> rnums{};
     std::generate_n(std::back_inserter(rnums), MAX_NUM, [&] { return dist(rng); });
 
+    std::cout << "Task 01.c\n";
     std::cout << "Random integer numbers reverse (std::vector)\n";
     print_container(std::begin(rnums), std::end(rnums));
     std::cout << "\n";
@@ -84,6 +87,7 @@ auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[])
     std::int32_t c_rnums[MAX_NUM]{0};
     std::generate_n(c_rnums, MAX_NUM, [&] { return dist(rng); });
 
+    std::cout << "Task 01.d\n";
     std::cout << "Random integer numbers reverse (C style array)\n";
     print_container(c_rnums, c_rnums + MAX_NUM);
     std::cout << "\n";
