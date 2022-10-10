@@ -87,9 +87,9 @@ auto substitute_cstr(char const* input, char const* before, char const* after) -
         //   1. Copy first part before match
         //   2. Copy after string to the new location
         //   3. Copy rest of the previous string data include null termination.
-        std::memcpy(str, tmp_str, match);
-        std::memcpy(str + match, after, after_len);
-        std::memcpy(str + match + after_len, tmp_str + match + before_len, tmp_len - match - before_len + 1);
+        std::memcpy(str, tmp_str, match * sizeof(char));
+        std::memcpy(str + match, after, after_len * sizeof(char));
+        std::memcpy(str + match + after_len, tmp_str + match + before_len, (tmp_len - match - before_len + 1) * sizeof(char));
 
         match = find_str(str, before);
         delete[] tmp_str;
