@@ -168,7 +168,7 @@ TEST(string_capacity, reserve) {
     uni::string str;
     constexpr std::size_t size = 128;
     str.reserve(size);
-    ASSERT_EQ(size, str.size());
+    ASSERT_EQ(size, str.capacity());
 }
 TEST(string_capacity, shrink) {
     constexpr std::size_t size = 128;

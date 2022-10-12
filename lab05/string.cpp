@@ -6,8 +6,9 @@
  * @copyright Copyright (c) 2022
  */
 #include "string.hpp"
-#include <cassert>
 #include <algorithm>
+#include <numeric>
+
 #include <cstring>
 
 // std::string memory allocation on different compilers libc++
@@ -72,15 +73,18 @@ auto string::push_back(char c) -> void {
     }
 }
 
-auto operator==([[maybe_unused]]string const& lhs, [[maybe_unused]]string const& rhs) -> bool {
-    return false;
+auto operator==(string const& lhs, string const& rhs) -> bool {
+    if (lhs.m_size != rhs.m_size) return false;
+    return std::all_of(lhs.m_data, lhs.m_data + lhs.m_size, [it = rhs.m_data](auto const& c) mutable {
+        return c == *(it++);
+    });
 }
-auto operator!=([[maybe_unused]]string const& lhs, [[maybe_unused]]string const& rhs) -> bool {
-    return false;
+auto operator!=(string const& lhs, string const& rhs) -> bool {
+    return !(lhs == rhs);
 }
 
 auto string::data() const -> char const* {
-    return nullptr;
+    return m_data;
 }
 
 auto operator<<(std::ostream& out, string const& rhs) -> std::ostream& {
@@ -96,9 +100,26 @@ auto string::at([[maybe_unused]]std::size_t i) const -> char const& {
     return m_data[i];
 }
 auto string::reserve(std::size_t new_capacity) -> void {
+    delete[] m_data;
     m_capacity = new_capacity;
+    m_data     = new char[m_capacity];
+    m_size     = 0;
+    std::memset(m_data, 0, m_capacity);
 }
 auto string::shrink_to_fit() -> void {
+    auto tmp = m_data;
+    if (m_size == 0) {
+        auto const count = std::count_if(m_data, m_data + m_capacity,
+            [is_zero = false](auto const& c) mutable {
+                if (c == 0) is_zero = true;
+                return c != 0 && !is_zero;
+            });
+        m_size = static_cast<std::size_t>(count);
+    }
+    m_data     = new char[m_size];
+    m_capacity = m_size;
+    std::memcpy(m_data, tmp, m_capacity);
+    delete[] tmp;
 }
 
 auto string::operator+=([[maybe_unused]]string const& rhs) -> string& {
