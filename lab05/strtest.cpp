@@ -1,6 +1,7 @@
 /**
  * @file   strtest.cpp
  * @author Pratchaya Khansomboon <me@mononerv.dev>
+ * @brief  Google Test suites for custom string implementation.
  * @date   2022-10-05
  *
  * @copyright Copyright (c) 2022
@@ -36,13 +37,13 @@ TEST(constructor, default) {
 }
 TEST(constructor, c_string) {
     constexpr char hello[] = "Hello, World!";
-    uni::string str{hello};
+    uni::string str(hello);
     // TODO: Check if string is equal
     ASSERT_EQ(nrv::length_of(hello), str.size());
 }
 TEST(constructor, copy_assignment_operator) {
     constexpr char hello[] = "Hello, World!";
-    uni::string a{hello};
+    uni::string a(hello);
     uni::string b = a;
     a = "";
     ASSERT_NE(a.size(), b.size());

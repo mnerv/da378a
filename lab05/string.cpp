@@ -17,7 +17,7 @@ string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacit
     std::memcpy(m_data, rhs.m_data, m_size);
 }
 string::string(char const* cstr) {
-    m_size     = std::strlen(cstr);
+    m_size     = std::strlen(cstr) + 1;
     m_capacity = m_size;
     m_data     = new char[m_capacity];
     std::memset(m_data, 0, m_capacity);
@@ -27,7 +27,18 @@ string::~string() {
     delete[] m_data;
 }
 
-auto string::operator=([[maybe_unused]]string const& rhs) -> string& {
+auto string::operator=(string const& rhs) -> string& {
+    m_size = rhs.m_size;
+    if (m_capacity < rhs.m_capacity) {
+        m_capacity = rhs.m_capacity;
+        delete [] m_data;
+        m_data = new char[m_capacity];
+        std::memset(m_data, 0, m_capacity);
+        std::memcpy(m_data, rhs.m_data, m_size);
+    } else {
+        std::memset(m_data, 0, m_capacity);
+        std::memcpy(m_data, rhs.m_data, m_size);
+    }
     return *this;
 }
 auto string::operator[](std::size_t i) -> char& {
