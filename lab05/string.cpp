@@ -10,6 +10,9 @@
 #include <algorithm>
 #include <cstring>
 
+// std::string memory allocation on different compilers libc++
+// https://shaharmike.com/cpp/std-string/
+
 namespace uni {
 string::string() : m_size(0), m_capacity(8), m_data(new char[m_capacity]) {}
 string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacity), m_data(new char[m_capacity]) {
@@ -54,7 +57,19 @@ auto string::capacity() const -> std::size_t {
     return m_capacity;
 }
 
-auto string::push_back([[maybe_unused]]char c) -> void {
+auto string::push_back(char c) -> void {
+    auto const old_size = m_size++;
+    if (m_size > m_capacity) {
+        m_capacity = m_size;
+        auto tmp = m_data;
+        m_data = new char[m_capacity];
+        std::memset(m_data, 0, m_capacity);
+        std::memcpy(m_data, tmp, old_size);
+        m_data[old_size] = c;
+        delete[] tmp;
+    } else {
+        m_data[old_size] = c;
+    }
 }
 
 auto operator==([[maybe_unused]]string const& lhs, [[maybe_unused]]string const& rhs) -> bool {
