@@ -3,7 +3,7 @@ project(string VERSION 0.0.0)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)  # Group CMake targets inside a folder
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json for language servers
 
-find_package(gtest CONFIG)
+find_package(GTest CONFIG)
 
 if (NOT MSVC AND NOT WIN32)
     add_compile_options(
@@ -34,7 +34,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
 # testing application with Google Test
-if (gtest_FOUND)
+if (DEFINED GTest_FOUND)
 project(strtest)
 set(SOURCE_FILES
     "strtest.cpp"

@@ -8,6 +8,7 @@
 #include "string.hpp"
 #include <cassert>
 #include <algorithm>
+#include <cstring>
 
 namespace uni {
 string::string() : m_size(0), m_capacity(8), m_data(new char[m_capacity]) {}
