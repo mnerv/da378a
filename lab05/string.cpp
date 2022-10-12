@@ -8,6 +8,7 @@
 #include "string.hpp"
 #include <algorithm>
 #include <numeric>
+#include <stdexcept>
 
 #include <cstring>
 
@@ -21,8 +22,8 @@ string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacit
     std::memcpy(m_data, rhs.m_data, m_size);
 }
 string::string(char const* cstr) {
-    m_size     = std::strlen(cstr) + 1;
-    m_capacity = m_size;
+    m_size     = std::strlen(cstr);
+    m_capacity = m_size + 1;
     m_data     = new char[m_capacity];
     std::memset(m_data, 0, m_capacity);
     std::memcpy(m_data, cstr, m_size);
@@ -61,7 +62,7 @@ auto string::capacity() const -> std::size_t {
 auto string::push_back(char c) -> void {
     auto const old_size = m_size++;
     if (m_size > m_capacity) {
-        m_capacity = m_size;
+        m_capacity = m_size + 1;
         auto tmp = m_data;
         m_data = new char[m_capacity];
         std::memset(m_data, 0, m_capacity);
@@ -93,10 +94,12 @@ auto operator<<(std::ostream& out, string const& rhs) -> std::ostream& {
     return out;
 }
 
-auto string::at([[maybe_unused]]std::size_t i) -> char& {
+auto string::at(std::size_t i) -> char& {
+    if (i >= m_size) throw std::out_of_range("uni::string index out of range");
     return m_data[i];
 }
-auto string::at([[maybe_unused]]std::size_t i) const -> char const& {
+auto string::at(std::size_t i) const -> char const& {
+    if (i >= m_size) throw std::out_of_range("uni::string index out of range");
     return m_data[i];
 }
 auto string::reserve(std::size_t new_capacity) -> void {
@@ -122,11 +125,26 @@ auto string::shrink_to_fit() -> void {
     delete[] tmp;
 }
 
-auto string::operator+=([[maybe_unused]]string const& rhs) -> string& {
+auto string::operator+=(string const& rhs) -> string& {
+    auto const new_size = m_size + rhs.m_size;
+    if (new_size > m_capacity) {
+        auto const new_capacity = new_size + 1;
+        auto tmp = m_data;
+        m_data = new char[new_capacity];
+        std::memset(m_data, 0, new_capacity);
+        std::memcpy(m_data, tmp, m_size);
+        std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
+        delete[] tmp;
+    } else {
+        std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
+    }
+    m_size = new_size;
     return *this;
 }
-auto string::operator+([[maybe_unused]]string const& rhs)  -> string& {
-    return *this;
+auto string::operator+(string const& rhs) -> string {
+    string str = *this;
+    str += rhs;
+    return str;
 }
 }
 

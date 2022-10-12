@@ -50,7 +50,7 @@ class string {
     auto shrink_to_fit() -> void;
 
     auto operator+=(string const& rhs) -> string&;
-    auto operator+(string const& rhs)  -> string&;
+    auto operator+(string const& rhs)  -> string;
 
   private:
     std::size_t m_size;

@@ -54,7 +54,7 @@ endif()
 # main test file
 # TODO: Add the main executable source code
 if(FALSE)
-project(stringtest)
+project(maintest)
 set(SOURCE_FILES "main201025.cpp")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}")
