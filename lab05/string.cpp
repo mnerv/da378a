@@ -29,11 +29,11 @@ string::~string() {
 auto string::operator=([[maybe_unused]]string const& rhs) -> string& {
     return *this;
 }
-auto string::operator[]([[maybe_unused]]std::size_t i) -> char& {
-    assert(false);
+auto string::operator[](std::size_t i) -> char& {
+    return m_data[i];
 }
-auto string::operator[]([[maybe_unused]]std::size_t i) const -> char const& {
-    assert(false);
+auto string::operator[](std::size_t i) const -> char const& {
+    return m_data[i];
 }
 auto string::size() const -> std::size_t {
     return m_size;
@@ -43,14 +43,13 @@ auto string::capacity() const -> std::size_t {
 }
 
 auto string::push_back([[maybe_unused]]char c) -> void {
-    assert(false);
 }
 
 auto operator==([[maybe_unused]]string const& lhs, [[maybe_unused]]string const& rhs) -> bool {
-    assert(false);
+    return false;
 }
 auto operator!=([[maybe_unused]]string const& lhs, [[maybe_unused]]string const& rhs) -> bool {
-    assert(false);
+    return false;
 }
 
 auto string::data() const -> char const* {
@@ -64,24 +63,22 @@ auto operator<<(std::ostream& out, string const& rhs) -> std::ostream& {
 }
 
 auto string::at([[maybe_unused]]std::size_t i) -> char& {
-    assert(false);
+    return m_data[i];
 }
 auto string::at([[maybe_unused]]std::size_t i) const -> char const& {
-    assert(false);
+    return m_data[i];
 }
 auto string::reserve(std::size_t new_capacity) -> void {
     m_capacity = new_capacity;
-    assert(false);
 }
 auto string::shrink_to_fit() -> void {
-    assert(false);
 }
 
 auto string::operator+=([[maybe_unused]]string const& rhs) -> string& {
-    assert(false);
+    return *this;
 }
 auto string::operator+([[maybe_unused]]string const& rhs)  -> string& {
-    assert(false);
+    return *this;
 }
 }
 
