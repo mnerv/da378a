@@ -49,22 +49,29 @@ TEST(constructor, copy_assignment_operator) {
     ASSERT_NE(a.size(), b.size());
 }
 
-TEST(string_operation, index_no_range_check_lower) {
+TEST(string_operation, index_no_range_check_lower_in) {
     constexpr char hello[] = "Hello, World!";
     uni::string a{hello};
     ASSERT_EQ(hello[0], a[0]);
 }
-TEST(string_operation, index_no_range_check_upper) {
+TEST(string_operation, index_no_range_check_upper_in) {
     constexpr char hello[] = "Hello, World!";
     uni::string a{hello};
     ASSERT_EQ(hello[nrv::length_of(hello) - 1], a[nrv::length_of(hello) - 1]);
 }
-// TODO: Inside boundary test
-TEST(string_operation, index_no_range_check_const) {
+TEST(string_operation, index_no_range_check_const_lower_in) {
     constexpr char hello[] = "Hello, World!";
     uni::string const a{hello};
-    auto const b = a[0];
-    ASSERT_TRUE(std::is_const<decltype(b)>::value);
+    static_assert(std::is_const<decltype(a)>::value, "not const here");
+    auto& b = a[0];
+    ASSERT_TRUE((std::is_same<decltype(b), char const&>::value));
+}
+TEST(string_operation, index_no_range_check_const_upper_in) {
+    constexpr char hello[] = "Hello, World!";
+    uni::string const a{hello};
+    static_assert(std::is_const<decltype(a)>::value, "not const here");
+    auto& b = a[nrv::length_of(hello) - 1];
+    ASSERT_TRUE((std::is_same<decltype(b), char const&>::value));
 }
 
 TEST(string_capacity, size) {
@@ -134,22 +141,26 @@ TEST(string_at, bounds_upper_out) {
 }
 TEST(string_at, bounds_lower_const_in) {
     constexpr char hello[] = "Hello, World!";
-    uni::string a{hello};
+    uni::string const a{hello};
+    static_assert(std::is_const<decltype(a)>::value, "not const here");
     ASSERT_NO_THROW(a.at(0));
-    auto const b = a.at(0);
-    ASSERT_TRUE(std::is_const<decltype(b)>::value);
+    auto& b = a.at(0);
+    //static_assert(std::is_const<std::remove_reference<decltype(b)>::type>::value, "Not const");
+    ASSERT_TRUE((std::is_same<decltype(b), char const&>::value));
 }
 TEST(string_at, bounds_upper_const_in) {
     constexpr char hello[] = "Hello, World!";
-    uni::string a{hello};
+    uni::string const a{hello};
+    static_assert(std::is_const<decltype(a)>::value, "not const here");
     ASSERT_NO_THROW(a.at(nrv::length_of(hello) - 1));
-    auto const b = a.at(nrv::length_of(hello) - 1);
-    ASSERT_TRUE(std::is_const<decltype(b)>::value);
+    auto& b = a.at(nrv::length_of(hello) - 1);
+    ASSERT_TRUE((std::is_same<decltype(b), char const&>::value));
 }
 // No need to check lower bound outside because you can't pass negative value with std::size_t
 TEST(string_at, bounds_upper_const_out) {
     constexpr char hello[] = "Hello, World!";
-    uni::string a{hello};
+    uni::string const a{hello};
+    static_assert(std::is_const<decltype(a)>::value, "not const here");
     ASSERT_THROW(a.at(nrv::length_of(hello)), std::out_of_range);
 }
 
