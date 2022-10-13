@@ -30,7 +30,7 @@ constexpr auto length_of(T (&)[N]) -> std::size_t {
 //    ASSERT_TRUE(false);
 //}
 
-TEST(constructor, default) {
+TEST(constructor, trivial_default) {
     uni::string str;
     ASSERT_EQ(0, str.size());
 }
@@ -73,13 +73,16 @@ TEST(constructor, copy_assignment_operator_bounds_upper_in) {
 // Upper out, One size bigger string
 // Should test for reallocation when assigning larger string.
 TEST(constructor, copy_assignment_operator_bounds_out) {
-    constexpr char texta[] = "Hello, World!";
-    constexpr char textb[] = "Hello, Charlie!";
+    constexpr char texta[]     = "Hello, World!";
+    constexpr std::size_t size = 64;
+    static char textb[size]{0};
+    for (std::size_t i = 0; i < size - 1; ++i)
+        textb[i] = static_cast<char>(65 + (i % 25));
     uni::string a(texta);
     uni::string b(textb);
-    auto ptr = a.data();
+    auto const ptr = a.data();
     a = b;
-    ASSERT_EQ(ptr, a.data());
+    ASSERT_NE(ptr, a.data());
     ASSERT_EQ(nrv::length_of(textb) - 1, a.size());
 }
 
