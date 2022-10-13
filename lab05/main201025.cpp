@@ -5,18 +5,18 @@
 #endif
 #endif  // _DEBUG
 //#include <stdlib.h>
+//#include <crtdbg.h>
 
 #define VG
 
 #include "string.hpp"
-using String = uni::string;
 
 #include <string>
 #include <iostream>
 #include <cassert>
 #include <utility>
-
 using namespace std;
+using String = uni::string;
 
 void AssertStrEqual(const String& lhs, const char* rhs) {
     for (size_t i = 0; i < lhs.size() && *rhs != '\0'; ++i) {
@@ -30,7 +30,7 @@ void TestPushBackReallocation() {
     String str("hej");
     assert(str.size() <= str.capacity());
     assert(str.size() == 3);
-    [[maybe_unused]]auto hej = "hej";
+    auto hej = "hej";
     //AssertStrEqual(str, hej);
     AssertStrEqual(str, "hej");
 #ifdef VG
@@ -383,15 +383,14 @@ void TestFörVälGodkäntString() {
 
 int main() {
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-    //locale::global(locale("swedish"));
+//
+//    locale::global(locale("swedish"));
     TestFörGodkäntString();
     cout << "G test klart\n";
 #ifdef VG
     TestFörVälGodkäntString();
     cout << "VG test klart\n";
 #endif
-    TestNoExtraAlloc();
     new int;
     cout << "det finns en minnesläcka i main, avsiktligt!\n så ni kan se att er minnesläckstest fungerar\n";
     cin.get();

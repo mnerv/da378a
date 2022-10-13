@@ -11,6 +11,7 @@
 #include <stdexcept>
 
 #include <cstring>
+#include <iostream>
 
 // std::string memory allocation on different compilers libc++
 // https://shaharmike.com/cpp/std-string/
