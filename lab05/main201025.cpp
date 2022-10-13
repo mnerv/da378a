@@ -15,6 +15,7 @@
 #include <iostream>
 #include <cassert>
 #include <utility>
+#include <cstring>
 using namespace std;
 using String = uni::string;
 
