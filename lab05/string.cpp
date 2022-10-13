@@ -75,7 +75,7 @@ auto string::push_back(char c) -> void {
         delete[] tmp;
     } else {
         m_data[old_size] = c;
-        m_data[m_size + 1] = 0;
+        m_data[m_size] = 0;
     }
 }
 
