@@ -41,7 +41,6 @@ auto string::operator=(string const& rhs) -> string& {
         std::memset(m_data, 0, m_capacity);
         std::memcpy(m_data, rhs.m_data, m_size);
     } else {
-        std::memset(m_data, 0, m_capacity);
         std::memcpy(m_data, rhs.m_data, m_size);
     }
     return *this;
@@ -62,7 +61,7 @@ auto string::capacity() const -> std::size_t {
 auto string::push_back(char c) -> void {
     auto const old_size = m_size++;
     if (m_size > m_capacity) {
-        m_capacity = m_size + 1;
+        m_capacity = 2 * m_size;
         auto tmp = m_data;
         m_data = new char[m_capacity];
         std::memset(m_data, 0, m_capacity);
@@ -71,6 +70,7 @@ auto string::push_back(char c) -> void {
         delete[] tmp;
     } else {
         m_data[old_size] = c;
+        m_data[m_size + 1] = 0;
     }
 }
 
@@ -103,11 +103,13 @@ auto string::at(std::size_t i) const -> char const& {
     return m_data[i];
 }
 auto string::reserve(std::size_t new_capacity) -> void {
-    delete[] m_data;
+    if (new_capacity <= m_capacity) return;
+    auto tmp = m_data;
+    m_data = new char[new_capacity];
+    std::memset(m_data, 0, new_capacity);
+    std::memcpy(m_data, tmp, m_capacity);
     m_capacity = new_capacity;
-    m_data     = new char[m_capacity];
-    m_size     = 0;
-    std::memset(m_data, 0, m_capacity);
+    delete[] tmp;
 }
 auto string::shrink_to_fit() -> void {
     auto tmp = m_data;

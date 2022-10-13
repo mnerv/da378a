@@ -13,8 +13,8 @@
  * @copyright Copright (c) 2022
  */
 
-#ifndef MAU_STRING_HPP
-#define MAU_STRING_HPP
+#ifndef UNI_STRING_HPP
+#define UNI_STRING_HPP
 
 #include <cstddef>
 #include <ostream>
@@ -59,4 +59,4 @@ class string {
 };
 }
 
-#endif  // MAU_STRING_HPP
+#endif  // UNI_STRING_HPP

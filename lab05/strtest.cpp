@@ -87,11 +87,20 @@ TEST(string_capacity, capacity) {
     uni::string str{hello};
     ASSERT_EQ(nrv::length_of(hello), str.capacity());
 }
+
 TEST(string_operation, push_back) {
     constexpr char hello[] = "Hello, World!";
     uni::string str{hello};
     str.push_back('C');
     ASSERT_EQ(nrv::length_of(hello), str.size());
+}
+TEST(string_operation, push_back_str_check) {
+    constexpr char hello[] = "Hello, World!";
+    uni::string str{hello};
+    str.push_back('a');
+    str.push_back('b');
+    str.push_back('c');
+    ASSERT_EQ("Hello, World!abc", str);
 }
 
 TEST(string_operation, equal_equal) {
@@ -165,12 +174,38 @@ TEST(string_at, bounds_upper_const_out) {
     ASSERT_THROW(a.at(nrv::length_of(hello) - 1), std::out_of_range);
 }
 
-TEST(string_capacity, reserve) {
+TEST(string_capacity, reserve_size) {
     uni::string str;
     constexpr std::size_t size = 128;
     str.reserve(size);
     ASSERT_EQ(size, str.capacity());
 }
+TEST(string_capacity, reserve_data) {
+    constexpr char hello[] = "Hello, World!";
+    uni::string str;
+    constexpr std::size_t size = 128;
+    str.reserve(size);
+    auto ptr = str.data();
+    str = hello;
+    ASSERT_EQ(ptr, str.data());
+}
+// TODO: Fix boundary tests for reserve
+//TEST(string_capacity, reserve_boundary_upper_out) {
+//    constexpr char hello[]     = "Hello, World!";
+//    constexpr std::size_t size = nrv::length_of(hello);
+//    uni::string str(hello);
+//    str.reserve(size - 9);
+//    auto ptr = str.data();
+//    ASSERT_EQ(hello[0], ptr[0]);
+//}
+//TEST(string_capacity, reserve_boundary_lower_in) {
+//    constexpr char hello[]     = "Hello, World!";
+//    constexpr std::size_t size = nrv::length_of(hello);
+//    uni::string str(hello);
+//    str.reserve(size);
+//    auto ptr = str.data();
+//    ASSERT_EQ(hello[0], ptr[0]);
+//}
 TEST(string_capacity, shrink) {
     constexpr std::size_t size = 128;
     uni::string str;

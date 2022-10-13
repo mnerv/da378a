@@ -34,7 +34,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
 # testing application with Google Test
-if (DEFINED GTest_FOUND)
+if (GTest_FOUND)
 project(strtest)
 set(SOURCE_FILES
     "strtest.cpp"
@@ -52,14 +52,12 @@ source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 endif()
 
 # main test file
-# TODO: Add the main executable source code
-if(FALSE)
 project(maintest)
 set(SOURCE_FILES "main201025.cpp")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_link_libraries(${PROJECT_NAME} string)
+target_compile_options(${PROJECT_NAME} PRIVATE "-Wno-error")
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
-endif()
 
