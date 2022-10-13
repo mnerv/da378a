@@ -50,6 +50,41 @@ TEST(constructor, copy_assignment_operator) {
     a = "";
     ASSERT_NE(a.size(), b.size());
 }
+// Lower out, One size smaller string
+// This should test that there are no reallocation when assignment smaller string.
+TEST(constructor, copy_assignment_operator_bounds_lower_out) {
+    constexpr char texta[] = "Hello, World!";
+    constexpr char textb[] = "Hello, World";
+    uni::string a(texta);
+    uni::string b(textb);
+    auto ptr = a.data();
+    a = b;
+    ASSERT_EQ(ptr, a.data());
+    ASSERT_EQ(nrv::length_of(textb) - 1, a.size());
+}
+// Upper in,  Same string
+// Should be the same as the lower bound out when assigning same size string there should be no reallocation.
+TEST(constructor, copy_assignment_operator_bounds_upper_in) {
+    constexpr char text[] = "Hello, World!";
+    uni::string a(text);
+    uni::string b(text);
+    auto ptr = a.data();
+    a = b;
+    ASSERT_EQ(ptr, a.data());
+    ASSERT_EQ(nrv::length_of(text) - 1, a.size());
+}
+// Upper out, One size bigger string
+// Should test for reallocation when assigning larger string.
+TEST(constructor, copy_assignment_operator_bounds_out) {
+    constexpr char texta[] = "Hello, World!";
+    constexpr char textb[] = "Hello, Charlie!";
+    uni::string a(texta);
+    uni::string b(textb);
+    auto ptr = a.data();
+    a = b;
+    ASSERT_EQ(ptr, a.data());
+    ASSERT_EQ(nrv::length_of(textb) - 1, a.size());
+}
 
 TEST(string_operation, index_no_range_check_lower_in) {
     constexpr char hello[] = "Hello, World!";
@@ -90,24 +125,24 @@ TEST(string_capacity, capacity) {
 
 TEST(string_operation, push_back) {
     constexpr char hello[] = "Hello, World!";
-    uni::string str{hello};
-    str.push_back('C');
-    ASSERT_EQ(nrv::length_of(hello), str.size());
+    constexpr auto size    = nrv::length_of(hello);
+    uni::string str;
+    for (std::size_t i = 0; i < size; ++i) str.push_back(hello[i]);
+    ASSERT_EQ(size, str.size());
+    ASSERT_STREQ(hello, str.data());
 }
-TEST(string_operation, push_back_str_check) {
-    constexpr char hello[] = "Hello, World!";
-    uni::string str{hello};
-    str.push_back('a');
-    str.push_back('b');
-    str.push_back('c');
-    ASSERT_EQ("Hello, World!abc", str);
-}
-
 TEST(string_operation, equal_equal) {
     constexpr char hello[] = "Hello";
     uni::string a{hello};
     uni::string b{hello};
     ASSERT_EQ(a, b);
+}
+TEST(string_operation, equal_equal_diff_size) {
+    constexpr char texta[] = "Hello";
+    constexpr char textb[] = "World!";
+    uni::string a{texta};
+    uni::string b{textb};
+    ASSERT_NE(a, b);
 }
 TEST(string_operation, not_equal) {
     constexpr char hello1[] = "Hello";
@@ -207,12 +242,23 @@ TEST(string_capacity, reserve_data) {
 //    ASSERT_EQ(hello[0], ptr[0]);
 //}
 TEST(string_capacity, shrink) {
+    constexpr char hello[] = "Hello, World! From a afar";
     constexpr std::size_t size = 128;
     uni::string str;
     str.reserve(size);
-    str[0] = 'H';
+    str = hello;
     str.shrink_to_fit();
-    ASSERT_EQ(1, str.capacity());
+    ASSERT_NE(size, str.capacity());
+    ASSERT_EQ(nrv::length_of(hello) - 1, str.capacity());
+}
+TEST(string_capacity, shrink_bounds_upper_in) {
+    constexpr char hello[] = "Hello, World!";
+    constexpr std::size_t size = nrv::length_of(hello);
+    uni::string str(hello);
+    str.reserve(size);
+    str = hello;
+    str.shrink_to_fit();
+    ASSERT_NE(size, str.capacity());
 }
 
 TEST(string_operation, plus_equal) {

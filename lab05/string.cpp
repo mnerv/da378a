@@ -17,7 +17,11 @@
 // https://shaharmike.com/cpp/std-string/
 
 namespace uni {
-string::string() : m_size(0), m_capacity(8), m_data(new char[m_capacity]) {}
+
+static constexpr std::size_t STR_CAPACITY = 8;
+static constexpr std::size_t GROWTH_RATE  = 2;
+
+string::string() : m_size(0), m_capacity(STR_CAPACITY), m_data(new char[m_capacity]) {}
 string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacity), m_data(new char[m_capacity]) {
     std::memset(m_data, 0, m_capacity);
     std::memcpy(m_data, rhs.m_data, m_size);
@@ -62,7 +66,7 @@ auto string::capacity() const -> std::size_t {
 auto string::push_back(char c) -> void {
     auto const old_size = m_size++;
     if (m_size > m_capacity) {
-        m_capacity = 2 * m_size;
+        m_capacity = GROWTH_RATE * m_size;
         auto tmp = m_data;
         m_data = new char[m_capacity];
         std::memset(m_data, 0, m_capacity);
@@ -90,8 +94,7 @@ auto string::data() const -> char const* {
 }
 
 auto operator<<(std::ostream& out, string const& rhs) -> std::ostream& {
-    std::for_each(rhs.m_data, rhs.m_data + rhs.m_size,
-                  [&out](auto const& c) { out.put(c); });
+    std::for_each(rhs.m_data, rhs.m_data + rhs.m_size, [&out](auto const& c) { out.put(c); });
     return out;
 }
 
@@ -113,34 +116,23 @@ auto string::reserve(std::size_t new_capacity) -> void {
     delete[] tmp;
 }
 auto string::shrink_to_fit() -> void {
-    auto tmp = m_data;
-    if (m_size == 0) {
-        auto const count = std::count_if(m_data, m_data + m_capacity,
-            [is_zero = false](auto const& c) mutable {
-                if (c == 0) is_zero = true;
-                return c != 0 && !is_zero;
-            });
-        m_size = static_cast<std::size_t>(count);
-    }
-    m_data     = new char[m_size];
+    if (m_size == m_capacity) return;
+    auto tmp   = m_data;
     m_capacity = m_size;
+    m_data     = new char[m_capacity];
     std::memcpy(m_data, tmp, m_capacity);
     delete[] tmp;
 }
 
 auto string::operator+=(string const& rhs) -> string& {
     auto const new_size = m_size + rhs.m_size;
-    if (new_size > m_capacity) {
-        auto const new_capacity = new_size + 1;
-        auto tmp = m_data;
-        m_data = new char[new_capacity];
-        std::memset(m_data, 0, new_capacity);
-        std::memcpy(m_data, tmp, m_size);
-        std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
-        delete[] tmp;
-    } else {
-        std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
-    }
+    auto const new_capacity = new_size + 1;
+    auto tmp = m_data;
+    m_data = new char[new_capacity];
+    std::memset(m_data, 0, new_capacity);
+    std::memcpy(m_data, tmp, m_size);
+    std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
+    delete[] tmp;
     m_size = new_size;
     return *this;
 }
