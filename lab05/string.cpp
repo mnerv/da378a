@@ -18,8 +18,8 @@
 
 namespace uni {
 
-static constexpr std::size_t STR_CAPACITY = 8;
-static constexpr std::size_t GROWTH_RATE  = 2;
+static constexpr std::size_t STR_CAPACITY = 0;
+static constexpr std::size_t GROW_RATE    = 2;
 
 string::string() : m_size(0), m_capacity(STR_CAPACITY), m_data(new char[m_capacity]) {}
 string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacity), m_data(new char[m_capacity]) {
@@ -66,7 +66,7 @@ auto string::capacity() const -> std::size_t {
 auto string::push_back(char c) -> void {
     auto const old_size = m_size++;
     if (m_size > m_capacity) {
-        m_capacity = GROWTH_RATE * m_size;
+        m_capacity = GROW_RATE * m_size;
         auto tmp = m_data;
         m_data = new char[m_capacity];
         std::memset(m_data, 0, m_capacity);
@@ -75,7 +75,6 @@ auto string::push_back(char c) -> void {
         delete[] tmp;
     } else {
         m_data[old_size] = c;
-        m_data[m_size] = 0;
     }
 }
 
@@ -125,7 +124,7 @@ auto string::shrink_to_fit() -> void {
 }
 
 auto string::operator+=(string const& rhs) -> string& {
-    auto const new_size = m_size + rhs.m_size;
+    auto const new_size     = m_size + rhs.m_size;
     auto const new_capacity = new_size + 1;
     auto tmp = m_data;
     m_data = new char[new_capacity];
@@ -133,7 +132,8 @@ auto string::operator+=(string const& rhs) -> string& {
     std::memcpy(m_data, tmp, m_size);
     std::memcpy(m_data + m_size, rhs.m_data, rhs.m_size);
     delete[] tmp;
-    m_size = new_size;
+    m_size     = new_size;
+    m_capacity = new_capacity;
     return *this;
 }
 auto string::operator+(string const& rhs) -> string {
