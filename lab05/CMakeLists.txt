@@ -13,7 +13,12 @@ if (NOT MSVC)
         "-Wpedantic"
         "-Wshadow"
         "-Werror"
+        #"-fprofile-instr-generate"
+        #"-fcoverage-mapping"
     )
+    #add_link_options(
+        #"-fprofile-instr-generate"
+    #)
 else()
     add_compile_options(
         "/W4"
