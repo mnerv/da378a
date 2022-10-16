@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
-project(string VERSION 0.0.0)
+project(lab05 VERSION 0.0.0)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)  # Group CMake targets inside a folder
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)         # Generate compile_commands.json for language servers
 
 find_package(GTest CONFIG)
 
-if (NOT MSVC AND NOT WIN32)
+if (NOT MSVC)
     add_compile_options(
         "-Wall"
         "-Wextra"
@@ -23,28 +23,26 @@ else()
 endif()
 
 # string library as object file linkage
-project(string)
 set(SOURCE_FILES
     "string.hpp"
     "string.cpp"
 )
-add_library(${PROJECT_NAME} OBJECT ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PUBLIC "${PROJECT_SOURCE_DIR}")
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+add_library(string OBJECT ${SOURCE_FILES})
+target_include_directories(string PUBLIC "${PROJECT_SOURCE_DIR}")
+target_compile_features(string PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
 # testing application with Google Test
 if (GTest_FOUND)
-project(strtest)
 set(SOURCE_FILES
     "strtest.cpp"
 )
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE
+add_executable(strtest ${SOURCE_FILES})
+target_include_directories(strtest PRIVATE
     "${PROJECT_SOURCE_DIR}"
 )
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-target_link_libraries(${PROJECT_NAME}
+target_compile_features(strtest PRIVATE cxx_std_20)
+target_link_libraries(strtest
     string
     GTest::gtest
 )
@@ -52,12 +50,15 @@ source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 endif()
 
 # main test file
-project(maintest)
 set(SOURCE_FILES "main201025.cpp")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}")
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-target_link_libraries(${PROJECT_NAME} string)
-target_compile_options(${PROJECT_NAME} PRIVATE "-Wno-error")
+add_executable(maintest ${SOURCE_FILES})
+target_include_directories(maintest PRIVATE "${PROJECT_SOURCE_DIR}")
+target_compile_features(maintest PRIVATE cxx_std_20)
+target_link_libraries(maintest string)
+if (NOT MSVC)
+    target_compile_options(maintest PRIVATE "-Wno-error")
+else()
+    target_compile_options(maintest PRIVATE "/WX-" "/utf-8")
+endif()
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
