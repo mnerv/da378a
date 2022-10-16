@@ -17,38 +17,41 @@
  * @copyright Copyright (c) 2022
  */
 #include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <ios>
 
 #include "lexer.hpp"
 #include "parser.hpp"
 
-[[maybe_unused]]constexpr auto test_source = R"(config dec
-print 1 + 1
-print 3 + 3 * 3
-print ( 3 + 3 ) * 3
-x = 2 - -2
-y = x
-z = y * ( 16 / ( y - 2 ) )
-print x
-print y
-print z
-config hex
-print z
-config bin
-print z
-)";
-
-[[maybe_unused]]constexpr auto out_source = R"(2
-12
-18
-4
-4
-32
-0x20
-0000000000100000
-)";
+namespace nrv {
+auto read_text(std::string const& filename) -> std::string {
+    std::ifstream input{filename, std::ios::in};
+    if (!input.is_open() || input.fail())
+        throw std::runtime_error("ERROR: Loading textfile!");
+    return {
+        std::istreambuf_iterator<char>(input),
+        std::istreambuf_iterator<char>()
+    };
+}
+}
 
 auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
-    cat::lexer lexer{test_source};
+    if (argc < 2) {
+        std::cout << "No input file\n";
+        std::cout << "usage: " << argv[0] << " {source_file}\n";
+        std::cout << "    {source_file} - cat language source code\n";
+        return 1;
+    }
+
+    std::filesystem::path source_file{argv[1]};
+    if (!std::filesystem::exists(source_file)) {
+        std::cerr << "File does not exist!\n";
+        return 1;
+    }
+
+    auto const source = nrv::read_text(source_file.string());
+    cat::lexer lexer{source};
     auto tokens = lexer.tokenize();
     cat::parser parse(tokens);
     return 0;
