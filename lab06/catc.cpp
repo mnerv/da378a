@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "lexer.hpp"
+#include "parser.hpp"
 
 [[maybe_unused]]constexpr auto test_source = R"(config dec
 print 1 + 1
@@ -49,9 +50,7 @@ print z
 auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
     cat::lexer lexer{test_source};
     auto tokens = lexer.tokenize();
-    for (auto const& token : tokens) {
-        std::cout << token.str() << "\n";
-    }
+    cat::parser parse(tokens);
     return 0;
 }
 

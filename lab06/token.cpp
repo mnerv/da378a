@@ -63,6 +63,8 @@ auto token_type_category(token_type const& type) -> token_category {
 
 token::token(std::string const& value, token_type const& type) : m_value(value), m_type(type) {}
 
+auto token::type() const -> token_type { return m_type; }
+auto token::value() const -> std::string { return m_value; }
 
 auto token::str() const -> std::string {
     using namespace std::string_literals;

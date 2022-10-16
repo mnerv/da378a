@@ -12,6 +12,11 @@
 #include "ast.hpp"
 
 namespace cat {
+class interpreter {
+  public:
+
+  private:
+};
 }
 
 #endif  // CATC_INTERPRETER_HPP

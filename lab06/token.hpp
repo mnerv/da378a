@@ -61,6 +61,8 @@ class token {
     token() = default;
     token(std::string const& value, token_type const& type);
 
+    auto type() const -> token_type;
+    auto value() const -> std::string;
     auto str() const -> std::string;
 
   public:

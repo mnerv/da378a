@@ -10,6 +10,8 @@
 #define CATC_PARSER_HPP
 
 #include <vector>
+#include <memory>
+
 #include "token.hpp"
 #include "lexer.hpp"
 #include "ast.hpp"
@@ -18,7 +20,12 @@ namespace cat {
 
 class parser {
   public:
+    parser(std::vector<token> const& tokens);
+    ~parser();
+
   private:
+    std::vector<token> m_tokens;
+    std::vector<std::shared_ptr<ast_node>> m_nodes;
 };
 
 }
