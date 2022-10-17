@@ -43,7 +43,21 @@ TEST(lexer, identifier) {
         ASSERT_EQ(cat::token_category::identifier, cat::token_type_category(token.type()));
 }
 
-auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {
+TEST(lexer, numeric_negative) {
+    constexpr auto numeric_literal = "-2";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_EQ(std::string(numeric_literal), tokens.begin()->value());
+}
+
+TEST(lexer, numeric_positive) {
+    constexpr auto numeric_literal = "+2";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_EQ(std::string(numeric_literal), tokens.begin()->value());
+}
+
+auto main(int argc, char const* argv[]) -> int {
     testing::InitGoogleTest(&argc, (char**)argv);
     return RUN_ALL_TESTS();
 }
