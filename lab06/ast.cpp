@@ -8,6 +8,8 @@
  */
 #include "ast.hpp"
 
+#include <utility>
+
 namespace cat {
 identifier_node::identifier_node(token tk) : ast_node(std::move(tk), node_type::identifier), m_name(m_token.value()) { }
 
@@ -62,6 +64,22 @@ auto variable_declaration_node::str() const -> std::string {
     return fmt;
 }
 
+call_expression_node::call_expression_node(token tk, std::vector<node_ref_t> args) : ast_node(std::move(tk), node_type::call_expression), m_callee(
+        make_identifier_node(m_token)), m_args(std::move(args)) { }
+auto call_expression_node::str() const -> std::string {
+    std::string fmt{name()};
+    fmt += "{";
+    fmt += " callee: " + m_callee->str() + ",";
+    fmt += " args: [ ";
+    for (std::size_t i = 0; i < m_args.size(); ++i) {
+        fmt += m_args[i]->str();
+        if (i < m_args.size() - 1) fmt += ", ";
+    }
+    fmt += " ]";
+    fmt += "}";
+    return fmt;
+}
+
 auto make_identifier_node(token tk) -> node_ref_t {
     return std::make_shared<identifier_node>(tk);
 }
@@ -73,6 +91,9 @@ auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) ->
 }
 auto make_variable_declaration_node(token tk, node_ref_t init) -> node_ref_t {
     return std::make_shared<variable_declaration_node>(tk, init);
+}
+auto make_call_expression_node(token tk, std::vector<node_ref_t> args) -> node_ref_t {
+    return std::make_shared<call_expression_node>(tk, args);
 }
 
 }

@@ -23,6 +23,7 @@ enum class node_type : std::uint32_t {
     numeric_literal,
     binary_expression,
     variable_declaration,
+    call_expression,
 };
 
 class ast_node {
@@ -102,16 +103,24 @@ class variable_declaration_node : public ast_node {
 
 class call_expression_node : public ast_node {
   public:
-    call_expression_node(token tk)
+    call_expression_node(token tk, std::vector<node_ref_t> args);
 
-    auto name() const -> char const* = 0;
-    auto str()  const -> std::string = 0;
+    auto name() const -> char const* override { return "call_expression"; };
+    auto str()  const -> std::string override;
+
+    auto callee() const -> node_ref_t { return m_callee; }
+    auto args() const -> std::vector<node_ref_t> const& { return m_args; }
+
+  private:
+    node_ref_t              m_callee;
+    std::vector<node_ref_t> m_args;
 };
 
 auto make_identifier_node(token tk) -> node_ref_t;
 auto make_numeric_literal_node(token tk) -> node_ref_t;
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
 auto make_variable_declaration_node(token tk, node_ref_t init) -> node_ref_t;
+auto make_call_expression_node(token tk, std::vector<node_ref_t> args) -> node_ref_t;
 
 }
 
