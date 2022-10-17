@@ -55,10 +55,10 @@ auto lexer::next_token() -> std::optional<token> {
     return token(res, token_type::identifier);
 }
 
+auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }
 auto lexer::is_tab()     const -> bool { return peek() == '\t'; }
 auto lexer::is_space()   const -> bool { return peek() == ' ';  }
 auto lexer::is_newline() const -> bool { return peek() == '\n'; }
-auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }
 auto lexer::is_carriage_return() const -> bool { return peek() == '\r'; }
 auto lexer::is_whitespace() const -> bool {
     return is_space() || is_tab() || is_newline() || is_carriage_return();

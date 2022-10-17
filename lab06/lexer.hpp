@@ -38,10 +38,10 @@ class lexer {
     // Whitespace character - Wikipedia
     // https://en.wikipedia.org/wiki/Whitespace_character
   private:
+    auto has_next()   const -> bool;
     auto is_tab()     const -> bool;
     auto is_space()   const -> bool;
     auto is_newline() const -> bool;
-    auto has_next()   const -> bool;
     auto is_carriage_return() const -> bool;
     auto is_whitespace()      const -> bool;
 
