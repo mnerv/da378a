@@ -47,7 +47,8 @@ TEST(lexer, numeric_negative) {
     constexpr auto numeric_literal = "-2";
     cat::lexer lexer{numeric_literal};
     auto const tokens = lexer.tokenize();
-    ASSERT_EQ(std::string(numeric_literal), tokens.begin()->value());
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(std::string(numeric_literal), std::begin(tokens)->value());
 }
 
 TEST(lexer, numeric_positive) {
