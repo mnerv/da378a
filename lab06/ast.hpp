@@ -25,7 +25,7 @@ class ast_node {
 
     virtual auto name() const -> char const* = 0;
     virtual auto str()  const -> std::string = 0;
-    virtual auto raw()  const -> token const& { return m_token; }
+    virtual auto raw_token() const -> token const& { return m_token; }
 
     auto left()  const -> node_ref_t { return m_left; }
     auto right() const -> node_ref_t { return m_right; }
