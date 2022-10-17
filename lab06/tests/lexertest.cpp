@@ -38,6 +38,13 @@ print z
 0000000000100000
 )";
 
+TEST(lexer, consume_spaces) {
+    constexpr std::size_t token_size = 3;
+    cat::lexer lexer{"1 +   1"};
+    auto const tokens = lexer.tokenize();
+    ASSERT_EQ(token_size, tokens.size());
+}
+
 TEST(lexer, identifier) {
     cat::lexer lexer{"config dec"};
     auto const tokens = lexer.tokenize();
