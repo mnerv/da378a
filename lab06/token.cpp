@@ -10,6 +10,7 @@
 #include <numeric>
 #include <algorithm>
 #include <cctype>
+#include <utility>
 
 namespace cat {
 std::unordered_map<std::string, token_type> token::s_token_strs{
@@ -61,7 +62,7 @@ auto token_type_category(token_type const& type) -> token_category {
     return token_category::invalid;
 }
 
-token::token(std::string const& value, token_type const& type) : m_value(value), m_type(type) {}
+token::token(std::string value, token_type const& type) : m_value(std::move(value)), m_type(type) {}
 
 auto token::type() const -> token_type { return m_type; }
 auto token::value() const -> std::string { return m_value; }

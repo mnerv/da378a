@@ -8,7 +8,7 @@
  */
 #include "gtest/gtest.h"
 
-#include "token.hpp"
+#include "lexer.hpp"
 
 [[maybe_unused]]constexpr auto test_source = R"(config dec
 print 1 + 1
@@ -36,8 +36,11 @@ print z
 0000000000100000
 )";
 
-TEST(MUCH, TEST) {
-    ASSERT_TRUE(false);
+TEST(lexer, identifier) {
+    cat::lexer lexer{"config dec"};
+    auto const tokens = lexer.tokenize();
+    for (auto const& token : tokens)
+        ASSERT_EQ(cat::token_category::identifier, cat::token_type_category(token.type()));
 }
 
 auto main([[maybe_unused]]int argc, [[maybe_unused]]char const* argv[]) -> int {

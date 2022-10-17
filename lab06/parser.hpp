@@ -23,9 +23,11 @@ class parser {
     parser(std::vector<token> const& tokens);
     ~parser();
 
+    auto nodes() const -> std::vector<node_ref_t> const& { return m_nodes; }
+
   private:
-    std::vector<token> m_tokens;
-    std::vector<std::shared_ptr<ast_node>> m_nodes;
+    std::vector<token>      m_tokens;
+    std::vector<node_ref_t> m_nodes;
 };
 
 }

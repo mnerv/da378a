@@ -59,7 +59,7 @@ auto token_type_category(token_type const& type) -> token_category;
 class token {
   public:
     token() = default;
-    token(std::string const& value, token_type const& type);
+    token(std::string value, token_type const& type);
 
     auto type() const -> token_type;
     auto value() const -> std::string;
