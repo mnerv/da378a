@@ -6,6 +6,8 @@
  *
  * @copyright Copyright (c) 2022
  */
+#include <string>
+
 #include "gtest/gtest.h"
 
 #include "lexer.hpp"
@@ -43,7 +45,17 @@ TEST(lexer, identifier) {
         ASSERT_EQ(cat::token_category::identifier, cat::token_type_category(token.type()));
 }
 
-TEST(lexer, numeric_negative) {
+TEST(lexer, numeric_literals) {
+    for (std::size_t i = 0; i < 10; ++i) {
+        auto const source = std::to_string(i);
+        cat::lexer lexer{source};
+        auto const tokens = lexer.tokenize();
+        ASSERT_NE(std::begin(tokens), std::end(tokens));
+        EXPECT_EQ(source, tokens[0].value());
+    }
+}
+
+TEST(lexer, numeric_unary_negative) {
     constexpr auto numeric_literal = "-2";
     cat::lexer lexer{numeric_literal};
     auto const tokens = lexer.tokenize();
@@ -51,11 +63,63 @@ TEST(lexer, numeric_negative) {
     ASSERT_EQ(std::string(numeric_literal), std::begin(tokens)->value());
 }
 
-TEST(lexer, numeric_positive) {
+TEST(lexer, numeric_unary_positive) {
     constexpr auto numeric_literal = "+2";
     cat::lexer lexer{numeric_literal};
     auto const tokens = lexer.tokenize();
     ASSERT_EQ(std::string(numeric_literal), tokens.begin()->value());
+}
+
+TEST(lexer, numeric_binary_operation_plus) {
+    using namespace std::string_literals;
+    constexpr std::size_t token_size = 3;
+    constexpr auto numeric_literal = "1 + 1";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(token_size, tokens.size());
+    ASSERT_EQ("1"s, tokens[0].value());
+    ASSERT_EQ("+"s, tokens[1].value());
+    ASSERT_EQ("1"s, tokens[2].value());
+}
+
+TEST(lexer, numeric_binary_operation_minus) {
+    using namespace std::string_literals;
+    constexpr std::size_t token_size = 3;
+    constexpr auto numeric_literal = "1 - 1";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(token_size, tokens.size());
+    ASSERT_EQ("1"s, tokens[0].value());
+    ASSERT_EQ("-"s, tokens[1].value());
+    ASSERT_EQ("1"s, tokens[2].value());
+}
+
+TEST(lexer, numeric_binary_operation_product) {
+    using namespace std::string_literals;
+    constexpr std::size_t token_size = 3;
+    constexpr auto numeric_literal = "1 * 1";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(token_size, tokens.size());
+    ASSERT_EQ("1"s, tokens[0].value());
+    ASSERT_EQ("*"s, tokens[1].value());
+    ASSERT_EQ("1"s, tokens[2].value());
+}
+
+TEST(lexer, numeric_binary_operation_fraction) {
+    using namespace std::string_literals;
+    constexpr std::size_t token_size = 3;
+    constexpr auto numeric_literal = "1 / 1";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(token_size, tokens.size());
+    ASSERT_EQ("1"s, tokens[0].value());
+    ASSERT_EQ("/"s, tokens[1].value());
+    ASSERT_EQ("1"s, tokens[2].value());
 }
 
 auto main(int argc, char const* argv[]) -> int {
