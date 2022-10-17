@@ -6,10 +6,19 @@
  *
  * @copyright Copyright (c) 2022
  */
-
 #include "ast.hpp"
 
 namespace cat {
+identifier_node::identifier_node(token tk) : ast_node(std::move(tk), node_type::identifier), m_name(m_token.value()) { }
+
+auto identifier_node::str() const -> std::string {
+    std::string fmt{name()};
+    fmt += "{";
+    fmt += " name: \"" + m_name + "\" ";
+    fmt += "}";
+    return fmt;
+}
+
 numeric_literal_node::numeric_literal_node(token tk) : ast_node(std::move(tk), node_type::numeric_literal) {
     m_value = std::stoi(m_token.value());
 }
@@ -41,18 +50,21 @@ auto binary_expression_node::str() const -> std::string {
 
 variable_declaration_node::variable_declaration_node(token tk, node_ref_t init)
     : ast_node(std::move(tk), node_type::variable_declaration),
-      m_identifier(m_token.value()), m_init(std::move(init)) {
+      m_id(make_identifier_node(m_token)), m_init(std::move(init)) {
 }
 
 auto variable_declaration_node::str() const -> std::string {
     std::string fmt{name()};
     fmt += "{";
-    fmt += " identifier: \"" + m_identifier  + "\",";
-    fmt += " init: "         + m_init->str() + " ";
+    fmt += " id: \"" + m_id->str()   + "\",";
+    fmt += " init: " + m_init->str() + " ";
     fmt += "}";
     return fmt;
 }
 
+auto make_identifier_node(token tk) -> node_ref_t {
+    return std::make_shared<identifier_node>(tk);
+}
 auto make_numeric_literal_node(token tk) -> node_ref_t {
     return std::make_shared<numeric_literal_node>(tk);
 }

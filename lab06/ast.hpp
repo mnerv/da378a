@@ -19,6 +19,7 @@ namespace cat {
 using node_ref_t = std::shared_ptr<class ast_node>;
 
 enum class node_type : std::uint32_t {
+    identifier,
     numeric_literal,
     binary_expression,
     variable_declaration,
@@ -45,6 +46,17 @@ class ast_node {
     node_ref_t m_right{nullptr};
     token      m_token;
     node_type  m_type;
+};
+
+class identifier_node : public ast_node {
+  public:
+    identifier_node(token tk);
+
+    auto name() const -> char const* override { return "identifier"; }
+    auto str() const -> std::string override;
+
+  private:
+    std::string m_name;
 };
 
 class numeric_literal_node : public ast_node {
@@ -81,13 +93,22 @@ class variable_declaration_node : public ast_node {
     auto name() const -> char const* override { return "variable_declaration"; }
     auto str() const -> std::string override;
 
-    auto identifier() const -> std::string { return m_identifier; }
+    auto id() const -> node_ref_t { return m_id; }
 
   private:
-    std::string m_identifier;
-    node_ref_t  m_init;
+    node_ref_t m_id;
+    node_ref_t m_init;
 };
 
+class call_expression_node : public ast_node {
+  public:
+    call_expression_node(token tk)
+
+    auto name() const -> char const* = 0;
+    auto str()  const -> std::string = 0;
+};
+
+auto make_identifier_node(token tk) -> node_ref_t;
 auto make_numeric_literal_node(token tk) -> node_ref_t;
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
 auto make_variable_declaration_node(token tk, node_ref_t init) -> node_ref_t;
