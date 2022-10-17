@@ -59,7 +59,7 @@ auto token_type_category(token_type const& type) -> token_category;
 class token {
   public:
     token() = default;
-    token(std::string value, token_type const& type);
+    token(std::string value, token_type const& type, std::size_t const& line);
 
     auto type() const -> token_type;
     auto value() const -> std::string;
@@ -72,6 +72,11 @@ class token {
   private:
     std::string m_value{};
     token_type  m_type{token_type::invalid};
+    std::size_t m_line;
+    [[maybe_unused]]std::size_t m_column_start;
+    [[maybe_unused]]std::size_t m_column_end;
+    [[maybe_unused]]std::size_t m_start;
+    [[maybe_unused]]std::size_t m_end;
 
   private:
     static std::unordered_map<std::string, token_type> s_token_strs;

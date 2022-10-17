@@ -9,6 +9,7 @@
 #ifndef CATC_AST_HPP
 #define CATC_AST_HPP
 
+#include <vector>
 #include <string>
 #include <memory>
 #include <utility>

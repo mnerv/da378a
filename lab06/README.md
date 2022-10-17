@@ -7,7 +7,7 @@ Mini project.
   - [cmake](https://cmake.org)
   - [vcpkg](http://vcpkg.io) - Google Test
 
-[vcpkg](http://vcpkg.io) is not required if you're not running unit tests. By default, if GTest library is not found test targets are not generated.
+[vcpkg](http://vcpkg.io) is not required if you're not running unit tests. By default, if GTest library is not found, test targets are not generated.
 
 ## Build
 

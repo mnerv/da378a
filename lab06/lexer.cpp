@@ -10,7 +10,7 @@
 
 namespace cat {
 
-lexer::lexer(std::string const& source) : m_source(source), m_cursor(0) {}
+lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
 lexer::~lexer() = default;
 
 auto lexer::tokenize() -> std::vector<token> {
@@ -20,6 +20,7 @@ auto lexer::tokenize() -> std::vector<token> {
         tokens.push_back(tkn.value());
         tkn = next_token();
     }
+    m_line = 0;
     return tokens;
 }
 
@@ -35,7 +36,10 @@ auto lexer::next_token() -> std::optional<token> {
     // TODO: Add a way to see where a token is located in the source file.
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
-    if (is_newline() || is_carriage_return()) res = consume_next();
+    if (is_newline() || is_carriage_return()) {
+        res = consume_next();
+        return token(res, token_type::newline, m_line++);
+    }
 
     // FIXME: Find a better way? It's kind of ugly
     if (res.empty()) {
@@ -46,13 +50,13 @@ auto lexer::next_token() -> std::optional<token> {
     }
 
     if (token::is_numeric(res))
-        return token(res, token_type::numeric_literal);
+        return token(res, token_type::numeric_literal, m_line);
 
     auto const token_valid = token::str_token(res);
     if (token_valid.has_value())
-        return token(res, token_valid.value());
+        return token(res, token_valid.value(), m_line);
 
-    return token(res, token_type::identifier);
+    return token(res, token_type::identifier, m_line);
 }
 
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }

@@ -62,7 +62,7 @@ auto token_type_category(token_type const& type) -> token_category {
     return token_category::invalid;
 }
 
-token::token(std::string value, token_type const& type) : m_value(std::move(value)), m_type(type) {}
+token::token(std::string value, token_type const& type, std::size_t const& line) : m_value(std::move(value)), m_type(type), m_line(line) {}
 
 auto token::type() const -> token_type { return m_type; }
 auto token::value() const -> std::string { return m_value; }
@@ -80,8 +80,9 @@ auto token::str() const -> std::string {
         });
     };
     std::string str{"cat::token{ "};
-    str += "value: \"" + sanitize_str(m_value) + "\", ";
-    str += "type: "    + token_type_str(m_type);
+    str += "value: \"" + sanitize_str(m_value)  + "\", ";
+    str += "type: "    + token_type_str(m_type) + ", ";
+    str += "line: "    + std::to_string(m_line);
     str += " }";
     return str;
 }
