@@ -8,3 +8,8 @@
  */
 #include "interpreter.hpp"
 
+namespace cat {
+interpreter::interpreter(std::vector<node_ref_t> const& nodes) : m_nodes(nodes) {
+}
+interpreter::~interpreter() = default;
+}
