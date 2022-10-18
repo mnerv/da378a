@@ -90,7 +90,7 @@ class binary_expression_node : public ast_node {
 
 class variable_declaration_node : public ast_node {
   public:
-    variable_declaration_node(token tk, node_ref_t init);
+    variable_declaration_node(node_ref_t idk, node_ref_t init);
 
     auto name() const -> char const* override { return "variable_declaration"; }
     auto str() const -> std::string override;
@@ -104,7 +104,7 @@ class variable_declaration_node : public ast_node {
 
 class call_expression_node : public ast_node {
   public:
-    call_expression_node(token tk, std::vector<node_ref_t> args);
+    call_expression_node(node_ref_t callee, std::vector<node_ref_t> args);
 
     auto name() const -> char const* override { return "call_expression"; };
     auto str()  const -> std::string override;
@@ -120,8 +120,8 @@ class call_expression_node : public ast_node {
 auto make_identifier_node(token tk) -> node_ref_t;
 auto make_numeric_literal_node(token tk) -> node_ref_t;
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
-auto make_variable_declaration_node(token tk, node_ref_t init) -> node_ref_t;
-auto make_call_expression_node(token tk, std::vector<node_ref_t> args) -> node_ref_t;
+auto make_variable_declaration_node(node_ref_t id, node_ref_t init) -> node_ref_t;
+auto make_call_expression_node(node_ref_t callee, std::vector<node_ref_t> args) -> node_ref_t;
 
 }
 

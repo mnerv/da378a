@@ -13,7 +13,6 @@
 #include <memory>
 
 #include "token.hpp"
-#include "lexer.hpp"
 #include "ast.hpp"
 
 namespace cat {

@@ -79,7 +79,7 @@ auto token::str() const -> std::string {
             return a + raw;
         });
     };
-    std::string str{"cat::token{ "};
+    std::string str{"token{ "};
     str += "value: \"" + sanitize_str(m_value)  + "\", ";
     str += "type: "    + token_type_str(m_type) + ", ";
     str += "line: "    + std::to_string(m_line);
