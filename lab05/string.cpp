@@ -18,24 +18,22 @@
 
 namespace uni {
 
-static constexpr std::size_t STR_CAPACITY = 0;
-static constexpr std::size_t GROW_RATE    = 2;
+static constexpr std::size_t STR_START_CAPACITY = 0;
+static constexpr std::size_t GROW_RATE          = 2;
 
-string::string() : m_size(0), m_capacity(STR_CAPACITY), m_data(new char[m_capacity]) {}
+string::string() : m_size(0), m_capacity(STR_START_CAPACITY), m_data(new char[m_capacity]) {}
 string::string(string const& rhs) : m_size(rhs.m_size), m_capacity(rhs.m_capacity), m_data(new char[m_capacity]) {
     std::memset(m_data, 0, m_capacity);
     std::memcpy(m_data, rhs.m_data, m_size);
 }
 string::string(char const* cstr) {
     m_size     = std::strlen(cstr);
-    m_capacity = m_size + 1;
+    m_capacity = m_size + 1;  // allocate extra space for null termination
     m_data     = new char[m_capacity];
     std::memset(m_data, 0, m_capacity);
     std::memcpy(m_data, cstr, m_size);
 }
-string::~string() {
-    delete[] m_data;
-}
+string::~string() { delete[] m_data; }
 
 auto string::operator=(string const& rhs) -> string& {
     m_size = rhs.m_size;

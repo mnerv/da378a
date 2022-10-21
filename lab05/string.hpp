@@ -20,6 +20,10 @@
 #include <ostream>
 
 namespace uni {
+/**
+ * Custom string implementation with value-semantic. This container tries to
+ * imitate the std::string with strip down features.
+ */
 class string {
   public:
     string();
