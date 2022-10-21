@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cctype>
 #include <utility>
+#include <regex>
 
 namespace cat {
 std::unordered_map<std::string, token_type> token::s_token_strs{
@@ -47,9 +48,9 @@ auto token_category_str(token_category const& type) -> std::string {
         case token_category::punctuation: return "punctuation";
         case token_category::identifier:  return "identifier";
         case token_category::invalid:
-        case token_category::_count:      return "invalid";
+        case token_category::_count:
+        default: return "invalid";
     }
-    return "invalid";
 }
 
 auto token_type_category(token_type const& type) -> token_category {
@@ -82,6 +83,7 @@ auto token::str() const -> std::string {
     std::string str{"token{ "};
     str += "value: \"" + sanitize_str(m_value)  + "\", ";
     str += "type: "    + token_type_str(m_type) + ", ";
+    str += "category: "+ token_category_str(token_type_category(m_type)) + ", ";
     str += "line: "    + std::to_string(m_line);
     str += " }";
     return str;
@@ -96,5 +98,9 @@ auto token::str_token(std::string const& str) -> std::optional<token_type> {
 auto token::is_numeric(std::string const& str) -> bool {
     return std::all_of(std::begin(str), std::end(str),
             [](auto const& c) { return std::isdigit(c); });
+}
+auto token::is_identifier(std::string const& str) -> bool {
+    static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9]+"};
+    return std::regex_match(str, id_regex);
 }
 }

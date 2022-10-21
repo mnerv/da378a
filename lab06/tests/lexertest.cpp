@@ -38,6 +38,14 @@ print z
 0000000000100000
 )";
 
+TEST(token, identifier_valid) {
+    ASSERT_TRUE(cat::token::is_identifier("hello"));
+}
+
+TEST(token, identifier_invalid) {
+    ASSERT_FALSE(cat::token::is_identifier("0hello"));
+}
+
 TEST(lexer, consume_spaces) {
     constexpr std::size_t token_size = 3;
     cat::lexer lexer{"1 +   1"};

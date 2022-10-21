@@ -56,7 +56,8 @@ auto lexer::next_token() -> std::optional<token> {
     if (token_valid.has_value())
         return token(res, token_valid.value(), m_line);
 
-    return token(res, token_type::identifier, m_line);
+    auto const type_of_token = token::is_identifier(res) ? token_type::identifier : token_type::invalid;
+    return token(res, type_of_token, m_line);
 }
 
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }

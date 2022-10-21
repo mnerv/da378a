@@ -68,6 +68,7 @@ class token {
   public:
     static auto str_token(std::string const& str) -> std::optional<token_type>;
     static auto is_numeric(std::string const& str) -> bool;
+    static auto is_identifier(std::string const& str) -> bool;
 
   private:
     std::string m_value{};
