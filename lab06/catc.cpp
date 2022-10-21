@@ -50,7 +50,7 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
     if (node == nullptr) return;
     auto indent = [](std::int32_t const& level) {
         std::string str;
-        for (std::size_t i = 0; i < level; ++i) str += " ";
+        for (auto i = 0; i < level; ++i) str += " ";
         return str;
     };
     std::cout << node->name() << " {";
