@@ -22,9 +22,10 @@ using node_ref_t = std::shared_ptr<class ast_node>;
 enum class node_type : std::uint32_t {
     identifier,
     numeric_literal,
+    assignment_expression,
     binary_expression,
-    variable_declarator,
     call_expression,
+    variable_declarator,
 };
 
 class ast_node {
@@ -77,6 +78,19 @@ class numeric_literal_node : public ast_node {
     std::int32_t m_value;
 };
 
+class assignment_expression_node : public ast_node {
+  public:
+    assignment_expression_node(token tk, node_ref_t left, node_ref_t right);
+
+    auto name() const -> char const* override { return "assignment_expression"; }
+    auto str() const -> std::string override;
+
+    auto operator_type() const -> token_type { return m_operator; }
+
+  private:
+    token_type m_operator;
+};
+
 // https://en.wikipedia.org/wiki/Binary_operation
 class binary_expression_node : public ast_node {
   public:
@@ -89,21 +103,6 @@ class binary_expression_node : public ast_node {
 
   private:
     token_type m_operator;
-};
-
-class variable_declarator_node : public ast_node {
-  public:
-    variable_declarator_node(node_ref_t idk, node_ref_t init);
-
-    auto name() const -> char const* override { return "variable_declarator"; }
-    auto str() const -> std::string override;
-
-    auto id() const -> node_ref_t { return m_id; }
-    auto init() const -> node_ref_t { return m_init; }
-
-  private:
-    node_ref_t m_id;
-    node_ref_t m_init;
 };
 
 class call_expression_node : public ast_node {
@@ -121,11 +120,27 @@ class call_expression_node : public ast_node {
     std::vector<node_ref_t> m_args;
 };
 
+class variable_declarator_node : public ast_node {
+  public:
+    variable_declarator_node(node_ref_t idk, node_ref_t init);
+
+    auto name() const -> char const* override { return "variable_declarator"; }
+    auto str() const -> std::string override;
+
+    auto id() const -> node_ref_t { return m_id; }
+    auto init() const -> node_ref_t { return m_init; }
+
+  private:
+    node_ref_t m_id;
+    node_ref_t m_init;
+};
+
 auto make_identifier_node(token tk) -> node_ref_t;
 auto make_numeric_literal_node(token tk) -> node_ref_t;
+auto make_assignment_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
-auto make_variable_declarator_node(node_ref_t id, node_ref_t init) -> node_ref_t;
 auto make_call_expression_node(node_ref_t callee, std::vector<node_ref_t> args) -> node_ref_t;
+auto make_variable_declarator_node(node_ref_t id, node_ref_t init) -> node_ref_t;
 
 }
 

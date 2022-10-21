@@ -19,8 +19,8 @@
 // T -> F * T | F / T | F
 // F -> ID | INT | (E) | -F
 
-// ID  -> [a-zA-Z][a-zA-Z0-9]+
-// INT -> -?[0-9]+
+// ID  -> ^[a-zA-Z][a-zA-Z0-9]+$
+// INT -> ^[-+]?[0-9]+$
 
 namespace cat {
 

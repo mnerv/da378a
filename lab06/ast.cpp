@@ -35,6 +35,22 @@ auto numeric_literal_node::str() const -> std::string {
     return fmt;
 }
 
+assignment_expression_node::assignment_expression_node(token tk, node_ref_t left, node_ref_t right)
+    : ast_node(std::move(tk), node_type::assignment_expression), m_operator(m_token.type()) {
+    m_left  = std::move(left);
+    m_right = std::move(right);
+}
+
+auto assignment_expression_node::str() const -> std::string {
+    std::string fmt{name()};
+    fmt += "{";
+    fmt += " operator: \"" + token_type_str(m_operator) + "\",";
+    fmt += " left: "       + m_left->str()   + ",";
+    fmt += " right: "      + m_right->str()  + " ";
+    fmt += "}";
+    return fmt;
+}
+
 binary_expression_node::binary_expression_node(token tk, node_ref_t left, node_ref_t right)
     : ast_node(std::move(tk), node_type::binary_expression) {
     m_left  = std::move(left);
@@ -87,6 +103,9 @@ auto make_identifier_node(token tk) -> node_ref_t {
 }
 auto make_numeric_literal_node(token tk) -> node_ref_t {
     return std::make_shared<numeric_literal_node>(tk);
+}
+auto make_assignment_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t {
+    return std::make_shared<assignment_expression_node>(tk, left, right);
 }
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t {
     return std::make_shared<binary_expression_node>(tk, left, right);

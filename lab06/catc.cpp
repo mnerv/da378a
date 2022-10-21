@@ -68,6 +68,11 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
         std::cout << indent(level + indent_size) << "raw: \"" << n.value() << "\",";
         break;
     }
+    case cat::node_type::assignment_expression: {
+        auto const& n = static_cast<cat::assignment_expression_node const&>(*node);
+        std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
+        break;
+    }
     case cat::node_type::binary_expression: {
         auto const& n = static_cast<cat::binary_expression_node const&>(*node);
         std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
@@ -96,6 +101,8 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
         std::cout << "]";
         break;
     }
+    default:
+        std::cout << indent(level + indent_size) << "NOT_IMPLEMENTED: " << node->name();
     }
 
     if (node->left() != nullptr) {
@@ -104,7 +111,7 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
         recursive_print(node->left(), level + indent_size);
     }
     if (node->right() != nullptr) {
-        std::cout << "\n";
+        std::cout << ",\n";
         std::cout << indent(level + indent_size) << "right: ";
         recursive_print(node->right(), level + indent_size);
     }
@@ -141,9 +148,12 @@ auto main(int argc, char const* argv[]) -> int {
 
     recursive_print(np);
 
+    auto tka = cat::token("*", cat::token_type::asterisk);
+    auto na = cat::make_binary_expression_node(tka, n1, np);
+
     auto tkid = cat::token("hello", cat::token_type::identifier);
     auto nid = cat::make_identifier_node(tkid);
-    auto niddec = cat::make_variable_declarator_node(nid, np);
+    auto niddec = cat::make_variable_declarator_node(nid, na);
 
     recursive_print(niddec);
 
@@ -152,6 +162,11 @@ auto main(int argc, char const* argv[]) -> int {
     auto ncallex = cat::make_call_expression_node(ncall, {n1, n2, nid, np});
 
     recursive_print(ncallex);
+
+    auto tkequal = cat::token("=", cat::token_type::equals);
+    auto nass = cat::make_assignment_expression_node(tkequal, nid, n1);
+
+    recursive_print(nass);
 
     return 0;
 }
