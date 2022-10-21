@@ -46,6 +46,22 @@ TEST(token, identifier_invalid) {
     ASSERT_FALSE(cat::token::is_identifier("0hello"));
 }
 
+TEST(token, numeric_valid) {
+    ASSERT_TRUE(cat::token::is_numeric("13"));
+}
+
+TEST(token, numeric_valid_unary_minus) {
+    ASSERT_TRUE(cat::token::is_numeric("-13"));
+}
+
+TEST(token, numeric_valid_unary_plus) {
+    ASSERT_TRUE(cat::token::is_numeric("+13"));
+}
+
+TEST(token, numeric_invalid) {
+    ASSERT_FALSE(cat::token::is_numeric("e13"));
+}
+
 TEST(lexer, consume_spaces) {
     constexpr std::size_t token_size = 3;
     cat::lexer lexer{"1 +   1"};
