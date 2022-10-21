@@ -46,6 +46,7 @@ auto read_text(std::string const& filename) -> std::string {
 }
 
 auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0) -> void {
+    constexpr auto indent_size = 2;
     if (node == nullptr) return;
     auto indent = [](std::int32_t const& level) {
         std::string str;
@@ -58,39 +59,39 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
     switch (node->type()) {
     case cat::node_type::identifier: {
         auto const& n = static_cast<cat::identifier_node const&>(*node);
-        std::cout << indent(level + 2) << "id: \"" << n.id() << "\",";
+        std::cout << indent(level + indent_size) << "id: \"" << n.id() << "\",";
         break;
     }
     case cat::node_type::numeric_literal: {
         auto const& n = static_cast<cat::numeric_literal_node const&>(*node);
-        std::cout << indent(level + 2) << "value: " << n.value() << ",\n";
-        std::cout << indent(level + 2) << "raw: \"" << n.value() << "\",";
+        std::cout << indent(level + indent_size) << "value: " << n.value() << ",\n";
+        std::cout << indent(level + indent_size) << "raw: \"" << n.value() << "\",";
         break;
     }
     case cat::node_type::binary_expression: {
         auto const& n = static_cast<cat::binary_expression_node const&>(*node);
-        std::cout << indent(level + 2) << "operator: \"" << n.raw_token().value() << "\",";
+        std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
         break;
     }
     case cat::node_type::variable_declarator: {
         auto const& n = static_cast<cat::variable_declarator_node const&>(*node);
-        std::cout << indent(level + 2) << "id: \"" << n.id()->raw_token().value() << "\",\n";
-        std::cout << indent(level + 2) << "init: ";
-        recursive_print(n.init(), level + 2);
+        std::cout << indent(level + indent_size) << "id: \"" << n.id()->raw_token().value() << "\",\n";
+        std::cout << indent(level + indent_size) << "init: ";
+        recursive_print(n.init(), level + indent_size);
         break;
     }
     case cat::node_type::call_expression: {
         auto const& n = static_cast<cat::call_expression_node const&>(*node);
-        std::cout << indent(level + 2) << "callee: \"" << n.callee()->raw_token().value() << "\",\n";
-        std::cout << indent(level + 2) << "args: [ ";
+        std::cout << indent(level + indent_size) << "callee: \"" << n.callee()->raw_token().value() << "\",\n";
+        std::cout << indent(level + indent_size) << "args: [ ";
         auto const& args = n.args();
-        if (args.size() != 0) std::cout << "\n" << indent(level + 2);
+        if (args.size() != 0) std::cout << "\n" << indent(level + indent_size);
         for (std::size_t i = 0; i < args.size(); ++i) {
             auto const& arg = args[i];
-            std::cout << indent(level + 2) << i << ": ";
-            recursive_print(arg, level + 4);
+            std::cout << indent(level + indent_size) << i << ": ";
+            recursive_print(arg, level + indent_size * 2);
             std::cout << ",\n";
-            std::cout << indent(level + 2);
+            std::cout << indent(level + indent_size);
         }
         std::cout << "]";
         break;
@@ -99,13 +100,13 @@ auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0)
 
     if (node->left() != nullptr) {
         std::cout << "\n";
-        std::cout << indent(level + 2) << "left: ";
-        recursive_print(node->left(), level + 2);
+        std::cout << indent(level + indent_size) << "left: ";
+        recursive_print(node->left(), level + indent_size);
     }
     if (node->right() != nullptr) {
         std::cout << "\n";
-        std::cout << indent(level + 2) << "right: ";
-        recursive_print(node->right(), level + 2);
+        std::cout << indent(level + indent_size) << "right: ";
+        recursive_print(node->right(), level + indent_size);
     }
     std::cout << "\n";
     std::cout << indent(level) << "}";
