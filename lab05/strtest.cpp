@@ -278,6 +278,15 @@ TEST(string_operation, plus) {
     ASSERT_EQ((nrv::length_of(hello) - 1) + (nrv::length_of(world) - 1), str.size());
 }
 
+TEST(string_operation, push_back_million) {
+    constexpr std::size_t SIZE = 100'000;
+    uni::string a{};
+    for (std::size_t i = 0; i < SIZE; ++i) {
+        a.push_back('a');
+    }
+    ASSERT_LE(a.capacity(), 1'000'000);
+}
+
 auto main([[maybe_unused]]std::int32_t argc, [[maybe_unused]]char const* argv[]) -> std::int32_t {
     testing::InitGoogleTest(&argc, (char**)argv);
     return RUN_ALL_TESTS();
