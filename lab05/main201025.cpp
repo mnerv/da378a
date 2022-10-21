@@ -10,6 +10,7 @@
 #define VG
 
 #include "string.hpp"
+#include <locale>
 
 #include <string>
 #include <iostream>
@@ -383,6 +384,10 @@ void TestFörVälGodkäntString() {
 
 
 int main() {
+#ifdef WIN32
+    std::setlocale(LC_ALL, "en_US.UTF-8");  // Turn on unicode support on Windows
+#endif // WIN32
+
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 //
 //    locale::global(locale("swedish"));
