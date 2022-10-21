@@ -51,11 +51,11 @@ auto binary_expression_node::str() const -> std::string {
     return fmt;
 }
 
-variable_declaration_node::variable_declaration_node(node_ref_t id, node_ref_t init)
+variable_declarator_node::variable_declarator_node(node_ref_t id, node_ref_t init)
     : ast_node(id->raw_token(), node_type::variable_declaration), m_id(std::move(id)), m_init(std::move(init)) {
 }
 
-auto variable_declaration_node::str() const -> std::string {
+auto variable_declarator_node::str() const -> std::string {
     std::string fmt{name()};
     fmt += "{";
     fmt += " id: \"" + m_id->str()   + "\",";
@@ -91,8 +91,8 @@ auto make_numeric_literal_node(token tk) -> node_ref_t {
 auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t {
     return std::make_shared<binary_expression_node>(tk, left, right);
 }
-auto make_variable_declaration_node(node_ref_t id, node_ref_t init) -> node_ref_t {
-    return std::make_shared<variable_declaration_node>(id, init);
+auto make_variable_declarator_node(node_ref_t id, node_ref_t init) -> node_ref_t {
+    return std::make_shared<variable_declarator_node>(id, init);
 }
 auto make_call_expression_node(node_ref_t callee, std::vector<node_ref_t> args) -> node_ref_t {
     return std::make_shared<call_expression_node>(callee, args);
