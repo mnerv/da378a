@@ -22,9 +22,15 @@ class parser {
     parser(std::vector<token> const& tokens);
     ~parser();
 
-    auto nodes() const -> std::vector<node_ref_t> const& { return m_nodes; }
+    auto parse() -> node_ref_t;
+    auto nodes() const -> std::vector<node_ref_t> const&;
 
   private:
+    auto next_token() -> void;
+    auto peek() const -> token const&;
+
+  private:
+    std::size_t             m_cursor;
     std::vector<token>      m_tokens;
     std::vector<node_ref_t> m_nodes;
 };

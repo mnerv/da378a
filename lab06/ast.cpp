@@ -16,7 +16,7 @@ identifier_node::identifier_node(token tk) : ast_node(std::move(tk), node_type::
 auto identifier_node::str() const -> std::string {
     std::string fmt{name()};
     fmt += "{";
-    fmt += " name: \"" + m_name + "\" ";
+    fmt += " id: \"" + m_name + "\" ";
     fmt += "}";
     return fmt;
 }
@@ -52,7 +52,7 @@ auto binary_expression_node::str() const -> std::string {
 }
 
 variable_declarator_node::variable_declarator_node(node_ref_t id, node_ref_t init)
-    : ast_node(id->raw_token(), node_type::variable_declaration), m_id(std::move(id)), m_init(std::move(init)) {
+    : ast_node(id->raw_token(), node_type::variable_declarator), m_id(std::move(id)), m_init(std::move(init)) {
 }
 
 auto variable_declarator_node::str() const -> std::string {

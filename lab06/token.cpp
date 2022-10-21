@@ -9,7 +9,6 @@
 #include "token.hpp"
 #include <numeric>
 #include <algorithm>
-#include <cctype>
 #include <utility>
 #include <regex>
 
@@ -96,11 +95,11 @@ auto token::str_token(std::string const& str) -> std::optional<token_type> {
 }
 
 auto token::is_numeric(std::string const& str) -> bool {
-    return std::all_of(std::begin(str), std::end(str),
-            [](auto const& c) { return std::isdigit(c); });
+    static std::regex const numeric_regex{"^[-+]?[0-9]+$"};
+    return std::regex_match(str, numeric_regex);
 }
 auto token::is_identifier(std::string const& str) -> bool {
-    static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9]+"};
+    static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9]+$"};
     return std::regex_match(str, id_regex);
 }
 }

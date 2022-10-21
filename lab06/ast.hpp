@@ -23,7 +23,7 @@ enum class node_type : std::uint32_t {
     identifier,
     numeric_literal,
     binary_expression,
-    variable_declaration,
+    variable_declarator,
     call_expression,
 };
 
@@ -36,6 +36,7 @@ class ast_node {
     virtual auto str()  const -> std::string = 0;
     virtual auto raw_token() const -> token const& { return m_token; }
 
+    auto type() const -> node_type { return m_type; }
     auto is_type(node_type const& type) const -> bool { return m_type == type; };
     auto left()  const -> node_ref_t { return m_left; }
     auto right() const -> node_ref_t { return m_right; }
@@ -56,6 +57,8 @@ class identifier_node : public ast_node {
 
     auto name() const -> char const* override { return "identifier"; }
     auto str() const -> std::string override;
+
+    auto id() const -> std::string const& { return m_name; }
 
   private:
     std::string m_name;
@@ -92,10 +95,11 @@ class variable_declarator_node : public ast_node {
   public:
     variable_declarator_node(node_ref_t idk, node_ref_t init);
 
-    auto name() const -> char const* override { return "variable_declaration"; }
+    auto name() const -> char const* override { return "variable_declarator"; }
     auto str() const -> std::string override;
 
     auto id() const -> node_ref_t { return m_id; }
+    auto init() const -> node_ref_t { return m_init; }
 
   private:
     node_ref_t m_id;
