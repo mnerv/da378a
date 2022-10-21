@@ -34,7 +34,7 @@ namespace nrv {
  * @param  filename Path to text file.
  * @return Text content.
  */
-auto read_text(std::string const& filename) -> std::string {
+static auto read_text(std::string const& filename) -> std::string {
     std::ifstream input{filename, std::ios::in};
     if (!input.is_open() || input.fail())
         throw std::runtime_error("ERROR: Loading textfile!");
@@ -45,7 +45,7 @@ auto read_text(std::string const& filename) -> std::string {
 }
 }
 
-auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0) -> void {
+static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0) -> void {
     constexpr auto indent_size = 2;
     if (node == nullptr) return;
     auto indent = [](std::int32_t const& level) {
@@ -135,8 +135,9 @@ auto main(int argc, char const* argv[]) -> int {
     [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
     constexpr auto test_source = "1 + 1";
     cat::lexer lexer{test_source};
-    auto const program = lexer.tokenize();
-    cat::parser parser{program};
+    auto const tokens = lexer.tokenize();
+    cat::parser parser{tokens};
+    parser.parse();
 
     auto tk1 = cat::token("1", cat::token_type::numeric_literal);
     auto tk2 = cat::token("2", cat::token_type::numeric_literal);
@@ -167,7 +168,6 @@ auto main(int argc, char const* argv[]) -> int {
     auto nass = cat::make_assignment_expression_node(tkequal, nid, n1);
 
     recursive_print(nass);
-
     return 0;
 }
 
