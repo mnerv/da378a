@@ -23,7 +23,7 @@ else()
     add_compile_options(
         "/W4"
         "/WX"
-        #"/fsanitize=address"  # Doesn't work without Visual Studio
+        #"/fsanitize=address"  # Doesn't work without Visual Studio and maintest can't be run with it
     )
 endif()
 
