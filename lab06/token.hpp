@@ -8,6 +8,7 @@
  */
 #ifndef CATC_TOKEN_HPP
 #define CATC_TOKEN_HPP
+
 #include <string>
 #include <unordered_map>
 #include <optional>
@@ -91,8 +92,8 @@ class token {
     token_category m_category{token_category::invalid};
     std::string    m_filename;
     std::size_t    m_line;
-    std::size_t    m_column;
-    std::size_t    m_offset;
+    [[maybe_unused]]std::size_t    m_column;
+    [[maybe_unused]]std::size_t    m_offset;
 
   private:
     static std::unordered_map<std::string, token_type> s_token_strs;

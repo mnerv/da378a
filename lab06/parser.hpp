@@ -42,6 +42,9 @@ class parser {
   private:
     auto parse_statement() -> node_ref_t;
 
+    auto parse_call_expression() -> node_ref_t;
+    auto parse_assignment_statement() -> node_ref_t;
+
     auto parse_expression() -> node_ref_t;
     auto parse_term_expression() -> node_ref_t;
     auto parse_factor_expression() -> node_ref_t;
@@ -50,6 +53,7 @@ class parser {
   private:
     auto next_token() -> void;
     auto peek() const -> std::optional<token>;
+    auto peek_next(std::size_t const& i = 1) const -> std::optional<token>;
     auto has_next() const -> bool;
 
   private:

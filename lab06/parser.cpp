@@ -58,13 +58,34 @@ auto parser::parse_statement() -> node_ref_t {
     if (tk->type() == token_type::newline) return nullptr;  // Handle error
 
     switch (tk->type()) {
-        case token_type::identifier:
-            return nullptr;
+        case token_type::identifier: {
+            auto next = peek_next();
+            if (!next.has_value()) return nullptr;
+
+            if ((next->type() == token_type::identifier || next->category() == token_category::number)) {
+                return parse_call_expression();
+            } else if (next->type() == token_type::equals) {
+                return parse_assignment_statement();
+            } else {
+                return parse_expression();
+            }
+        }
         case token_type::numeric_literal:
             return parse_expression();
         default:
             return nullptr;
     }
+}
+
+auto parser::parse_call_expression() -> node_ref_t {
+    auto token_callee = *peek();
+    auto callee = make_ref<identifier_node>(token_callee);
+    next_token();
+    auto args = parse_args();
+    return make_ref<call_expression_node>(callee, args);
+}
+auto parser::parse_assignment_statement() -> node_ref_t {
+    return nullptr;
 }
 
 auto parser::parse_expression() -> node_ref_t {
@@ -74,7 +95,7 @@ auto parser::parse_expression() -> node_ref_t {
         if (tk->category() != token_category::operator_) break;
         next_token();
         auto right = parse_term_expression();
-        left  = make_ref<binary_expression_node>(tk.value(), left, right);
+        left  = make_ref<binary_expression_node>(*tk, left, right);
         tk    = peek();
     }
     return left;
@@ -87,7 +108,7 @@ auto parser::parse_term_expression() -> node_ref_t {
         if (tk->type() != token_type::asterisk && tk->type() != token_type::slash) break;
         next_token();
         auto right = parse_term_expression();
-        left  = make_ref<binary_expression_node>(tk.value(), left, right);
+        left  = make_ref<binary_expression_node>(*tk, left, right);
         tk    = peek();
     }
     return left;
@@ -118,8 +139,19 @@ auto parser::parse_factor_expression() -> node_ref_t {
 }
 auto parser::parse_args() -> std::vector<node_ref_t> {
     std::vector<node_ref_t> args{};
-    while (peek().has_value() && peek()->type() != token_type::newline)
-        args.push_back(parse_statement());
+    auto tk = peek();
+    while (tk.has_value()) {
+        auto next = peek_next();
+        if ((tk->type() == token_type::identifier || tk->category() == token_category::number) && next.has_value() && next->category() == token_category::operator_) {
+            args.push_back(parse_expression());
+        } else if (tk->type() == token_type::identifier) {
+            next_token();
+            args.push_back(make_ref<identifier_node>(*tk));
+        } else {
+            next_token();
+        }
+        tk = peek();
+    }
     return args;
 }
 
@@ -127,6 +159,10 @@ auto parser::next_token() -> void { ++m_cursor; }
 auto parser::peek() const -> std::optional<token> {
     if (!has_next()) return {};
     return m_tokens[m_cursor];
+}
+auto parser::peek_next(std::size_t const& i) const -> std::optional<token> {
+    if (m_cursor + i >= m_tokens.size()) return {};
+    return m_tokens[m_cursor + i];
 }
 auto parser::has_next() const -> bool { return m_cursor < m_tokens.size(); }
 

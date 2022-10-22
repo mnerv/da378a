@@ -21,7 +21,7 @@ class interpreter {
     auto eval(node_ref_t const& node) -> bool;
 
   private:
-    std::ostream& m_output;
+    [[maybe_unused]]std::ostream& m_output;
 };
 }
 
