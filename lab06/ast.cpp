@@ -98,24 +98,5 @@ auto call_expression_node::str() const -> std::string {
     return fmt;
 }
 
-auto make_identifier_node(token tk) -> node_ref_t {
-    return std::make_shared<identifier_node>(tk);
-}
-auto make_numeric_literal_node(token tk) -> node_ref_t {
-    return std::make_shared<numeric_literal_node>(tk);
-}
-auto make_assignment_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t {
-    return std::make_shared<assignment_expression_node>(tk, left, right);
-}
-auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t {
-    return std::make_shared<binary_expression_node>(tk, left, right);
-}
-auto make_variable_declarator_node(node_ref_t id, node_ref_t init) -> node_ref_t {
-    return std::make_shared<variable_declarator_node>(id, init);
-}
-auto make_call_expression_node(node_ref_t callee, std::vector<node_ref_t> args) -> node_ref_t {
-    return std::make_shared<call_expression_node>(callee, args);
-}
-
 }
 

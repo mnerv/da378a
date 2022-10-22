@@ -65,7 +65,6 @@ auto parser::parse_statement() -> node_ref_t {
         default:
             return nullptr;
     }
-
 }
 
 auto parser::parse_expression() -> node_ref_t {
@@ -75,7 +74,7 @@ auto parser::parse_expression() -> node_ref_t {
         if (tk->category() != token_category::operator_) break;
         next_token();
         auto right = parse_term_expression();
-        left  = make_binary_expression_node(tk.value(), left, right);
+        left  = make_ref<binary_expression_node>(tk.value(), left, right);
         tk    = peek();
     }
     return left;
@@ -88,7 +87,7 @@ auto parser::parse_term_expression() -> node_ref_t {
         if (tk->type() != token_type::asterisk && tk->type() != token_type::slash) break;
         next_token();
         auto right = parse_term_expression();
-        left  = make_binary_expression_node(tk.value(), left, right);
+        left  = make_ref<binary_expression_node>(tk.value(), left, right);
         tk    = peek();
     }
     return left;
@@ -99,9 +98,9 @@ auto parser::parse_factor_expression() -> node_ref_t {
     next_token();
     switch (tk->type()) {
         case token_type::identifier:
-            return make_identifier_node(*tk);
+            return make_ref<identifier_node>(*tk);
         case token_type::numeric_literal:
-            return make_numeric_literal_node(*tk);
+            return make_ref<numeric_literal_node>(*tk);
         case token_type::paren_open: {
             auto a = parse_expression();
             if (a == nullptr) return nullptr;

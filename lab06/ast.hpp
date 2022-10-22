@@ -17,7 +17,15 @@
 #include "token.hpp"
 
 namespace cat {
-using node_ref_t = std::shared_ptr<class ast_node>;
+template<typename T>
+using ref = std::shared_ptr<T>;
+
+template<typename T, typename... Args>
+auto make_ref(Args&&... args) -> std::shared_ptr<T> {
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+using node_ref_t = ref<class ast_node>;
 
 enum class node_type : std::uint32_t {
     identifier,
@@ -122,7 +130,7 @@ class call_expression_node : public ast_node {
 
 class variable_declarator_node : public ast_node {
   public:
-    variable_declarator_node(node_ref_t idk, node_ref_t init);
+    variable_declarator_node(node_ref_t id, node_ref_t init);
 
     auto name() const -> char const* override { return "variable_declarator"; }
     auto str() const -> std::string override;
@@ -134,14 +142,6 @@ class variable_declarator_node : public ast_node {
     node_ref_t m_id;
     node_ref_t m_init;
 };
-
-auto make_identifier_node(token tk) -> node_ref_t;
-auto make_numeric_literal_node(token tk) -> node_ref_t;
-auto make_assignment_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
-auto make_binary_expression_node(token tk, node_ref_t left, node_ref_t right) -> node_ref_t;
-auto make_call_expression_node(node_ref_t callee, std::vector<node_ref_t> args) -> node_ref_t;
-auto make_variable_declarator_node(node_ref_t id, node_ref_t init) -> node_ref_t;
-
 }
 
 #endif  // CATC_AST_HPP

@@ -45,8 +45,7 @@ static auto read_text(std::string const& filename) -> std::string {
 }
 }
 
-static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0) -> void {
-    constexpr auto indent_size = 2;
+static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0, std::int32_t const& indent_size = 2) -> void {
     if (node == nullptr) return;
     auto indent = [](std::int32_t const& level) {
         std::string str;
@@ -103,6 +102,7 @@ static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& lev
     }
     default:
         std::cout << indent(level + indent_size) << "NOT_IMPLEMENTED: " << node->name();
+        break;
     }
 
     if (node->left() != nullptr) {
