@@ -53,14 +53,26 @@ auto parser::parse() -> void {
 auto parser::program() const -> std::vector<node_ref_t> const& { return m_nodes; }
 
 auto parser::parse_statement() -> node_ref_t {
-    return parse_expression();
+    auto tk = peek();
+    if (!tk.has_value()) return nullptr;
+    if (tk->type() == token_type::newline) return nullptr;  // Handle error
+
+    switch (tk->type()) {
+        case token_type::identifier:
+            return nullptr;
+        case token_type::numeric_literal:
+            return parse_expression();
+        default:
+            return nullptr;
+    }
+
 }
 
 auto parser::parse_expression() -> node_ref_t {
     auto left = parse_term_expression();
     auto tk   = peek();
     while (tk.has_value()) {
-        if (tk->category() != token_category::operator_) return left;
+        if (tk->category() != token_category::operator_) break;
         next_token();
         auto right = parse_term_expression();
         left  = make_binary_expression_node(tk.value(), left, right);
@@ -85,7 +97,7 @@ auto parser::parse_factor_expression() -> node_ref_t {
     auto tk = peek();
     if (!tk.has_value()) return nullptr;
     next_token();
-    switch (tk.value().type()) {
+    switch (tk->type()) {
         case token_type::identifier:
             return make_identifier_node(*tk);
         case token_type::numeric_literal:
@@ -107,7 +119,7 @@ auto parser::parse_factor_expression() -> node_ref_t {
 }
 auto parser::parse_args() -> std::vector<node_ref_t> {
     std::vector<node_ref_t> args{};
-    while (peek().has_value() && peek().value().type() != token_type::newline)
+    while (peek().has_value() && peek()->type() != token_type::newline)
         args.push_back(parse_statement());
     return args;
 }

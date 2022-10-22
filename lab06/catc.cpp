@@ -58,39 +58,39 @@ static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& lev
 
     switch (node->type()) {
     case cat::node_type::identifier: {
-        auto const& n = static_cast<cat::identifier_node const&>(*node);
+        auto const& n = dynamic_cast<cat::identifier_node const&>(*node);
         std::cout << indent(level + indent_size) << "id: \"" << n.id() << "\",";
         break;
     }
     case cat::node_type::numeric_literal: {
-        auto const& n = static_cast<cat::numeric_literal_node const&>(*node);
+        auto const& n = dynamic_cast<cat::numeric_literal_node const&>(*node);
         std::cout << indent(level + indent_size) << "value: " << n.value() << ",\n";
         std::cout << indent(level + indent_size) << "raw: \"" << n.value() << "\",";
         break;
     }
     case cat::node_type::assignment_expression: {
-        auto const& n = static_cast<cat::assignment_expression_node const&>(*node);
+        auto const& n = dynamic_cast<cat::assignment_expression_node const&>(*node);
         std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
         break;
     }
     case cat::node_type::binary_expression: {
-        auto const& n = static_cast<cat::binary_expression_node const&>(*node);
+        auto const& n = dynamic_cast<cat::binary_expression_node const&>(*node);
         std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
         break;
     }
     case cat::node_type::variable_declarator: {
-        auto const& n = static_cast<cat::variable_declarator_node const&>(*node);
+        auto const& n = dynamic_cast<cat::variable_declarator_node const&>(*node);
         std::cout << indent(level + indent_size) << "id: \"" << n.id()->raw_token().value() << "\",\n";
         std::cout << indent(level + indent_size) << "init: ";
         recursive_print(n.init(), level + indent_size);
         break;
     }
     case cat::node_type::call_expression: {
-        auto const& n = static_cast<cat::call_expression_node const&>(*node);
+        auto const& n = dynamic_cast<cat::call_expression_node const&>(*node);
         std::cout << indent(level + indent_size) << "callee: \"" << n.callee()->raw_token().value() << "\",\n";
         std::cout << indent(level + indent_size) << "args: [ ";
         auto const& args = n.args();
-        if (args.size() != 0) std::cout << "\n" << indent(level + indent_size);
+        if (!args.empty()) std::cout << "\n" << indent(level + indent_size);
         for (std::size_t i = 0; i < args.size(); ++i) {
             auto const& arg = args[i];
             std::cout << indent(level + indent_size) << i << ": ";
