@@ -153,6 +153,16 @@ TEST(lexer, numeric_binary_operation_fraction) {
     ASSERT_EQ("1"s, tokens[2].value());
 }
 
+TEST(lexer, numeric_binary_operation_parens) {
+    using namespace std::string_literals;
+    constexpr std::size_t token_size = 5;
+    constexpr auto numeric_literal = "(1 + 1)";
+    cat::lexer lexer{numeric_literal};
+    auto const tokens = lexer.tokenize();
+    ASSERT_NE(std::begin(tokens), std::end(tokens));
+    ASSERT_EQ(token_size, tokens.size());
+}
+
 auto main(int argc, char const* argv[]) -> int {
     testing::InitGoogleTest(&argc, (char**)argv);
     return RUN_ALL_TESTS();

@@ -45,8 +45,10 @@ auto lexer::next_token() -> std::optional<token> {
     if (res.empty()) {
         do {
             res += consume_next();
+            if (res.front() == '(') break;
+            if (peek() == ')') break;
         } while (has_next() && !is_whitespace());
-        if (has_next() && !is_newline()) consume();
+        if (has_next() && !is_newline() && is_space()) consume();
     }
 
     if (token::is_numeric(res))
