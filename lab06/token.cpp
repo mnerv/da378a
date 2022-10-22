@@ -98,6 +98,10 @@ auto token::is_numeric(std::string const& str) -> bool {
     static std::regex const numeric_regex{"^[-+]?[0-9]+$"};
     return std::regex_match(str, numeric_regex);
 }
+auto token::is_float(std::string const& str) -> bool {
+    static std::regex const float_regex{"^[0-9]+.(?:[0-9]+f?)?$"};
+    return std::regex_match(str, float_regex);
+}
 auto token::is_identifier(std::string const& str) -> bool {
     static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9]+$"};
     return std::regex_match(str, id_regex);

@@ -11,23 +11,52 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include "token.hpp"
 #include "ast.hpp"
 
 namespace cat {
-
+/**
+ * C@ language parser.
+ *
+ * @code
+ * Grammar rules
+ * S     -> ID [ID | E]+
+ * S     -> ID "=" [ E | ID ]
+ * E     -> T + E | T - E | T
+ * T     -> F * T | F / T | F
+ * F     -> ID | INT | (E) | -F
+ * ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
+ * INT   -> ^[-+]?[0-9]+$
+ * @endcode
+ */
 class parser {
   public:
     parser(std::vector<token> const& tokens);
     ~parser();
 
-    auto parse() -> node_ref_t;
-    auto nodes() const -> std::vector<node_ref_t> const&;
+    auto parse() -> void;
+    auto program() const -> std::vector<node_ref_t> const&;
+
+  private:
+    auto parse_statement() -> node_ref_t;
+    auto parse_expression() -> node_ref_t;
+
+    auto parse_math_expression() -> node_ref_t;
+    auto parse_sum_expression() -> node_ref_t;
+    auto parse_product_expression() -> node_ref_t;
+    auto parse_primary_expression() -> node_ref_t;
+    auto parse_args() -> std::vector<node_ref_t>;
+    auto parse_int() -> node_ref_t;
+    auto parse_id() -> node_ref_t;
 
   private:
     auto next_token() -> void;
-    auto peek() const -> token const&;
+    auto peek() const -> std::optional<token>;
+    auto peek_ahead(std::size_t const& i = 1) const -> std::optional<token>;
+    auto peek_consume() -> std::optional<token>;
+    auto has_next() const -> bool;
 
   private:
     std::size_t             m_cursor;

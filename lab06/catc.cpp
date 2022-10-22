@@ -133,41 +133,14 @@ auto main(int argc, char const* argv[]) -> int {
     }
 
     [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
-    constexpr auto test_source = "1 + 1";
+    constexpr auto test_source = "1 + 2 + 3 * 4";
     cat::lexer lexer{test_source};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};
     parser.parse();
+    if (!parser.program().empty())
+        recursive_print(parser.program()[0]);
 
-    auto tk1 = cat::token("1", cat::token_type::numeric_literal);
-    auto tk2 = cat::token("2", cat::token_type::numeric_literal);
-    auto tkp = cat::token("+", cat::token_type::plus);
-
-    auto n1 = cat::make_numeric_literal_node(tk1);
-    auto n2 = cat::make_numeric_literal_node(tk2);
-    auto np = cat::make_binary_expression_node(tkp, n1, n2);
-
-    recursive_print(np);
-
-    auto tka = cat::token("*", cat::token_type::asterisk);
-    auto na = cat::make_binary_expression_node(tka, n1, np);
-
-    auto tkid = cat::token("hello", cat::token_type::identifier);
-    auto nid = cat::make_identifier_node(tkid);
-    auto niddec = cat::make_variable_declarator_node(nid, na);
-
-    recursive_print(niddec);
-
-    auto tkcall = cat::token("config", cat::token_type::identifier);
-    auto ncall = cat::make_identifier_node(tkcall);
-    auto ncallex = cat::make_call_expression_node(ncall, {n1, n2, nid, np});
-
-    recursive_print(ncallex);
-
-    auto tkequal = cat::token("=", cat::token_type::equals);
-    auto nass = cat::make_assignment_expression_node(tkequal, nid, n1);
-
-    recursive_print(nass);
     return 0;
 }
 
