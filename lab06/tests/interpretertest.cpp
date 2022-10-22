@@ -1,7 +1,7 @@
 /**
- * @file   parsertest.cpp
+ * @file   interpretertest.cpp
  * @author Pratchaya Khansomboon <me@mononerv.dev>
- * @brief  Parser test suites for cat language library.
+ * @brief  Interpreter test suites for cat language library.
  * @date   2022-10-17
  *
  * @copyright Copyright (c) 2022
@@ -10,9 +10,7 @@
 
 #include "gtest/gtest.h"
 
-#include "parser.hpp"
-
-TEST(parser, numeric_literal) {
+TEST(interpreter, test) {
     ASSERT_TRUE(false);
 }
 

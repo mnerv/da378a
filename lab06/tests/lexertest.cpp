@@ -1,7 +1,7 @@
 /**
- * @file   hello.cpp
+ * @file   lexertest.cpp
  * @author Pratchaya Khansomboon <me@mononerv.dev>
- * @brief  Google Test suites for cat language library.
+ * @brief  Lexer test suites for cat language library.
  * @date   2022-10-17
  *
  * @copyright Copyright (c) 2022

@@ -9,7 +9,10 @@
 #include "interpreter.hpp"
 
 namespace cat {
-interpreter::interpreter(std::vector<node_ref_t> const& nodes) : m_nodes(nodes) {
-}
+interpreter::interpreter(std::ostream& output) : m_output(output) {}
 interpreter::~interpreter() = default;
+
+auto interpreter::eval([[maybe_unused]]node_ref_t const& node) -> bool {
+    return false;
+}
 }

@@ -22,13 +22,13 @@ namespace cat {
  *
  * @code
  * Grammar rules
- * S     -> ID [ID | E]+
- * S     -> ID "=" [ E | ID ]
- * E     -> T + E | T - E | T
- * T     -> F * T | F / T | F
- * F     -> ID | INT | (E) | -F
- * ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
- * INT   -> ^[-+]?[0-9]+$
+// S     -> ID [ ID | E ]+
+// S     -> ID "=" [ E | ID ]
+// E     -> T [ + | - T ]+
+// T     -> F [ * | / T ]+
+// F     -> ID | INT | (E) | -F
+// ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
+// INT   -> ^[-+]?[0-9]+$
  * @endcode
  */
 class parser {
@@ -41,11 +41,10 @@ class parser {
 
   private:
     auto parse_statement() -> node_ref_t;
-    auto parse_expression() -> node_ref_t;
 
-    auto parse_math_expression() -> node_ref_t;
-    auto parse_product_expression() -> node_ref_t;
-    auto parse_primary_expression() -> node_ref_t;
+    auto parse_expression() -> node_ref_t;
+    auto parse_term_expression() -> node_ref_t;
+    auto parse_factor_expression() -> node_ref_t;
     auto parse_args() -> std::vector<node_ref_t>;
 
   private:

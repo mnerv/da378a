@@ -9,18 +9,19 @@
 #ifndef CATC_INTERPRETER_HPP
 #define CATC_INTERPRETER_HPP
 
-#include <vector>
-
-#include "ast.hpp"
+#include <memory>
+#include "parser.hpp"
 
 namespace cat {
 class interpreter {
   public:
-    interpreter(std::vector<node_ref_t> const& nodes);
+    interpreter(std::ostream& output);
     ~interpreter();
 
+    auto eval(node_ref_t const& node) -> bool;
+
   private:
-    std::vector<node_ref_t> m_nodes;
+    std::ostream& m_output;
 };
 }
 
