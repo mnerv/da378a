@@ -16,12 +16,12 @@
  *
  * @copyright Copyright (c) 2022
  */
-#include <iostream>
 #include <string>
 #include <filesystem>
 #include <fstream>
 #include <ios>
 #include <numeric>
+#include <iostream>
 
 #include "lexer.hpp"
 #include "parser.hpp"
@@ -133,7 +133,7 @@ auto main(int argc, char const* argv[]) -> int {
     }
 
     [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
-    constexpr auto test_source = "print 1 + 2 2 + 2";
+    constexpr auto test_source = "print 1 + 2 * 3 - 4";
     cat::lexer lexer{test_source};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};

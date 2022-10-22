@@ -60,11 +60,9 @@ auto parser::parse_statement() -> node_ref_t {
     switch (tk->type()) {
         case token_type::identifier: {
             auto next = peek_next();
-            if (!next.has_value()) return nullptr;
-
-            if ((next->type() == token_type::identifier || next->category() == token_category::number)) {
+            if (!next.has_value() || (next.has_value() && (next->category() == token_category::number || next->category() == token_category::identifier))) {
                 return parse_call_expression();
-            } else if (next->type() == token_type::equals) {
+            } else if (next.has_value() && next->type() == token_type::equals) {
                 return parse_assignment_statement();
             } else {
                 return parse_expression();
