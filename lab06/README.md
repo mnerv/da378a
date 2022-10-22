@@ -32,7 +32,7 @@ F: (Factor)
 
 ```
 S     -> ID [ ID | E ]+
-S     -> ID "=" [ E | ID ]
+S     -> ID = [ E | ID ]
 E     -> T + E | T - E | T
 T     -> F * T | F / T | F
 F     -> ID | INT | FLOAT | (E) | -F

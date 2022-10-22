@@ -133,16 +133,18 @@ auto main(int argc, char const* argv[]) -> int {
     }
 
     [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
-    constexpr auto test_source = "1 + 2 / 2 + 3";
+    constexpr auto test_source = "1 + 2 / 3 - 4";
     cat::lexer lexer{test_source};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};
     parser.parse();
 
     std::cout << "source: " << test_source << "\n";
-    std::cout << "tree:\n";
-    if (!parser.program().empty())
-        recursive_print(parser.program()[0]);
+    auto program = parser.program();
+    for (auto const& node : program) {
+        recursive_print(node);
+        std::cout << "\n";
+    }
 
     return 0;
 }

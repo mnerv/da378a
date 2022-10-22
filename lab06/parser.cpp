@@ -18,24 +18,28 @@
 
 // Grammar rules
 //
-// S     -> ID [ID | E]+
+// S     -> ID [ ID | E ]+
 // S     -> ID "=" [ E | ID ]
-// E     -> T + E | T - E | T
+// E     -> T [ + | - T ]+
 // T     -> F * T | F / T | F
 // F     -> ID | INT | FLOAT | (E) | -F
 // ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
 // INT   -> ^[-+]?[0-9]+$
 // FLOAT -> ^[-+]?[0-9]+.(?:[0-9]+f?)?$
 
+// parse_e
+// parse_t
+// parse_f
+// parse_id
+// parse_int
+
 // Grammar rules (verbose)
 //
 // function_statement   -> id [ id | math_expression ]+
 // assignment_statement -> id "=" math_expression
-// math_expression      -> sum_expression
-// sum_expression       -> product_expression [ "+" product_expression | "-" product_expression ]+
+// math_expression      -> product_expression [ "+" product_expression | "-" product_expression ]+
 // product_expression   -> primary_expression [ "*" primary_expression | "/" primary_expression ]+
 // primary_expression   ->  id | int | float | "(" math_expressin ")" | "-" primary_expression
-// args                 -> [ int | id ]+
 // int                  -> ^[-+]?[0-9]+$
 // id                   -> ^[a-zA-Z][a-zA-Z0-9]+$
 // float                -> ^[-+]?[0-9]+.(?:[0-9]+f?)?$
@@ -58,46 +62,27 @@ auto parser::parse_statement() -> node_ref_t {
     return parse_math_expression();
 }
 
-auto parser::parse_expression() -> node_ref_t {
-    return nullptr;
-}
-
 auto parser::parse_math_expression() -> node_ref_t {
-    return parse_sum_expression();
-}
-auto parser::parse_sum_expression() -> node_ref_t {
     auto left = parse_product_expression();
-    auto tk   = peek_consume();
-    if (!tk.has_value()) return left;
-
-    if (tk.value().type() == token_type::plus || tk.value().type() == token_type::minus) {
-        auto op = peek_ahead();
-        node_ref_t right{nullptr};
-        if (op.has_value() && token_type_category(op.value().type()) != token_category::punctuation)
-            right = parse_sum_expression();
-        else
-            right = parse_product_expression();
-        if (right != nullptr) return make_binary_expression_node(tk.value(), left, right);
+    auto tk   = peek();
+    while (true) {
+        if (!tk.has_value()) return left;
+        next_token();
+        auto right = parse_product_expression();
+        left  = make_binary_expression_node(tk.value(), left, right);
+        tk    = peek();
     }
-
-    return nullptr;  // TODO: Show error
 }
 auto parser::parse_product_expression() -> node_ref_t {
     auto left = parse_primary_expression();
     if (left == nullptr) return nullptr;
-
-    auto tk_op = peek();
-    if (!tk_op.has_value()) return left;
-    auto const& tk = tk_op.value();
-    if (tk.type() == token_type::asterisk || tk.type() == token_type::slash) {
+    auto tk = peek();
+    while (tk.has_value()) {
+        if (tk->type() != token_type::asterisk && tk->type() != token_type::slash) break;
         next_token();
-        auto op = peek_ahead();
-        node_ref_t right{nullptr};
-        if (op.has_value())
-            right = parse_sum_expression();
-        else
-            right = parse_primary_expression();
-        if (right != nullptr) return make_binary_expression_node(tk, left, right);
+        auto right = parse_product_expression();
+        left  = make_binary_expression_node(tk.value(), left, right);
+        tk    = peek();
     }
     return left;
 }
@@ -107,17 +92,23 @@ auto parser::parse_primary_expression() -> node_ref_t {
     next_token();
     switch (tk.value().type()) {
         case token_type::identifier:
-            return make_identifier_node(tk.value());
+            return make_identifier_node(*tk);
         case token_type::numeric_literal:
-            return make_numeric_literal_node(tk.value());
+            return make_numeric_literal_node(*tk);
         case token_type::paren_open: {
-            auto node = parse_math_expression();
-            if (peek().has_value() && peek().value().type() == token_type::paren_close) next_token();
-            return node;
+            auto a = parse_math_expression();
+            if (a == nullptr) return nullptr;
+            tk = peek();
+            if (tk.has_value() && tk->type() == token_type::paren_close) {
+                next_token();
+                return a;
+            } else {
+                return nullptr;
+            }
         }
-        default: break;
+        default:
+            return nullptr;
     }
-    return nullptr;
 }
 auto parser::parse_args() -> std::vector<node_ref_t> {
     std::vector<node_ref_t> args{};

@@ -10,7 +10,6 @@
 
 #include "gtest/gtest.h"
 
-#include "lexer.hpp"
 #include "parser.hpp"
 
 TEST(parser, numeric_literal) {

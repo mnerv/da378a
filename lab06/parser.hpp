@@ -44,7 +44,6 @@ class parser {
     auto parse_expression() -> node_ref_t;
 
     auto parse_math_expression() -> node_ref_t;
-    auto parse_sum_expression() -> node_ref_t;
     auto parse_product_expression() -> node_ref_t;
     auto parse_primary_expression() -> node_ref_t;
     auto parse_args() -> std::vector<node_ref_t>;
