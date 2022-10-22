@@ -34,6 +34,7 @@ else()
     target_compile_options(${TARGET_NAME} PRIVATE
         "/W4"
         "/WX"
+        "/utf-8"
         #"/fsanitize=address"  # Doesn't work without Visual Studio
     )
 endif()
