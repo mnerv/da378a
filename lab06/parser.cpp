@@ -67,6 +67,7 @@ auto parser::parse_math_expression() -> node_ref_t {
     auto tk   = peek();
     while (true) {
         if (!tk.has_value()) return left;
+        if (token_type_category(tk->type()) != token_category::operator_) return left;
         next_token();
         auto right = parse_product_expression();
         left  = make_binary_expression_node(tk.value(), left, right);
