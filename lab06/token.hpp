@@ -53,17 +53,30 @@ enum class token_category : std::uint32_t {
 auto token_category_str(token_category const& type) -> std::string;
 auto token_type_category(token_type const& type) -> token_category;
 
+struct source_position {
+    std::size_t line;
+    std::size_t column;
+    std::size_t offset;
+};
+
+struct source_range {
+    std::string filename;
+    source_position start;
+    source_position end;
+};
+
 /**
  * Token container, describe what type of token it is and what value it has.
  */
 class token {
   public:
     token() = default;
-    token(std::string value, token_type const& type, std::size_t const& line = 0);
+    token(std::string value, token_type const& type, std::string const& filename = "", std::size_t const& line = 0, std::size_t const& column = 0, std::size_t const& offset = 0);
 
     auto category() const -> token_category;
     auto type() const -> token_type;
     auto value() const -> std::string;
+    auto filename() const->std::string;
     auto str() const -> std::string;
 
   public:
@@ -76,12 +89,10 @@ class token {
     std::string    m_value{};
     token_type     m_type{token_type::invalid};
     token_category m_category{token_category::invalid};
+    std::string    m_filename;
     std::size_t    m_line;
-    // TODO: column location and cursor location
-//    std::size_t m_column_start;
-//    std::size_t m_column_end;
-//    std::size_t m_start;
-//    std::size_t m_end;
+    std::size_t    m_column;
+    std::size_t    m_offset;
 
   private:
     static std::unordered_map<std::string, token_type> s_token_strs;

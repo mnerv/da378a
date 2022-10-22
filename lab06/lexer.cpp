@@ -34,11 +34,13 @@ auto lexer::next_token() -> std::optional<token> {
     if (!has_next()) return {};
     std::string res{};  // Eaten results
     // TODO: Add a way to see where a token is located in the source file.
+    // TODO: String token support
+    // TODO: Unary operator +T, -T, ++T, T++, --T, T--
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
     if (is_newline() || is_carriage_return()) {
         res = consume_next();
-        return token(res, token_type::newline, m_line++);
+        return token(res, token_type::newline, "", m_line++);
     }
 
     // FIXME: Find a better way? It's kind of ugly
@@ -52,14 +54,14 @@ auto lexer::next_token() -> std::optional<token> {
     }
 
     if (token::is_numeric(res))
-        return token(res, token_type::numeric_literal, m_line);
+        return token(res, token_type::numeric_literal, "", m_line);
 
     auto const token_valid = token::str_token(res);
     if (token_valid.has_value())
-        return token(res, token_valid.value(), m_line);
+        return token(res, token_valid.value(), "", m_line);
 
     auto const type_of_token = token::is_identifier(res) ? token_type::identifier : token_type::invalid;
-    return token(res, type_of_token, m_line);
+    return token(res, type_of_token, "", m_line);
 }
 
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }
