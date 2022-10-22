@@ -73,7 +73,7 @@ auto parser::parse_sum_expression() -> node_ref_t {
     if (tk.value().type() == token_type::plus || tk.value().type() == token_type::minus) {
         auto op = peek_ahead();
         node_ref_t right{nullptr};
-        if (op.has_value() && token_type_category(op.value().type()) == token_category::operator_)
+        if (op.has_value() && token_type_category(op.value().type()) != token_category::punctuation)
             right = parse_sum_expression();
         else
             right = parse_product_expression();
@@ -93,7 +93,7 @@ auto parser::parse_product_expression() -> node_ref_t {
         next_token();
         auto op = peek_ahead();
         node_ref_t right{nullptr};
-        if (op.has_value() && token_type_category(op.value().type()) == token_category::operator_)
+        if (op.has_value())
             right = parse_sum_expression();
         else
             right = parse_primary_expression();
@@ -102,18 +102,20 @@ auto parser::parse_product_expression() -> node_ref_t {
     return left;
 }
 auto parser::parse_primary_expression() -> node_ref_t {
-    auto tk = peek_consume();
+    auto tk = peek();
     if (!tk.has_value()) return nullptr;
+    next_token();
     switch (tk.value().type()) {
         case token_type::identifier:
             return make_identifier_node(tk.value());
         case token_type::numeric_literal:
             return make_numeric_literal_node(tk.value());
-        case token_type::paren_open:
-            return parse_math_expression();
-        case token_type::paren_close:
-        default:
-            break;
+        case token_type::paren_open: {
+            auto node = parse_math_expression();
+            if (peek().has_value() && peek().value().type() == token_type::paren_close) next_token();
+            return node;
+        }
+        default: break;
     }
     return nullptr;
 }
@@ -122,14 +124,6 @@ auto parser::parse_args() -> std::vector<node_ref_t> {
     while (peek().has_value() && peek().value().type() != token_type::newline)
         args.push_back(parse_statement());
     return args;
-}
-auto parser::parse_int() -> node_ref_t {
-    if (!peek().has_value()) return nullptr;
-    return make_numeric_literal_node(peek().value());
-}
-auto parser::parse_id() -> node_ref_t {
-    if (!peek().has_value()) return nullptr;
-    return make_identifier_node(peek().value());
 }
 
 auto parser::next_token() -> void { ++m_cursor; }

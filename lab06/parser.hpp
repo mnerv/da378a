@@ -48,8 +48,6 @@ class parser {
     auto parse_product_expression() -> node_ref_t;
     auto parse_primary_expression() -> node_ref_t;
     auto parse_args() -> std::vector<node_ref_t>;
-    auto parse_int() -> node_ref_t;
-    auto parse_id() -> node_ref_t;
 
   private:
     auto next_token() -> void;
