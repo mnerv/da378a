@@ -7,16 +7,38 @@ Mini project.
   - [cmake](https://cmake.org)
   - [vcpkg](http://vcpkg.io) - Google Test
 
-[vcpkg](http://vcpkg.io) is not required if you're not running unit tests. By default, if GTest library is not found,
-test targets are not generated.
+[vcpkg](http://vcpkg.io) is not required.
 
 ## Build
 
-If you have `vcpkg` installed then you can use the command below for unix systems. This will automatically install
-Google Test library. To use without Google Test run `cmake` without `-DCMAKE_TOOLCHAIN_FILE` argument.
+This project requires `vcpkg` to run unit tests, but it can run without the test suites. Use `cmake` with
+`-DCMAKE_TOOLCHAIN_FILE`flag as the command below to enable test targets.
 
 ```
 cmake -S . -Bbuild -GNinja -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
 ```
 
 `${VCPKG_ROOT}`: This points to where the `vcpkg` located on your system.
+
+## Grammar
+
+```
+S: Statement
+E: Rule (Expression)
+T: Non-Terminal Symbols "Grammar Symbols" (Term)
+F: (Factor)
++-*/()=: Terminal Symbols
+```
+
+```
+S     -> ID [ ID | E ]+
+S     -> ID "=" [ E | ID ]
+E     -> T + E | T - E | T
+T     -> F * T | F / T | F
+F     -> ID | INT | FLOAT | (E) | -F
+ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
+INT   -> ^[-+]?[0-9]+$
+FLOAT -> ^[-+]?[0-9]+.(?:[0-9]+f?)?$
+```
+
+`ID`, `INT`, and `FLOAT` rule is a valid regex.
