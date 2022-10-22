@@ -51,8 +51,6 @@ class parser {
   private:
     auto next_token() -> void;
     auto peek() const -> std::optional<token>;
-    auto peek_ahead(std::size_t const& i = 1) const -> std::optional<token>;
-    auto peek_consume() -> std::optional<token>;
     auto has_next() const -> bool;
 
   private:

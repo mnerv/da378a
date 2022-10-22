@@ -61,6 +61,7 @@ class token {
     token() = default;
     token(std::string value, token_type const& type, std::size_t const& line = 0);
 
+    auto category() const -> token_category;
     auto type() const -> token_type;
     auto value() const -> std::string;
     auto str() const -> std::string;
@@ -72,9 +73,10 @@ class token {
     static auto is_identifier(std::string const& str) -> bool;
 
   private:
-    std::string m_value{};
-    token_type  m_type{token_type::invalid};
-    std::size_t m_line;
+    std::string    m_value{};
+    token_type     m_type{token_type::invalid};
+    token_category m_category{token_category::invalid};
+    std::size_t    m_line;
     // TODO: column location and cursor location
 //    std::size_t m_column_start;
 //    std::size_t m_column_end;

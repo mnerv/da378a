@@ -65,14 +65,14 @@ auto parser::parse_statement() -> node_ref_t {
 auto parser::parse_math_expression() -> node_ref_t {
     auto left = parse_product_expression();
     auto tk   = peek();
-    while (true) {
-        if (!tk.has_value()) return left;
-        if (token_type_category(tk->type()) != token_category::operator_) return left;
+    while (tk.has_value()) {
+        if (tk->category() != token_category::operator_) return left;
         next_token();
         auto right = parse_product_expression();
         left  = make_binary_expression_node(tk.value(), left, right);
         tk    = peek();
     }
+    return left;
 }
 auto parser::parse_product_expression() -> node_ref_t {
     auto left = parse_primary_expression();
@@ -122,14 +122,6 @@ auto parser::next_token() -> void { ++m_cursor; }
 auto parser::peek() const -> std::optional<token> {
     if (!has_next()) return {};
     return m_tokens[m_cursor];
-}
-auto parser::peek_ahead(std::size_t const& i) const -> std::optional<token> {
-    if (m_cursor + i >= m_tokens.size()) return {};
-    return m_tokens[m_cursor + i];
-}
-auto parser::peek_consume() -> std::optional<token> {
-    if (!has_next()) return {};
-    return m_tokens[m_cursor++];
 }
 auto parser::has_next() const -> bool { return m_cursor < m_tokens.size(); }
 
