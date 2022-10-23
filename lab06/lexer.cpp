@@ -10,7 +10,9 @@
 
 namespace cat {
 
-lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {}
+lexer::lexer(std::string const& source) : m_source(source), m_cursor(0), m_line(1) {
+    (void)m_column;
+}
 lexer::~lexer() = default;
 
 auto lexer::tokenize() -> std::vector<token> {

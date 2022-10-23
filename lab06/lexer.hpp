@@ -49,7 +49,7 @@ class lexer {
     std::string m_source;
     std::size_t m_cursor;
     std::size_t m_line;
-    [[maybe_unused]]std::size_t m_column;
+    std::size_t m_column;
 };
 }
 

@@ -74,10 +74,14 @@ class token {
     token() = default;
     token(std::string value, token_type const& type, std::string const& filename = "", std::size_t const& line = 0, std::size_t const& column = 0, std::size_t const& offset = 0);
 
-    auto category() const -> token_category;
-    auto type() const -> token_type;
-    auto value() const -> std::string;
-    auto filename() const->std::string;
+
+    auto category() const -> token_category { return m_category; }
+    auto type() const -> token_type { return m_type; }
+    auto value() const -> std::string { return m_value; }
+    auto filename() const -> std::string { return m_filename; }
+    auto line() const -> std::size_t { return m_line; }
+    auto column() const -> std::size_t { return m_column; }
+    auto offset() const -> std::size_t { return m_offset; }
     auto str() const -> std::string;
 
   public:
@@ -92,8 +96,8 @@ class token {
     token_category m_category{token_category::invalid};
     std::string    m_filename;
     std::size_t    m_line;
-    [[maybe_unused]]std::size_t    m_column;
-    [[maybe_unused]]std::size_t    m_offset;
+    std::size_t    m_column;
+    std::size_t    m_offset;
 
   private:
     static std::unordered_map<std::string, token_type> s_token_strs;

@@ -58,11 +58,7 @@ auto main(int argc, char const* argv[]) -> int {
         return 1;
     }
 
-    [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
-    [[maybe_unused]]constexpr auto test_source = R"(
-x = 2 - -2
-y = x - 1
-)";
+    auto const source = nrv::read_text(source_file.string());
     cat::lexer lexer{source};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};

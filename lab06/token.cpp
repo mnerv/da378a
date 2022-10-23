@@ -67,15 +67,10 @@ token::token(std::string value, token_type const& type, std::string const& filen
     : m_value(std::move(value)), m_type(type), m_category(token_type_category(m_type)), m_filename(filename)
     , m_line(line), m_column(column), m_offset(offset) {}
 
-auto token::category() const -> token_category { return m_category; }
-auto token::type() const -> token_type { return m_type; }
-auto token::value() const -> std::string { return m_value; }
-auto token::filename() const -> std::string { return m_filename; }
-
 auto token::str() const -> std::string {
     using namespace std::string_literals;
     auto sanitize_str = [](std::string const& str) -> std::string {
-        return std::reduce(std::begin(str), std::end(str), std::string{}, [](auto a, auto b) {
+        return std::accumulate(std::begin(str), std::end(str), std::string{}, [](auto const& a, char const& b) {
             std::string raw{};
             if (b == '\n')     raw = "\\n";
             else if(b == '\r') raw = "\\r";

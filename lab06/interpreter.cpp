@@ -9,7 +9,9 @@
 #include "interpreter.hpp"
 
 namespace cat {
-interpreter::interpreter(std::ostream& output) : m_output(output) {}
+interpreter::interpreter(std::ostream& output) : m_output(output) {
+    (void)m_output;
+}
 interpreter::~interpreter() = default;
 
 auto interpreter::eval([[maybe_unused]]node_ref_t const& node) -> bool {
@@ -19,9 +21,9 @@ auto interpreter::eval([[maybe_unused]]node_ref_t const& node) -> bool {
 auto recursive_print(std::ostream& output, cat::node_ref_t const& node, std::int32_t const& level, std::int32_t const& indent_size) -> void {
     using namespace std::string_literals;
     if (node == nullptr) return;
-    auto indent = [](std::int32_t const& level) {
+    auto indent = [](std::int32_t const& indent_level) {
         std::string str;
-        for (auto i = 0; i < level; ++i) str += " ";
+        for (auto i = 0; i < indent_level; ++i) str += " ";
         return str;
     };
     output << std::string(node->name()) << " {"s;
