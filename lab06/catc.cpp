@@ -25,6 +25,7 @@
 
 #include "lexer.hpp"
 #include "parser.hpp"
+#include "interpreter.hpp"
 
 namespace nrv {
 /**
@@ -45,81 +46,6 @@ static auto read_text(std::string const& filename) -> std::string {
 }
 }
 
-static auto recursive_print(cat::node_ref_t const& node, std::int32_t const& level = 0, std::int32_t const& indent_size = 2) -> void {
-    if (node == nullptr) return;
-    auto indent = [](std::int32_t const& level) {
-        std::string str;
-        for (auto i = 0; i < level; ++i) str += " ";
-        return str;
-    };
-    std::cout << node->name() << " {";
-    std::cout << "\n";
-
-    switch (node->type()) {
-    case cat::node_type::identifier: {
-        auto const& n = dynamic_cast<cat::identifier_node const&>(*node);
-        std::cout << indent(level + indent_size) << "id: \"" << n.id() << "\",";
-        break;
-    }
-    case cat::node_type::numeric_literal: {
-        auto const& n = dynamic_cast<cat::numeric_literal_node const&>(*node);
-        std::cout << indent(level + indent_size) << "value: " << n.value() << ",\n";
-        std::cout << indent(level + indent_size) << "raw: \"" << n.value() << "\",";
-        break;
-    }
-    case cat::node_type::assignment_expression: {
-        auto const& n = dynamic_cast<cat::assignment_expression_node const&>(*node);
-        std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
-        break;
-    }
-    case cat::node_type::binary_expression: {
-        auto const& n = dynamic_cast<cat::binary_expression_node const&>(*node);
-        std::cout << indent(level + indent_size) << "operator: \"" << n.raw_token().value() << "\",";
-        break;
-    }
-    case cat::node_type::variable_declarator: {
-        auto const& n = dynamic_cast<cat::variable_declarator_node const&>(*node);
-        std::cout << indent(level + indent_size) << "id: \"" << n.id()->raw_token().value() << "\",\n";
-        std::cout << indent(level + indent_size) << "init: ";
-        recursive_print(n.init(), level + indent_size);
-        break;
-    }
-    case cat::node_type::call_expression: {
-        auto const& n = dynamic_cast<cat::call_expression_node const&>(*node);
-        std::cout << indent(level + indent_size) << "callee: \"" << n.callee()->raw_token().value() << "\",\n";
-        std::cout << indent(level + indent_size) << "args: [ ";
-        auto const& args = n.args();
-        if (!args.empty()) std::cout << "\n" << indent(level + indent_size);
-        for (std::size_t i = 0; i < args.size(); ++i) {
-            auto const& arg = args[i];
-            std::cout << indent(level + indent_size) << i << ": ";
-            recursive_print(arg, level + indent_size * 2);
-            std::cout << ",\n";
-            std::cout << indent(level + indent_size);
-        }
-        std::cout << "]";
-        break;
-    }
-    default:
-        std::cout << indent(level + indent_size) << "NOT_IMPLEMENTED: " << node->name();
-        break;
-    }
-
-    if (node->left() != nullptr) {
-        std::cout << "\n";
-        std::cout << indent(level + indent_size) << "left: ";
-        recursive_print(node->left(), level + indent_size);
-    }
-    if (node->right() != nullptr) {
-        std::cout << ",\n";
-        std::cout << indent(level + indent_size) << "right: ";
-        recursive_print(node->right(), level + indent_size);
-    }
-    std::cout << "\n";
-    std::cout << indent(level) << "}";
-    if (level == 0) std::cout << "\n";
-}
-
 auto main(int argc, char const* argv[]) -> int {
     if (argc < 2) {
         std::cout << "catc: error: no input file!\n";
@@ -133,17 +59,22 @@ auto main(int argc, char const* argv[]) -> int {
     }
 
     [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
-    constexpr auto test_source = "print 1 + 2 * 3 - 4";
-    cat::lexer lexer{test_source};
+    [[maybe_unused]]constexpr auto test_source = R"(
+x = 2 - -2
+y = x - 1
+)";
+    cat::lexer lexer{source};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};
+    cat::interpreter interpreter(std::cout);
     parser.parse();
-
-    std::cout << "source: " << test_source << "\n";
     auto program = parser.program();
     for (auto const& node : program) {
-        recursive_print(node);
-        std::cout << "\n";
+        cat::recursive_print(std::cout, node);
+        //if (!interpreter.eval(node)) {
+        //    std::cerr << "Error!\n";
+        //    break;
+        //}
     }
 
     return 0;
