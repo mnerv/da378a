@@ -21,19 +21,19 @@ else()
 endif()
 
 # Task 1 - Sort integers with algorithm
-project(sortint)
+set(TARGET_NAME sortint)
 set(SOURCE_FILES
     "sortint.cpp"
 )
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE
+add_executable(${TARGET_NAME} ${SOURCE_FILES})
+target_include_directories(${TARGET_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}"
 )
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
 # Task 2 - Sort Person
-project(sortperson)
+set(TARGET_NAME sortperson)
 set(SOURCE_FILES
     "PersonReg/PersonReg.hpp"
     "PersonReg/Person.hpp"
@@ -42,22 +42,22 @@ set(SOURCE_FILES
 
     "sortperson.cpp"
 )
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE
+add_executable(${TARGET_NAME} ${SOURCE_FILES})
+target_include_directories(${TARGET_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}"
 )
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
 # Task 3 - Usage of std::remove_if
-project(remif)
+set(TARGET_NAME remif)
 set(SOURCE_FILES
     "remif.cpp"
 )
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE
+add_executable(${TARGET_NAME} ${SOURCE_FILES})
+target_include_directories(${TARGET_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}"
 )
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${SOURCE_FILES})
 
