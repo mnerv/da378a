@@ -45,22 +45,40 @@ parser::~parser() = default;
 
 auto parser::parse() -> void {
     node_ref_t current_node{nullptr};
+    std::size_t null_count = 0;
+    static constexpr std::size_t max_null_count = 256;
     do {
         current_node = parse_statement();
         if (current_node != nullptr) m_nodes.push_back(current_node);
-    } while (current_node != nullptr);
+        if (current_node == nullptr) ++null_count;
+        else null_count = 0;
+    } while (has_next() && null_count < max_null_count);
+
+    // TODO: Handle error properly
+    if (null_count == max_null_count) std::cerr << "TOO MANY nullptr!\n";
 }
 auto parser::program() const -> std::vector<node_ref_t> const& { return m_nodes; }
 
 auto parser::parse_statement() -> node_ref_t {
     auto tk = peek();
     if (!tk.has_value()) return nullptr;
-    if (tk->type() == token_type::newline) return nullptr;  // Handle error
+    if (tk->type() == token_type::newline) {
+        next_token();
+        return nullptr;  // Handle error
+    }
 
     switch (tk->type()) {
         case token_type::identifier: {
             auto next = peek_next();
-            if (!next.has_value() || (next.has_value() && (next->category() == token_category::number || next->category() == token_category::identifier))) {
+            if (!next.has_value() ||
+                (next.has_value() &&
+                    (
+                        next->category() == token_category::number     ||
+                        next->category() == token_category::identifier ||
+                        next->type()     == token_type::paren_open
+                    )
+                )
+               ) {
                 return parse_call_expression();
             } else if (next.has_value() && next->type() == token_type::equals) {
                 return parse_assignment_statement();
@@ -69,6 +87,7 @@ auto parser::parse_statement() -> node_ref_t {
             }
         }
         case token_type::numeric_literal:
+        case token_type::paren_open:
             return parse_expression();
         default:
             return nullptr;
@@ -83,7 +102,14 @@ auto parser::parse_call_expression() -> node_ref_t {
     return make_ref<call_expression_node>(callee, args);
 }
 auto parser::parse_assignment_statement() -> node_ref_t {
-    return nullptr;
+    auto tk_id = peek();
+    next_token();
+    auto equal = peek();
+    next_token();
+
+    auto id   = make_ref<identifier_node>(*tk_id);
+    auto init = parse_statement();
+    return make_ref<assignment_expression_node>(*equal, id, init);
 }
 
 auto parser::parse_expression() -> node_ref_t {
@@ -139,15 +165,19 @@ auto parser::parse_args() -> std::vector<node_ref_t> {
     std::vector<node_ref_t> args{};
     auto tk = peek();
     while (tk.has_value()) {
-        auto next = peek_next();
-        if ((tk->type() == token_type::identifier || tk->category() == token_category::number) && next.has_value() && next->category() == token_category::operator_) {
-            args.push_back(parse_expression());
-        } else if (tk->type() == token_type::identifier) {
+        if (tk->type() == token_type::newline) {
             next_token();
-            args.push_back(make_ref<identifier_node>(*tk));
+            break;
+        }
+        auto next = peek_next();
+
+        if (next.has_value()) {
+            args.push_back(parse_expression());
         } else {
             next_token();
+            args.push_back(make_ref<identifier_node>(*tk));
         }
+
         tk = peek();
     }
     return args;
