@@ -9,8 +9,10 @@
 #ifndef CATC_INTERPRETER_HPP
 #define CATC_INTERPRETER_HPP
 
-#include <memory>
+#include <string>
 #include <ostream>
+#include <unordered_map>
+
 #include "parser.hpp"
 
 namespace cat {
@@ -25,6 +27,8 @@ class interpreter {
 
   private:
     std::ostream& m_output;
+
+    std::unordered_map<std::string, std::int32_t> m_variables;
 };
 }
 

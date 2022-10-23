@@ -9,8 +9,9 @@
 #include "interpreter.hpp"
 
 namespace cat {
-interpreter::interpreter(std::ostream& output) : m_output(output) {
+interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({}) {
     (void)m_output;
+    (void)m_variables;
 }
 interpreter::~interpreter() = default;
 
