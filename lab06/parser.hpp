@@ -23,7 +23,7 @@ namespace cat {
  * @code
  * Grammar rules
 // S     -> ID [ ID | E ]+
-// S     -> ID "=" [ E | ID ]
+// S     -> ID = [ E | ID ]
 // E     -> T [ + | - T ]+
 // T     -> F [ * | / T ]+
 // F     -> ID | INT | (E) | -F
@@ -51,7 +51,7 @@ class parser {
     auto parse_args() -> std::vector<node_ref_t>;
 
   private:
-    auto next_token() -> void;
+    auto consume() -> void;
     auto peek() const -> std::optional<token>;
     auto peek_next(std::size_t const& i = 1) const -> std::optional<token>;
     auto has_next() const -> bool;

@@ -20,7 +20,6 @@
 #include <filesystem>
 #include <fstream>
 #include <ios>
-#include <numeric>
 #include <iostream>
 
 #include "lexer.hpp"
