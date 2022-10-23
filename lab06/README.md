@@ -36,7 +36,7 @@ S     -> ID = [ E | ID ]
 E     -> T + E | T - E | T
 T     -> F * T | F / T | F
 F     -> ID | INT | FLOAT | (E) | -F
-ID    -> ^[a-zA-Z][a-zA-Z0-9]+$
+ID    -> ^[a-zA-Z](?:[a-zA-Z0-9]+)?$
 INT   -> ^[-+]?[0-9]+$
 FLOAT -> ^[-+]?[0-9]+.(?:[0-9]+f?)?$
 ```

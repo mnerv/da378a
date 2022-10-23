@@ -108,7 +108,7 @@ auto token::is_float(std::string const& str) -> bool {
     return std::regex_match(str, float_regex);
 }
 auto token::is_identifier(std::string const& str) -> bool {
-    static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9]+$"};
+    static std::regex const id_regex{"^[a-zA-Z](?:[a-zA-Z0-9]+)?$"};
     return std::regex_match(str, id_regex);
 }
 }
