@@ -16,7 +16,7 @@
 #include "parser.hpp"
 
 namespace cat {
-auto recursive_print(std::ostream& output, cat::node_ref_t const& node, std::int32_t const& level = 0, std::int32_t const& indent_size = 2) -> void;
+auto recursive_print(std::ostream& output, node_ref_t const& node, std::int32_t const& level = 0, std::int32_t const& indent_size = 2) -> void;
 
 class interpreter {
   public:
