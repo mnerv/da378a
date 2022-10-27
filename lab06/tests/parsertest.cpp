@@ -13,7 +13,7 @@
 #include "parser.hpp"
 
 TEST(parser, numeric_literal) {
-    cat::token one_token{"1", cat::token_type::numeric_literal};
+    cat::token one_token{cat::token_type::numeric_literal, "1"};
     std::vector<cat::token> tokens{one_token};
     cat::parser parser{tokens};
     parser.parse();
@@ -24,9 +24,9 @@ TEST(parser, numeric_literal) {
 }
 
 TEST(parser, binary_operation_plus_numeric_literals) {
-    cat::token a_token{"1", cat::token_type::numeric_literal};
-    cat::token op_token{"+", cat::token_type::plus};
-    cat::token b_token{"2", cat::token_type::numeric_literal};
+    cat::token a_token{cat::token_type::numeric_literal, "1"};
+    cat::token op_token{cat::token_type::plus, "+"};
+    cat::token b_token{cat::token_type::numeric_literal, "2"};
     std::vector<cat::token> tokens{a_token, op_token, b_token};
     cat::parser parser{tokens};
     parser.parse();
@@ -39,9 +39,9 @@ TEST(parser, binary_operation_plus_numeric_literals) {
 }
 
 TEST(parser, binary_operation_minus_numeric_literals) {
-    cat::token a_token{"1", cat::token_type::numeric_literal};
-    cat::token op_token{"-", cat::token_type::minus};
-    cat::token b_token{"2", cat::token_type::numeric_literal};
+    cat::token a_token{cat::token_type::numeric_literal, "1"};
+    cat::token op_token{cat::token_type::minus, "-"};
+    cat::token b_token{cat::token_type::numeric_literal, "2"};
     std::vector<cat::token> tokens{a_token, op_token, b_token};
     cat::parser parser{tokens};
     parser.parse();

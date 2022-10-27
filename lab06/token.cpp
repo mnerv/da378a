@@ -63,9 +63,8 @@ auto token_type_category(token_type const& type) -> token_category {
     return token_category::invalid;
 }
 
-token::token(std::string value, token_type const& type, std::string const& filename, std::size_t const& line,
-             std::size_t const& column, std::size_t const& offset)
-    : m_value(std::move(value)), m_type(type), m_category(token_type_category(m_type)), m_filename(filename)
+token::token(token_type const& type, std::string value, std::string const& filename, std::size_t const& line, std::size_t const& column, std::size_t const& offset)
+    : m_type(type), m_category(token_type_category(m_type)), m_value(std::move(value)), m_filename(filename)
     , m_line(line), m_column(column), m_offset(offset) {}
 
 auto token::str() const -> std::string {

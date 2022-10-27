@@ -30,7 +30,7 @@ class lexer {
 
   private:
     auto consume() -> void;
-    auto consume_whitespace() -> void;
+    auto consume_space() -> void;
     auto peek_consume() -> char;
     auto peek() const -> char;
 

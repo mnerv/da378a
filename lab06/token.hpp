@@ -74,7 +74,7 @@ struct source_range {
 class token {
   public:
     token() = default;
-    token(std::string value, token_type const& type, std::string const& filename = "", std::size_t const& line = 0, std::size_t const& column = 0, std::size_t const& offset = 0);
+    token(token_type const& type, std::string value, std::string const& filename = "", std::size_t const& line = 0, std::size_t const& column = 0, std::size_t const& offset = 0);
 
     auto category() const -> token_category { return m_category; }
     auto type() const -> token_type { return m_type; }
@@ -93,13 +93,13 @@ class token {
     static auto is_operator(std::string const& str) -> bool;
 
   private:
-    std::string    m_value{};
     token_type     m_type{token_type::invalid};
     token_category m_category{token_category::invalid};
-    std::string    m_filename;
-    std::size_t    m_line;
-    std::size_t    m_column;
-    std::size_t    m_offset;
+    std::string    m_value{};
+    std::string    m_filename{};
+    std::size_t    m_line{};
+    std::size_t    m_column{};
+    std::size_t    m_offset{};
 
   private:
     static std::unordered_map<std::string, token_type> s_token_strs;

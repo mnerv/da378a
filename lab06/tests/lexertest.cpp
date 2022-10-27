@@ -53,7 +53,7 @@ TEST(lexer, consume_whitespace) {
 TEST(lexer, string_literal) {
     using namespace std::string_literals;
     constexpr auto str = "\"Hello, World!\"";
-    cat::token tk(str, cat::token_type::string_literal);
+    cat::token tk(cat::token_type::string_literal, str);
     cat::lexer lexer{str};
     auto const tokens = lexer.tokenize();
     ASSERT_NE(0, tokens.size());

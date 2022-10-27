@@ -28,13 +28,13 @@ auto lexer::tokenize() -> std::vector<token> {
 }
 
 auto lexer::consume() -> void { ++m_cursor; }
-auto lexer::consume_whitespace() -> void { while (is_whitespace() && has_next()) consume(); }
+auto lexer::consume_space() -> void { while (is_space() && has_next()) consume(); }
 auto lexer::peek_consume() -> char { return m_source[m_cursor++]; }
 auto lexer::peek() const -> char { return m_source[m_cursor]; }
 
 auto lexer::next_token() -> std::optional<token> {
     if (!has_next()) return {};
-    consume_whitespace();
+    consume_space();
     if (!has_next()) return {};
     std::string res{};  // Eaten results
     // TODO: Add a way to see where a token is located in the source file.
@@ -43,33 +43,60 @@ auto lexer::next_token() -> std::optional<token> {
     if (is_quote()) {
         consume();
         while (!is_quote()) {
-            if (is_newline()) return token(res, token_type::invalid, m_filename, m_line++);
+            if (is_newline()) return token(token_type::invalid, res, m_filename, m_line);
             res += peek_consume();
         }
-        consume();
-        return token(res, token_type::string_literal, m_filename, m_line);
+        if (is_quote()) {
+            consume();
+            return token(token_type::string_literal, res, m_filename, m_line);
+        } else {
+            return token(token_type::invalid, res, m_filename, m_line);
+        }
     }
 
     // Numeric literal
     if (is_digit()) {
         while (is_digit()) res += peek_consume();
-        return token(res, token_type::numeric_literal, m_filename, m_line);
+        return token(token_type::numeric_literal, res, m_filename, m_line);
     }
 
     // Operator
     if (is_operator()) {
         res += peek_consume();
-        auto const& valid = token::str_token(res);
-        return token(res, valid.has_value() ? valid.value() : token_type::invalid, m_filename, m_line);
+        return token(*token::str_token(res), res, m_filename, m_line);
+    }
+
+    if (peek() == '(') {
+        res += peek_consume();
+        return token(token_type::paren_open, res, m_filename, m_line);
+    }
+
+    if (peek() == ')') {
+        res += peek_consume();
+        return token(token_type::paren_open, res, m_filename, m_line);
+    }
+
+    // Identifier
+    if (token::is_identifier({peek()})) {
+        auto is_valid_identifier_char = [this] {
+            auto const& c = peek();
+            return (c >= '0' && c <= '9') ||
+                   (c >= 'A' && c <= 'Z') ||
+                   (c >= 'a' && c <= 'z') ||
+                   (c == '_');
+        };
+        while (is_valid_identifier_char()) res += peek_consume();
+        auto const& type = token::is_identifier(res) ? token_type::identifier : token_type::invalid;
+        return token(type, res, m_filename, m_line);
     }
 
     // FIXME: Handle if the line ending is different somehow, LF, CRLF. It might not be a problem.
     if (is_newline() || is_carriage_return()) {
         res = peek_consume();
-        return token(res, token_type::newline, "", m_line++);
+        return token(token_type::newline, res, m_filename, m_line++);
     }
 
-    return {};
+    return token(token_type::invalid, {peek_consume()}, m_filename, m_line);
 }
 
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }
@@ -80,13 +107,7 @@ auto lexer::is_carriage_return() const -> bool { return peek() == '\r'; }
 auto lexer::is_whitespace() const -> bool {
     return is_space() || is_tab() || is_newline() || is_carriage_return();
 }
-auto lexer::is_quote() const -> bool {
-    return peek() == '\"';
-}
-auto lexer::is_digit() const -> bool {
-    return std::isdigit(peek());
-}
-auto lexer::is_operator() const -> bool {
-    return token::is_operator(std::string{peek()});
-}
+auto lexer::is_quote() const -> bool { return peek() == '\"'; }
+auto lexer::is_digit() const -> bool { return std::isdigit(peek()); }
+auto lexer::is_operator() const -> bool { return token::is_operator({peek()}); }
 }
