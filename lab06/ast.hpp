@@ -115,16 +115,16 @@ class binary_expression_node : public ast_node {
 
 class call_expression_node : public ast_node {
   public:
-    call_expression_node(node_ref_t callee, std::vector<node_ref_t> args);
+    call_expression_node(ref<identifier_node> callee, std::vector<node_ref_t> args);
 
     auto name() const -> char const* override { return "call_expression"; };
     auto str()  const -> std::string override;
 
-    auto callee() const -> node_ref_t { return m_callee; }
+    auto callee() const -> ref<identifier_node> { return m_callee; }
     auto args() const -> std::vector<node_ref_t> const& { return m_args; }
 
   private:
-    node_ref_t              m_callee;
+    ref<identifier_node>    m_callee;
     std::vector<node_ref_t> m_args;
 };
 

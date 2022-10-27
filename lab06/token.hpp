@@ -30,6 +30,7 @@ namespace cat {
         ENUMERATOR_CATLANG_TOKEN(paren_close    , punctuation)  \
         ENUMERATOR_CATLANG_TOKEN(plus           , operator_  )  \
         ENUMERATOR_CATLANG_TOKEN(identifier     , identifier )  \
+        ENUMERATOR_CATLANG_TOKEN(string_literal , string     )  \
         ENUMERATOR_CATLANG_TOKEN(slash          , operator_  )
 
 enum class token_type : std::uint32_t {
@@ -45,6 +46,7 @@ enum class token_category : std::uint32_t {
     identifier,
     invalid,
     number,
+    string,
     keyword,
     operator_,
     punctuation,
@@ -74,7 +76,6 @@ class token {
     token() = default;
     token(std::string value, token_type const& type, std::string const& filename = "", std::size_t const& line = 0, std::size_t const& column = 0, std::size_t const& offset = 0);
 
-
     auto category() const -> token_category { return m_category; }
     auto type() const -> token_type { return m_type; }
     auto value() const -> std::string { return m_value; }
@@ -89,6 +90,7 @@ class token {
     static auto is_numeric(std::string const& str) -> bool;
     static auto is_float(std::string const& str) -> bool;
     static auto is_identifier(std::string const& str) -> bool;
+    static auto is_operator(std::string const& str) -> bool;
 
   private:
     std::string    m_value{};

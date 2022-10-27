@@ -80,7 +80,7 @@ auto variable_declarator_node::str() const -> std::string {
     return fmt;
 }
 
-call_expression_node::call_expression_node(node_ref_t callee, std::vector<node_ref_t> args)
+call_expression_node::call_expression_node(ref<identifier_node> callee, std::vector<node_ref_t> args)
     : ast_node(callee->raw_token(), node_type::call_expression)
     , m_callee(std::move(callee)), m_args(std::move(args)) { }
 

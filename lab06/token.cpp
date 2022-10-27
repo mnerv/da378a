@@ -43,6 +43,7 @@ auto token_category_str(token_category const& type) -> std::string {
     switch (type) {
         case token_category::number:      return "number";
         case token_category::keyword:     return "keyword";
+        case token_category::string:      return "string";
         case token_category::operator_:   return "operator";
         case token_category::punctuation: return "punctuation";
         case token_category::identifier:  return "identifier";
@@ -105,5 +106,9 @@ auto token::is_float(std::string const& str) -> bool {
 auto token::is_identifier(std::string const& str) -> bool {
     static std::regex const id_regex{"^[a-zA-z][a-zA-z0-9]*$"};
     return std::regex_match(str, id_regex);
+}
+auto token::is_operator(std::string const& str) -> bool {
+    static std::regex const operator_regex{"^[-+*/=]?$"};
+    return std::regex_match(str, operator_regex);
 }
 }

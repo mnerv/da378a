@@ -58,7 +58,7 @@ auto main(int argc, char const* argv[]) -> int {
     }
 
     auto const source = nrv::read_text(source_file.string());
-    cat::lexer lexer{source};
+    cat::lexer lexer{source, source_file.string()};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};
     cat::interpreter interpreter(std::cout);
@@ -66,10 +66,9 @@ auto main(int argc, char const* argv[]) -> int {
     auto program = parser.program();
     for (auto const& node : program) {
         cat::recursive_print(std::cout, node);
-        //if (!interpreter.eval(node)) {
-        //    std::cerr << "Error!\n";
-        //    break;
-        //}
+//        if (!interpreter.eval(node)) {
+//            std::cout << "Error!\n";
+//        }
     }
 
     return 0;

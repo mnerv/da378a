@@ -23,14 +23,15 @@ namespace cat {
  */
 class lexer {
   public:
-    lexer(std::string const& source);
+    lexer(std::string const& source, std::string const& filename = "");
     ~lexer();
 
     auto tokenize() -> std::vector<token>;
 
   private:
     auto consume() -> void;
-    auto consume_next() -> char;
+    auto consume_whitespace() -> void;
+    auto peek_consume() -> char;
     auto peek() const -> char;
 
     auto next_token() -> std::optional<token>;
@@ -44,9 +45,13 @@ class lexer {
     auto is_newline() const -> bool;
     auto is_carriage_return() const -> bool;
     auto is_whitespace()      const -> bool;
+    auto is_quote() const -> bool;
+    auto is_digit() const -> bool;
+    auto is_operator() const -> bool;
 
   private:
     std::string m_source;
+    std::string m_filename;
     std::size_t m_cursor;
     std::size_t m_line;
     std::size_t m_column;

@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2022
  */
 #include "interpreter.hpp"
+#include <stack>
 
 namespace cat {
 interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({}) {
@@ -15,8 +16,29 @@ interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({
 }
 interpreter::~interpreter() = default;
 
-auto interpreter::eval([[maybe_unused]]node_ref_t const& node) -> bool {
-    return false;
+auto interpreter::eval(node_ref_t const& node) -> bool {
+    if (node->type() == node_type::call_expression) {
+        auto call = std::dynamic_pointer_cast<call_expression_node>(node);
+        if (call->callee()->id() == "config") {
+            m_output << "config call here\n";
+            return true;
+        } else if (call->callee()->id() == "print") {
+            m_output << "print call here\n";
+            return true;
+        } else if (call->callee()->id() == "dump_ast") {
+            return false;
+        } else {
+            return false;
+        }
+    } else if (node->type() == node_type::assignment_expression) {
+        auto assign = std::dynamic_pointer_cast<assignment_expression_node>(node);
+        return false;
+    } else if (node->type() == node_type::binary_expression){
+        auto binop = std::dynamic_pointer_cast<binary_expression_node>(node);
+        return false;
+    } else {
+        return false;
+    }
 }
 
 auto recursive_print(std::ostream& output, node_ref_t const& node, std::int32_t const& level, std::int32_t const& indent_size) -> void {
