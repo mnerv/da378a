@@ -47,10 +47,10 @@ class ast_node {
     virtual auto str()  const -> std::string = 0;
     virtual auto raw_token() const -> token const& { return m_token; }
 
-    auto type() const -> node_type { return m_type; }
+    auto type() const -> node_type const& { return m_type; }
     auto is_type(node_type const& type) const -> bool { return m_type == type; };
-    auto left()  const -> node_ref_t { return m_left; }
-    auto right() const -> node_ref_t { return m_right; }
+    auto left()  const -> node_ref_t const& { return m_left; }
+    auto right() const -> node_ref_t const& { return m_right; }
 
     //auto set_left(node_ref_t const& left)   -> void { m_left = left; }
     //auto set_right(node_ref_t const& right) -> void { m_right = right; }
@@ -82,7 +82,7 @@ class numeric_literal_node : public ast_node {
     auto name() const -> char const* override { return "numeric_literal"; }
     auto str() const -> std::string override;
 
-    auto value() const -> std::int32_t { return m_value; }
+    auto value() const -> std::int32_t const& { return m_value; }
 
   private:
     std::int32_t m_value;
@@ -95,7 +95,7 @@ class string_literal_node : public ast_node {
     auto name() const -> char const* override { return "string_literal"; }
     auto str() const -> std::string override;
 
-    auto value() const -> std::string { return m_value; }
+    auto value() const -> std::string const& { return m_value; }
 
   private:
     std::string m_value;
@@ -108,7 +108,7 @@ class assignment_expression_node : public ast_node {
     auto name() const -> char const* override { return "assignment_expression"; }
     auto str() const -> std::string override;
 
-    auto operator_type() const -> token_type { return m_operator; }
+    auto operator_type() const -> token_type const& { return m_operator; }
 
   private:
     token_type m_operator;
@@ -122,7 +122,7 @@ class binary_expression_node : public ast_node {
     auto name() const -> char const* override { return "binary_expression"; }
     auto str() const -> std::string override;
 
-    auto operator_type() const -> token_type { return m_operator; }
+    auto operator_type() const -> token_type const& { return m_operator; }
 
   private:
     token_type m_operator;
@@ -135,9 +135,9 @@ class unary_expression_node : public ast_node {
     auto name() const -> char const* override { return "unary_expression"; }
     auto str() const -> std::string override;
 
-    auto arg() const -> node_ref_t { return m_arg; }
-    auto is_prefix() const -> bool { return m_prefix; }
-    auto operator_type() const -> token_type { return m_operator; }
+    auto arg() const -> node_ref_t const& { return m_arg; }
+    auto is_prefix() const -> bool const& { return m_prefix; }
+    auto operator_type() const -> token_type const& { return m_operator; }
 
   private:
     node_ref_t m_arg;
@@ -152,7 +152,7 @@ class call_expression_node : public ast_node {
     auto name() const -> char const* override { return "call_expression"; };
     auto str()  const -> std::string override;
 
-    auto callee() const -> ref<identifier_node> { return m_callee; }
+    auto callee() const -> ref<identifier_node> const& { return m_callee; }
     auto args() const -> std::vector<node_ref_t> const& { return m_args; }
 
   private:
@@ -167,8 +167,8 @@ class variable_declarator_node : public ast_node {
     auto name() const -> char const* override { return "variable_declarator"; }
     auto str() const -> std::string override;
 
-    auto id() const -> node_ref_t { return m_id; }
-    auto init() const -> node_ref_t { return m_init; }
+    auto id() const -> node_ref_t const& { return m_id; }
+    auto init() const -> node_ref_t const& { return m_init; }
 
   private:
     node_ref_t m_id;
