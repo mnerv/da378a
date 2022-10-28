@@ -105,6 +105,20 @@ TEST(lexer, operator_equals) {
     ASSERT_EQ(cat::token_type::equals, std::begin(tokens)->type());
 }
 
+TEST(lexer, parenthesis_open) {
+    cat::lexer lexer{"("};
+    auto const tokens = lexer.tokenize();
+    cat::token token{cat::token_type::paren_open, "("};
+    ASSERT_EQ(token.type(), std::begin(tokens)->type());
+}
+
+TEST(lexer, parenthesis_close) {
+    cat::lexer lexer{")"};
+    auto const tokens = lexer.tokenize();
+    cat::token token{cat::token_type::paren_close, ")"};
+    ASSERT_EQ(token.type(), std::begin(tokens)->type());
+}
+
 TEST(lexer, identifier) {
     constexpr std::size_t token_size = 2;
     cat::lexer lexer{"config dec"};

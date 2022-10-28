@@ -73,7 +73,7 @@ auto lexer::next_token() -> std::optional<token> {
 
     if (peek() == ')') {
         res += peek_consume();
-        return token(token_type::paren_open, res, m_filename, m_line);
+        return token(token_type::paren_close, res, m_filename, m_line);
     }
 
     // Identifier
