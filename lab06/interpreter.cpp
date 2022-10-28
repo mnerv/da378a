@@ -97,6 +97,19 @@ auto recursive_print(std::ostream& output, node_ref_t const& node, std::int32_t 
         output << "]"s;
         break;
     }
+    case node_type::string_literal: {
+        auto const& n = dynamic_cast<string_literal_node const&>(*node);
+        output << indent(level + indent_size) << "value: \""s << token::sanitize_str(n.value()) << "\","s;
+        break;
+    }
+    case node_type::unary_expression: {
+        auto const& n = dynamic_cast<unary_expression_node const&>(*node);
+        output << indent(level + indent_size) << "operator: \""s << n.raw_token().value() << "\",\n"s;
+        output << indent(level + indent_size) << "prefix: "s     << (n.is_prefix() ? "true" : "false") << ",\n"s;
+        output << indent(level + indent_size) << "argument: "s;
+        recursive_print(output, n.arg(), level + indent_size * 2);
+        break;
+    }
     default:
         output << indent(level + indent_size) << "NOT_IMPLEMENTED: "s << std::string(node->name());
         break;

@@ -35,6 +35,21 @@ auto numeric_literal_node::str() const -> std::string {
     return fmt;
 }
 
+string_literal_node::string_literal_node(token tk) : ast_node(std::move(tk), node_type::string_literal) {
+    m_value = m_token.value();
+}
+
+auto string_literal_node::str() const -> std::string {
+    using namespace std::string_literals;
+    // FIXME: Sanitize string
+    std::string fmt{name()};
+    fmt += "{";
+    fmt += " value: \""s + m_value         + "\",";
+    fmt += " raw: \""s   + m_token.value() + "\" ";
+    fmt += "}";
+    return fmt;
+}
+
 assignment_expression_node::assignment_expression_node(token tk, node_ref_t left, node_ref_t right)
     : ast_node(std::move(tk), node_type::assignment_expression), m_operator(m_token.type()) {
     m_left  = std::move(left);
@@ -65,6 +80,15 @@ auto binary_expression_node::str() const -> std::string {
     fmt += " right: "      + m_right->str()  + " ";
     fmt += "}";
     return fmt;
+}
+
+unary_expression_node::unary_expression_node(token tk, node_ref_t arg, bool prefix)
+    : ast_node(std::move(tk), node_type::unary_expression), m_arg(arg), m_prefix(prefix) {
+    m_operator = m_token.type();
+}
+
+auto unary_expression_node::str() const -> std::string  {
+    return name();
 }
 
 variable_declarator_node::variable_declarator_node(node_ref_t id, node_ref_t init)

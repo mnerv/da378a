@@ -39,10 +39,23 @@ auto lexer::next_token() -> std::optional<token> {
     std::string res{};  // Eaten results
     // TODO: Add a way to see where a token is located in the source file.
 
+    //// Literal string
+    //auto is_literal_string = [this] { return peek() == '`'; };
+    //if (is_literal_string()) {
+    //    consume();
+    //    while (!is_literal_string() && has_next()) res += peek_consume();
+    //    if (is_literal_string()) {
+    //        consume();
+    //        return token(token_type::string_literal, res, m_filename, m_line);
+    //    } else {
+    //        return token(token_type::invalid, res, m_filename, m_line);
+    //    }
+    //}
+
     // String literal
     if (is_quote()) {
         consume();
-        while (!is_quote()) {
+        while (!is_quote() && has_next()) {
             if (is_newline()) return token(token_type::invalid, res, m_filename, m_line);
             res += peek_consume();
         }
@@ -59,6 +72,8 @@ auto lexer::next_token() -> std::optional<token> {
         while (is_digit()) res += peek_consume();
         return token(token_type::numeric_literal, res, m_filename, m_line);
     }
+
+    // TODO: Handle ++, -- operator
 
     // Operator
     if (is_operator()) {
@@ -96,7 +111,8 @@ auto lexer::next_token() -> std::optional<token> {
         return token(token_type::newline, res, m_filename, m_line++);
     }
 
-    return token(token_type::invalid, {peek_consume()}, m_filename, m_line);
+    while (has_next()) res += peek_consume();
+    return token(token_type::invalid, res, m_filename, m_line);
 }
 
 auto lexer::has_next()   const -> bool { return m_cursor < m_source.size(); }

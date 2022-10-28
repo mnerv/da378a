@@ -23,7 +23,7 @@ namespace cat {
  */
 class lexer {
   public:
-    lexer(std::string const& source, std::string const& filename = "");
+    lexer(std::string const& source, std::string const& filename = "unknown");
     ~lexer();
 
     auto tokenize() -> std::vector<token>;

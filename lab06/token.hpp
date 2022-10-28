@@ -86,6 +86,7 @@ class token {
     auto str() const -> std::string;
 
   public:
+    static auto sanitize_str(std::string const& str) -> std::string;
     static auto str_token(std::string const& str) -> std::optional<token_type>;
     static auto is_numeric(std::string const& str) -> bool;
     static auto is_float(std::string const& str) -> bool;

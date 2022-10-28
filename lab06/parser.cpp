@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2022
  */
 #include "parser.hpp"
-#include <iostream>
 
 // Grammars
 // S: Statement
@@ -54,8 +53,8 @@ auto parser::parse() -> void {
         else null_count = 0;
     } while (has_next() && null_count < max_null_count);
 
-    // TODO: Handle error properly
-    if (null_count == max_null_count) std::cerr << "TOO MANY nullptr!\n";
+    //// TODO: Handle error properly
+    //if (null_count == max_null_count) std::cerr << "TOO MANY nullptr!\n";
 }
 auto parser::program() const -> std::vector<node_ref_t> const& { return m_nodes; }
 
@@ -75,7 +74,8 @@ auto parser::parse_statement() -> node_ref_t {
                     (
                         next->category() == token_category::number     ||
                         next->category() == token_category::identifier ||
-                        next->type()     == token_type::paren_open
+                        next->type()     == token_type::paren_open     ||
+                        next->type()     == token_type::string_literal
                     )
                 )
                ) {
@@ -146,6 +146,12 @@ auto parser::parse_factor_expression() -> node_ref_t {
             return make_ref<identifier_node>(*tk);
         case token_type::numeric_literal:
             return make_ref<numeric_literal_node>(*tk);
+        case token_type::plus:
+        case token_type::minus: {
+            auto arg = parse_expression();
+            if (arg == nullptr) return nullptr;
+            return make_ref<unary_expression_node>(*tk, arg, true);
+       }
         case token_type::paren_open: {
             auto a = parse_expression();
             if (a == nullptr) return nullptr;
@@ -171,11 +177,16 @@ auto parser::parse_args() -> std::vector<node_ref_t> {
         }
         auto next = peek_next();
 
-        if (next.has_value()) {
+        if (next.has_value() && next->category() == token_category::number) {
             args.push_back(parse_expression());
-        } else {
+        }  else {
             consume();
-            args.push_back(make_ref<identifier_node>(*tk));
+            if (tk->type() == token_type::identifier)
+                args.push_back(make_ref<identifier_node>(*tk));
+            else if (tk->type() == token_type::string_literal)
+                args.push_back(make_ref<string_literal_node>(*tk));
+            else
+                args.push_back(make_ref<identifier_node>(*tk));
         }
 
         tk = peek();

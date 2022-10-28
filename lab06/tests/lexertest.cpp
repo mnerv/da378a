@@ -44,12 +44,6 @@ TEST(lexer, consume_space) {
     ASSERT_EQ(0, tokens.size());
 }
 
-TEST(lexer, consume_whitespace) {
-    cat::lexer lexer{"                                \n\t"};
-    auto const tokens = lexer.tokenize();
-    ASSERT_EQ(0, tokens.size());
-}
-
 TEST(lexer, string_literal) {
     using namespace std::string_literals;
     constexpr auto str = "\"Hello, World!\"";

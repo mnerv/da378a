@@ -69,16 +69,6 @@ token::token(token_type const& type, std::string value, std::string const& filen
 
 auto token::str() const -> std::string {
     using namespace std::string_literals;
-    auto sanitize_str = [](std::string const& str) -> std::string {
-        return std::accumulate(std::begin(str), std::end(str), std::string{}, [](auto const& a, char const& b) {
-            std::string raw{};
-            if (b == '\n')     raw = "\\n";
-            else if(b == '\r') raw = "\\r";
-            else if(b == '\t') raw = "\\t";
-            else raw = b;
-            return a + raw;
-        });
-    };
     std::string str{"token{ "};
     str += "value: \"" + sanitize_str(m_value)  + "\", ";
     str += "type: "    + token_type_str(m_type) + ", ";
@@ -86,6 +76,17 @@ auto token::str() const -> std::string {
     str += "line: "    + std::to_string(m_line);
     str += " }";
     return str;
+}
+
+auto token::sanitize_str(std::string const& str) -> std::string {
+    return std::accumulate(std::begin(str), std::end(str), std::string{}, [](auto const& a, char const& b) {
+        std::string raw{};
+        if (b == '\n')     raw = "\\n";
+        else if(b == '\r') raw = "\\r";
+        else if(b == '\t') raw = "\\t";
+        else raw = b;
+        return a + raw;
+    });
 }
 
 auto token::str_token(std::string const& str) -> std::optional<token_type> {
@@ -103,7 +104,7 @@ auto token::is_float(std::string const& str) -> bool {
     return std::regex_match(str, float_regex);
 }
 auto token::is_identifier(std::string const& str) -> bool {
-    static std::regex const id_regex{"^[a-zA-z][a-zA-z0-9]*$"};
+    static std::regex const id_regex{"^[a-zA-Z][a-zA-Z0-9_]*$"};
     return std::regex_match(str, id_regex);
 }
 auto token::is_operator(std::string const& str) -> bool {

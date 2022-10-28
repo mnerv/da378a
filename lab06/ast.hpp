@@ -30,8 +30,10 @@ using node_ref_t = ref<class ast_node>;
 enum class node_type : std::uint32_t {
     identifier,
     numeric_literal,
+    string_literal,
     assignment_expression,
     binary_expression,
+    unary_expression,
     call_expression,
     variable_declarator,
 };
@@ -86,6 +88,19 @@ class numeric_literal_node : public ast_node {
     std::int32_t m_value;
 };
 
+class string_literal_node : public ast_node {
+  public:
+    string_literal_node(token tk);
+
+    auto name() const -> char const* override { return "string_literal"; }
+    auto str() const -> std::string override;
+
+    auto value() const -> std::string { return m_value; }
+
+  private:
+    std::string m_value;
+};
+
 class assignment_expression_node : public ast_node {
   public:
     assignment_expression_node(token tk, node_ref_t left, node_ref_t right);
@@ -110,6 +125,23 @@ class binary_expression_node : public ast_node {
     auto operator_type() const -> token_type { return m_operator; }
 
   private:
+    token_type m_operator;
+};
+
+class unary_expression_node : public ast_node {
+  public:
+    unary_expression_node(token tk, node_ref_t arg, bool prefix);
+
+    auto name() const -> char const* override { return "unary_expression"; }
+    auto str() const -> std::string override;
+
+    auto arg() const -> node_ref_t { return m_arg; }
+    auto is_prefix() const -> bool { return m_prefix; }
+    auto operator_type() const -> token_type { return m_operator; }
+
+  private:
+    node_ref_t m_arg;
+    bool       m_prefix;
     token_type m_operator;
 };
 

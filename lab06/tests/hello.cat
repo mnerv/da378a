@@ -12,3 +12,4 @@ config hex
 print z
 config bin
 print z
+

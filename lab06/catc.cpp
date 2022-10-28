@@ -57,12 +57,16 @@ auto main(int argc, char const* argv[]) -> int {
         return 1;
     }
 
-    auto const source = nrv::read_text(source_file.string());
+    [[maybe_unused]]auto const source = nrv::read_text(source_file.string());
     cat::lexer lexer{source, source_file.string()};
+    //cat::lexer lexer{"((3+3)/2)*3"};
     auto const tokens = lexer.tokenize();
     cat::parser parser{tokens};
     cat::interpreter interpreter(std::cout);
     parser.parse();
+    for (auto const& token : tokens) {
+        std::cout << token.str() << "\n";
+    }
     auto program = parser.program();
     for (auto const& node : program) {
         cat::recursive_print(std::cout, node);
