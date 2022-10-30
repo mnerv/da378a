@@ -35,7 +35,7 @@ enum class node_type : std::uint32_t {
     binary_expression,
     unary_expression,
     call_expression,
-    variable_declarator,
+//    variable_declarator,
 };
 
 class ast_node {
@@ -160,20 +160,20 @@ class call_expression_node : public ast_node {
     std::vector<node_ref_t> m_args;
 };
 
-class variable_declarator_node : public ast_node {
-  public:
-    variable_declarator_node(node_ref_t id, node_ref_t init);
-
-    auto name() const -> char const* override { return "variable_declarator"; }
-    auto str() const -> std::string override;
-
-    auto id() const -> node_ref_t const& { return m_id; }
-    auto init() const -> node_ref_t const& { return m_init; }
-
-  private:
-    node_ref_t m_id;
-    node_ref_t m_init;
-};
+//class variable_declarator_node : public ast_node {
+//  public:
+//    variable_declarator_node(node_ref_t id, node_ref_t init);
+//
+//    auto name() const -> char const* override { return "variable_declarator"; }
+//    auto str() const -> std::string override;
+//
+//    auto id() const -> node_ref_t const& { return m_id; }
+//    auto init() const -> node_ref_t const& { return m_init; }
+//
+//  private:
+//    node_ref_t m_id;
+//    node_ref_t m_init;
+//};
 }
 
 #endif  // CATC_AST_HPP
