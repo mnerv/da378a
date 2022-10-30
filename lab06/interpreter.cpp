@@ -10,10 +10,10 @@
 #include "lexer.hpp"
 #include "parser.hpp"
 
+#include <memory>
 #include <stdexcept>
 #include <sstream>
-#include <stack>
-#include <vector>
+#include <bitset>
 
 namespace cat {
 interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({}) { }
