@@ -13,5 +13,4 @@ print z
 config bin
 print z
 print "Hello, World!\n"
-dump_ast "print 42\n1+2*3"
-
+dump_ast "1+1"

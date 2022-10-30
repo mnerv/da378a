@@ -22,7 +22,7 @@
 // E     -> T [ + | - T ]+
 // T     -> F [ * | / T ]+
 // F     -> ID | INT | FLOAT | (E) | -F
-// ID    -> ^[a-zA-z][a-zA-z0-9]*$
+// ID    -> ^[a-zA-Z][a-zA-Z0-9]*$
 // INT   -> ^[-+]?[0-9]+$
 // FLOAT -> ^[-+]?[0-9]+.[0-9]*f?$
 
@@ -34,7 +34,7 @@
 // product_expression   -> primary_expression [ "*" primary_expression | "/" primary_expression ]+
 // primary_expression   ->  id | int | float | "(" math_expressin ")" | "-" primary_expression
 // int                  -> ^[-+]?[0-9]+$
-// id                   -> ^[a-zA-z][a-zA-z0-9]*$
+// id                   -> ^[a-zA-Z][a-zA-Z0-9]*$
 // float                -> ^[-+]?[0-9]+.[0-9]*f?$
 
 namespace cat {
