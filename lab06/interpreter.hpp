@@ -23,12 +23,23 @@ class interpreter {
     interpreter(std::ostream& output);
     ~interpreter();
 
-    auto eval(node_ref_t const& node) -> bool;
+    auto eval(node_ref_t const& node) -> void;
+
+  private:
+    auto eval_expression(node_ref_t node) -> std::int32_t;
+    auto print(std::int32_t const& num) -> void;
+    auto dump_ast(std::string const& value) -> void;
 
   private:
     std::ostream& m_output;
 
+  private:
     std::unordered_map<std::string, std::int32_t> m_variables;
+
+    enum class config_mode {
+        dec, bin, hex
+    };
+    config_mode m_mode{config_mode::dec};
 };
 }
 

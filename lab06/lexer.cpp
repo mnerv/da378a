@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2022
  */
 #include "lexer.hpp"
+#include <regex>
 
 namespace cat {
 
@@ -57,6 +58,20 @@ auto lexer::next_token() -> std::optional<token> {
         consume();
         while (!is_quote() && has_next()) {
             if (is_newline()) return token(token_type::invalid, res, m_filename, m_line);
+            if (peek() == '\\') {
+                consume();
+                if (peek() == 'n') {
+                    consume();
+                    res += '\n';
+                } else if (peek() == 't') {
+                    consume();
+                    res += '\t';
+                } else if (peek() == 'r') {
+                    consume();
+                    res += '\r';
+                }
+                continue;
+            }
             res += peek_consume();
         }
         if (is_quote()) {

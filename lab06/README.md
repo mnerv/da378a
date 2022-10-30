@@ -42,3 +42,8 @@ FLOAT -> ^[-+]?[0-9]+.[0-9]*f?$
 ```
 
 `ID`, `INT`, and `FLOAT` rule is a valid regex.
+
+## Usage
+
+This project include two tests files, `hello.cat` and `hello_extend.cat` in `tests` directory.
+

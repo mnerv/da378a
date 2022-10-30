@@ -177,7 +177,9 @@ auto parser::parse_args() -> std::vector<node_ref_t> {
         }
         auto next = peek_next();
 
-        if (next.has_value() && next->category() == token_category::number) {
+        if ((next.has_value() && next->category() == token_category::number) ||
+            (tk->category() == token_category::number &&
+             next.has_value() && next->category() == token_category::operator_)) {
             args.push_back(parse_expression());
         }  else {
             consume();
@@ -185,8 +187,8 @@ auto parser::parse_args() -> std::vector<node_ref_t> {
                 args.push_back(make_ref<identifier_node>(*tk));
             else if (tk->type() == token_type::string_literal)
                 args.push_back(make_ref<string_literal_node>(*tk));
-            else
-                args.push_back(make_ref<identifier_node>(*tk));
+            else if (tk->category() == token_category::number)
+                args.push_back(make_ref<numeric_literal_node>(*tk));
         }
 
         tk = peek();

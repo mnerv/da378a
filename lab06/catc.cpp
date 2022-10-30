@@ -12,6 +12,8 @@
  *           - Terminals defined by regular expressions (int and variable)
  *             should be matched properly to the provided pattern. int-tokens
  *             should be matched before being ast to C++ integers.
+ *
+ *         Github: https://github.com/mnerv
  * @date   2022-09-15
  *
  * @copyright Copyright (c) 2022
@@ -64,15 +66,13 @@ auto main(int argc, char const* argv[]) -> int {
     cat::parser parser{tokens};
     cat::interpreter interpreter(std::cout);
     parser.parse();
-    for (auto const& token : tokens) {
-        std::cout << token.str() << "\n";
-    }
     auto program = parser.program();
     for (auto const& node : program) {
-        cat::recursive_print(std::cout, node);
-//        if (!interpreter.eval(node)) {
-//            std::cout << "Error!\n";
-//        }
+        try {
+            interpreter.eval(node);
+        } catch (std::exception const& e) {
+            std::cerr << e.what() << "\n";
+        }
     }
 
     return 0;

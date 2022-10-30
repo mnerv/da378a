@@ -7,7 +7,13 @@
  * @copyright Copyright (c) 2022
  */
 #include "interpreter.hpp"
+#include "lexer.hpp"
+#include "parser.hpp"
+
+#include <stdexcept>
+#include <sstream>
 #include <stack>
+#include <vector>
 
 namespace cat {
 interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({}) {
@@ -16,29 +22,141 @@ interpreter::interpreter(std::ostream& output) : m_output(output), m_variables({
 }
 interpreter::~interpreter() = default;
 
-auto interpreter::eval(node_ref_t const& node) -> bool {
+auto interpreter::eval(node_ref_t const& node) -> void {
+    using namespace std::string_literals;
     if (node->type() == node_type::call_expression) {
         auto call = std::dynamic_pointer_cast<call_expression_node>(node);
         if (call->callee()->id() == "config") {
-            m_output << "config call here\n";
-            return true;
+            if (!call->args().empty()) {
+                auto const& mode = *std::begin(call->args());
+                if (mode->raw_token().value() == "dec") {
+                    m_mode = config_mode::dec;
+                } else if (mode->raw_token().value() == "bin") {
+                    m_mode = config_mode::bin;
+                }  else if (mode->raw_token().value() == "hex") {
+                    m_mode = config_mode::hex;
+                } else {
+                    throw std::runtime_error("config error: invalid argument\n    expected: config [dec|bin|hex], got: config "s
+                                             + token::sanitize_str(mode->raw_token().value()));
+                }
+            } else {
+                throw std::runtime_error("Invalid argument\nexpected: [dec|bin|hex], got zero arguments");
+            }
         } else if (call->callee()->id() == "print") {
-            m_output << "print call here\n";
-            return true;
+            if (call->args().empty())
+                throw std::runtime_error("print error: invalid argument\n    expected none zero arguments");
+
+            auto const& arg = call->args()[0];
+            if (arg->type() == node_type::string_literal) {
+                auto const& str = std::dynamic_pointer_cast<string_literal_node>(arg);
+                m_output << str->value();
+            } else if (arg->type() == node_type::binary_expression) {
+                print(eval_expression(arg));
+            } else if (arg->type() == node_type::identifier) {
+                auto const& n = std::dynamic_pointer_cast<identifier_node>(arg);
+                auto it = m_variables.find(n->id());
+                if (it == std::end(m_variables)) m_output << n->id() << ": undefined\n";
+                else print(it->second);
+            } else if(arg->type() == node_type::numeric_literal) {
+                auto const& n = std::dynamic_pointer_cast<numeric_literal_node>(arg);
+                print(n->value());
+            } else {
+                throw std::runtime_error("print error: unsupported argument type\n    "s + arg->str());
+            }
         } else if (call->callee()->id() == "dump_ast") {
-            return false;
+            dump_ast(call->args()[0]->raw_token().value());
         } else {
-            return false;
         }
     } else if (node->type() == node_type::assignment_expression) {
-        auto assign = std::dynamic_pointer_cast<assignment_expression_node>(node);
-        return false;
+        auto ret = eval_expression(node->right());
+        auto id = std::dynamic_pointer_cast<identifier_node>(node->left());
+        m_variables.insert({id->id(), ret});
     } else if (node->type() == node_type::binary_expression){
-        auto binop = std::dynamic_pointer_cast<binary_expression_node>(node);
-        return false;
+        m_output << "i32: ";
+        print(eval_expression(node));
+    } else if (node->type() == node_type::numeric_literal) {
+        m_output << "i32: ";
+        print(eval_expression(node));
     } else {
-        return false;
+        throw std::runtime_error("Invalid: "s + node->str());
     }
+}
+
+auto interpreter::eval_expression(node_ref_t root) -> std::int32_t {
+    if (root == nullptr) return 0;
+    if (root->type() == node_type::unary_expression) {
+        auto const unary = std::dynamic_pointer_cast<unary_expression_node>(root);
+        auto const arg = eval_expression(unary->arg());
+        if (unary->operator_type() == token_type::plus) {
+            return +arg;
+        }
+        if (unary->operator_type() == token_type::minus) {
+            return -arg;
+        }
+    }
+    if (root->left() == nullptr && root->right() == nullptr) {
+        if (root->type() == node_type::numeric_literal){
+            auto const ret = std::dynamic_pointer_cast<numeric_literal_node>(root);
+            return ret->value();
+        }
+        if (root->type() == node_type::identifier){
+            auto const ret = std::dynamic_pointer_cast<identifier_node>(root);
+            auto it = m_variables.find(ret->id());
+            if (it != std::end(m_variables)) return it->second;
+            throw std::runtime_error("expression error: " + ret->id() + " is undefined");
+        }
+    }
+    auto const bin = std::dynamic_pointer_cast<binary_expression_node>(root);
+    auto const left  = eval_expression(root->left());
+    auto const right = eval_expression(root->right());
+    if (bin->operator_type() == token_type::plus) {
+        return left + right;
+    }
+    if (bin->operator_type() == token_type::minus) {
+        return left - right;
+    }
+    if (bin->operator_type() == token_type::asterisk) {
+        return left * right;
+    }
+    if (bin->operator_type() == token_type::slash) {
+        return left / right;
+    }
+    throw std::runtime_error("invalid expression: " + root->str());
+}
+
+auto interpreter::print(std::int32_t const& num) -> void {
+    constexpr std::size_t BIT_SIZE = 32;
+    switch (m_mode) {
+        case config_mode::bin:
+            m_output << std::bitset<BIT_SIZE>(static_cast<std::uint32_t>(num)).to_string() << "\n";
+            break;
+        case config_mode::hex:
+            m_output << std::hex << "0x" << num << "\n";
+            break;
+        case config_mode::dec:
+            m_output << std::dec << num << "\n";
+            break;
+    }
+}
+auto interpreter::dump_ast(std::string const& value) -> void {
+    lexer lex{value};
+    auto const tokens = lex.tokenize();
+    parser par{tokens};
+    par.parse();
+    auto const& nodes = par.program();
+    m_output << "Abstract Syntax Tree [\n";
+    for (auto const& node : nodes) {
+        std::stringstream ss;
+        recursive_print(ss, node);
+        auto const str = ss.str();
+        m_output << "    ";
+        for (std::size_t i = 0; i < str.size(); ++i) {
+            m_output << str[i];
+            if (str[i] == '\n' && i < str.size() - 1) m_output << "    ";
+        }
+        m_output << ",\n";
+    }
+    m_output << "]\n";
 }
 
 auto recursive_print(std::ostream& output, node_ref_t const& node, std::int32_t const& level, std::int32_t const& indent_size) -> void {
@@ -127,6 +245,6 @@ auto recursive_print(std::ostream& output, node_ref_t const& node, std::int32_t 
     }
     output << "\n"s;
     output << indent(level) << "}"s;
-    if (level == 0) output << "\n"s;
+    if (level == 0) output << ""s;
 }
 }
