@@ -12,6 +12,20 @@ This repository holds all the course labs. It includes 6 programming assignments
 
 **Fundamental types**: LP-prefix stands for Long Pointer, example: LP64 is long-pointer 64.
 
+## Labs Summary
+
+**lab01** introduces how to get input parameters from the command line and a simple 2nd-degree polynomial program implementation. The second was to introduce us to how to write a C++ class.
+
+**lab02** Task 1 is an implementation of a prime calculation using the Eratosthenes Sieve algorithm. Task 2 is an implementation of string modification using the std::string and then C style with memory allocation.
+
+**lab03** is to create two classes, one that stores the other. The first class is a Person class that has basic information and another is PersonReg which stores these in an array. We also used polymorphism to overload how the Person class should be printed.
+
+**lab04** introduces us to C++ STL, in this case, we use to sort, first to sort integers and then a custom data structure like the Person class from the previous lab03.
+
+**lab05** is a custom string container class that manages its own memory. This also introduces us to copy constructors and what is a good way to grow the memory.
+
+**lab06** is a simple implementation of a custom programming language. Here I've made an AST and an interpreter that can parse the tree.
+
 ## Development
 
 ### CMake
@@ -32,7 +46,7 @@ ninja -C build
 
 Some tasks requires you to compile the file with command line tools and when using neovim with ccls language server it can't know what C++ standard we should be using or what warning flags should be use.
 
-Create `.ccls` file in the project directory and populate it 
+Create `.ccls` file in the project directory and populate it
 
 ```
 %c++ -std=c++20 -Wall -Wextra -Wconversion -Wpedantic -Wshadow -Werror
